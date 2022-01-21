@@ -4,7 +4,7 @@ Installation
 To use `lean4-mode` in Emacs, add the following to your `init.el`:
 ```
 ;; You need to modify the following line
-(setq load-path (cons "/path/to/lean4/lean4-mode" load-path))
+(setq load-path (cons "/path/to/lean4-mode" load-path))
 
 (setq lean4-mode-required-packages '(dash f flycheck lsp-mode magit-section s))
 
@@ -25,21 +25,10 @@ Alternatively if you are a fan of `use-package` and `straight.el` you
 can use:
 ```
 (use-package lean4-mode
-  :straight (lean4-mode :type git :host github :repo "leanprover/lean4"
-             :files ("lean4-mode/lean4*.el"))
+  :straight (lean4-mode :type git :host github :repo "leanprover/lean4-mode")
   ;; to defer loading the package until required
   :commands (lean4-mode))
 ```
-If you are working on the `lean4` repository already and don't want to
-have two separate checkouts you can use:
-```
-(use-package lean4-mode
-  :straight (lean4-mode :local-repo "/path/to/your/lean4"
-             :files ("lean4-mode/lean4*.el"))
-  ;; to defer loading the package until required
-  :commands (lean4-mode))
-```
-
 
 Trying It Out
 =============
