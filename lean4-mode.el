@@ -226,12 +226,14 @@ Invokes `lean4-mode-hook'.
   (message "Lean %s" (mapconcat 'identity (lean--version) ".")))
 (defalias 'lean4-show-version 'lean-show-version)
 
+;;;###autoload
 (defun lean-select-mode ()
   (if lean4-autodetect-lean3
       (let ((version (lean--version)))
         (cond ((equal (car version) "4") (lean4-mode))
               ((equal (car version) "3") (lean-mode))))
     (lean4-mode)))
+;;;###autoload
 (defalias 'lean4-select-mode 'lean-select-mode)
 
 ;; Automatically use lean4-mode for .lean files.
