@@ -212,10 +212,6 @@ Invokes `lean4-mode-hook'.
     (add-hook hook fn nil 'local))
   (lean4-mode-setup))
 
-;; Automatically use lean4-mode for .lean files.
-;;;###autoload
-(push '("\\.lean$" . lean4-select-mode) auto-mode-alist)
-
 (defun lean--version ()
   (let ((version-line
          (car (last (process-lines (lean4-get-executable "lean")
@@ -238,6 +234,9 @@ Invokes `lean4-mode-hook'.
     (lean4-mode)))
 (defalias 'lean4-select-mode 'lean-select-mode)
 
+;; Automatically use lean4-mode for .lean files.
+;;;###autoload
+(push '("\\.lean$" . lean4-select-mode) auto-mode-alist)
 
 ;;;###autoload
 (with-eval-after-load 'markdown-mode
