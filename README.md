@@ -29,6 +29,12 @@ can use:
   ;; to defer loading the package until required
   :commands (lean4-mode))
 ```
+If you are a doom-emacs user, adding the following to `packages.el` should work:
+```
+(package! lean4-mode :recipe
+  (:host github
+   :repo "leanprover/lean4-mode"))
+```
 
 Trying It Out
 =============
