@@ -10,7 +10,7 @@
 ;; Maintainer: Sebastian Ullrich <sebasti@nullri.ch>
 ;; Created: Jan 09, 2014
 ;; Keywords: languages
-;; Package-Requires: ((emacs "24.3") (dash "2.18.0") (s "1.10.0") (f "0.19.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
+;; Package-Requires: ((emacs "26.3") (dash "2.18.0") (s "1.10.0") (f "0.19.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
 ;; URL: https://github.com/leanprover/lean4
 
 ;; Released under Apache 2.0 license as described in the file LICENSE.
@@ -253,8 +253,15 @@ Invokes `lean4-mode-hook'.
 (add-to-list 'lsp-language-id-configuration
              '(lean4-mode . "lean"))
 
+(defun lean4--server-cmd ()
+  (condition-case nil
+      (if (string-version-lessp (car (process-lines (lean4-get-executable "lake") "--version")) "3.1.0")
+          `(,(lean4-get-executable lean4-executable-name) "--server")
+        `(,(lean4-get-executable "lake") "serve"))
+    (error `(,(lean4-get-executable lean4-executable-name) "--server"))))
+
 (lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection (lambda () `(,(lean4-get-executable lean4-executable-name) "--server")))
+ (make-lsp-client :new-connection (lsp-stdio-connection #'lean4--server-cmd)
                   :major-modes '(lean4-mode)
                   :server-id 'lean4-lsp
                   :notification-handlers (ht ("$/lean/fileProgress" #'lean4-fringe-update))))
