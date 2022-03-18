@@ -1,3 +1,5 @@
+(require 'lean4-util)
+
 (defun lean4-lake-find-dir-in (dir)
   (when dir
     (or (lean4-lake-find-dir-in (f-parent dir))
@@ -16,7 +18,7 @@
   (interactive)
   (let* ((default-directory (file-name-as-directory (lean4-lake-find-dir-safe))))
     (with-existing-directory
-      (compile (concat (lean4-get-executable "lake") " build")))))
+      (compile (concat (lean4-get-executable lean4-lake-name) " build")))))
 
 (provide 'lean4-lake)
 
