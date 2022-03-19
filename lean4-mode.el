@@ -264,9 +264,10 @@ Invokes `lean4-mode-hook'.
 
 (defun lean4--server-cmd ()
   (condition-case nil
-      (if (string-version-lessp (car (process-lines (lean4-get-executable "lake") "--version")) "3.1.0")
+      (if (or (string-version-lessp (car (process-lines (lean4-get-executable lean4-lake-name) "--version")) "3.1.0")
+	      (not (lean4-lake-find-dir)))
           `(,(lean4-get-executable lean4-executable-name) "--server")
-        `(,(lean4-get-executable "lake") "serve"))
+        `(,(lean4-get-executable lean4-lake-name) "serve"))
     (error `(,(lean4-get-executable lean4-executable-name) "--server"))))
 
 (lsp-register-client
