@@ -2,8 +2,8 @@
 
 (defun lean4-lake-find-dir-in (dir)
   (when dir
-    (or (lean4-lake-find-dir-in (f-parent dir))
-        (when (f-exists? (f-join dir "lakefile.lean")) dir))))
+    (or (when (f-exists? (f-join dir "lakefile.lean")) dir)
+	(lean4-lake-find-dir-in (f-parent dir)))))
 
 (defun lean4-lake-find-dir ()
   (and (buffer-file-name)
