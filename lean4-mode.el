@@ -41,10 +41,13 @@
 (require 'lean4-leanpkg)
 (require 'lean4-dev)
 (require 'lean4-fringe)
+(require 'lean4-lake)
 
-(defun lean4-compile-string (exe-name args file-name)
+(defun lean4-compile-string (lake-name exe-name args file-name)
   "Concatenate EXE-NAME, ARGS, and FILE-NAME."
-  (format "%s %s %s" exe-name args file-name))
+  (if lake-name
+      (format "%s env %s %s %s" lake-name exe-name args file-name)
+      (format "%s %s %s" exe-name args file-name)))
 
 (defun lean4-create-temp-in-system-tempdir (file-name prefix)
   "Create a temp lean file and return its name."
@@ -55,17 +58,22 @@
   (interactive)
   (when (called-interactively-p 'any)
     (setq arg (read-string "arg: " arg)))
-  (let ((cc compile-command)
-        (target-file-name
-         (or
-          (buffer-file-name)
-          (flymake-init-create-temp-buffer-copy 'lean4-create-temp-in-system-tempdir))))
+  (let* ((cc compile-command)
+	 (dd default-directory)
+	 (use-lake (lean4-lake-find-dir))
+	 (default-directory (if use-lake (lean4-lake-find-dir) dd))
+         (target-file-name
+          (or
+           (buffer-file-name)
+           (flymake-init-create-temp-buffer-copy 'lean4-create-temp-in-system-tempdir))))
     (compile (lean4-compile-string
+	      (if use-lake (shell-quote-argument (f-full (lean4-get-executable lean4-lake-name))) nil)
               (shell-quote-argument (f-full (lean4-get-executable lean4-executable-name)))
               (or arg "")
               (shell-quote-argument (f-full target-file-name))))
     ;; restore old value
-    (setq compile-command cc)))
+    (setq compile-command cc)
+    (setq default-directory dd)))
 
 (defun lean4-std-exe ()
   (interactive)
@@ -103,6 +111,7 @@
   (local-set-key lean4-keybinding-leanpkg-configure         #'lean4-leanpkg-configure)
   (local-set-key lean4-keybinding-leanpkg-build             #'lean4-leanpkg-build)
   (local-set-key lean4-keybinding-leanpkg-test              #'lean4-leanpkg-test)
+  (local-set-key lean4-keybinding-lake-build                #'lean4-lake-build)
   (local-set-key lean4-keybinding-refresh-file-dependencies #'lean4-refresh-file-dependencies)
   ;; This only works as a mouse binding due to the event, so it is not abstracted
   ;; to avoid user confusion.

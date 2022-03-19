@@ -24,6 +24,12 @@
     (t             "lean"))
   "Default executable name of Lean")
 
+(defvar-local lean4-default-lake-name
+  (cl-case system-type
+    ('windows-nt   "lake.exe")
+    (t             "lake"))
+  "Default executable name of Lake")
+
 (defcustom lean4-rootdir nil
   "Full pathname of lean root directory. It should be defined by user."
   :group 'lean
@@ -32,6 +38,11 @@
 (defcustom lean4-executable-name lean4-default-executable-name
   "Name of lean executable"
   :group 'lean
+  :type 'string)
+
+(defcustom lean4-lake-name lean4-default-lake-name
+  "Name of lake executable"
+  :group 'lake
   :type 'string)
 
 (defcustom lean4-memory-limit 1024
@@ -117,6 +128,9 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   :group 'lean4-keybinding :type 'key-sequence)
 (defcustom lean4-keybinding-leanpkg-test (kbd "C-c C-p C-t")
   "Lean Keybinding for lean4-leanpkg-test"
+  :group 'lean4-keybinding :type 'key-sequence)
+(defcustom lean4-keybinding-lake-build (kbd "C-c C-p C-l")
+  "Lean Keybinding for lean4-lake-build"
   :group 'lean4-keybinding :type 'key-sequence)
 (defcustom lean4-keybinding-refresh-file-dependencies (kbd "C-c C-d")
   "Lean Keybinding for lean4-refresh-file-dependencies"
