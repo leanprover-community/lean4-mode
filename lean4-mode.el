@@ -103,7 +103,6 @@
   (local-set-key lean4-keybinding-std-exe1                  #'lean4-std-exe)
   (local-set-key lean4-keybinding-std-exe2                  #'lean4-std-exe)
   (local-set-key lean4-keybinding-show-key                  #'quail-show-key)
-  (local-set-key lean4-keybinding-find-definition           #'lean4-find-definition)
   (local-set-key lean4-keybinding-tab-indent                #'lean4-tab-indent)
   (local-set-key lean4-keybinding-hole                      #'lean4-hole)
   (local-set-key lean4-keybinding-lean4-toggle-info         #'lean4-toggle-info)
@@ -139,7 +138,6 @@
     ["Toggle message boxes" lean4-message-boxes-toggle         t]
     ["Highlight pending tasks"  lean4-server-toggle-show-pending-tasks
      :active t :style toggle :selected lean4-server-show-pending-tasks]
-    ["Find definition at point" lean4-find-definition          t]
     "-----------------"
     ["List of errors"       flycheck-list-errors              flycheck-mode]
     "-----------------"

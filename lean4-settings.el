@@ -102,9 +102,6 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
 (defcustom lean4-keybinding-server-switch-version (kbd "C-c C-s")
   "Lean Keybinding for lean4-server-switch-version"
   :group 'lean4-keybinding :type 'key-sequence)
-(defcustom lean4-keybinding-find-definition (kbd "M-.")
-  "Lean Keybinding for find-definition"
-  :group 'lean4-keybinding  :type 'key-sequence)
 (defcustom lean4-keybinding-tab-indent (kbd "TAB")
   "Lean Keybinding for tab-indent"
   :group 'lean4-keybinding  :type 'key-sequence)
