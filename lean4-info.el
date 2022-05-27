@@ -41,14 +41,16 @@
        (setq buffer-read-only nil)
        (erase-buffer)
        (setq standard-output buf)
-       . ,body)))
+       ,@body
+       (setq buffer-read-only t))))
 
 (defun lean4-ensure-info-buffer (buffer)
   (unless (get-buffer buffer)
     (with-current-buffer (get-buffer-create buffer)
       (buffer-disable-undo)
       (magit-section-mode)
-      (set-syntax-table lean4-syntax-table))))
+      (set-syntax-table lean4-syntax-table)
+      (setq buffer-read-only t))))
 
 (defun lean4-toggle-info-buffer (buffer)
   (-if-let (window (get-buffer-window buffer))
