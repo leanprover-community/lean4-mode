@@ -59,8 +59,8 @@
 (defun lean4-info-buffer-active (buffer)
   "Checks whether the given info buffer should show info for the current buffer"
   (and
-   ;; info buffer visible
-   (get-buffer-window buffer)
+   ;; info buffer visible (on any frame)
+   (get-buffer-window buffer t)
    ;; current window of current buffer is selected (i.e., in focus)
    (eq (current-buffer) (window-buffer))))
 
