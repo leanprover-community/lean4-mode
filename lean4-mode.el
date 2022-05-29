@@ -185,9 +185,12 @@ enabled and disabled respectively.")
 (defun lean4-create-lsp-workspace ()
   "This will allow us to use emacs when a repo contains
 multiple lean packages"
-  (when-let ((root (vc-find-root (buffer-file-name)
-                                 "lakefile.lean")))
-    (lsp-workspace-folders-add root)))
+  (let (buff-name (buffer-file-name))
+    (progn
+      (if (not buff-name) (setq buff-name (buffer-file-name (window-buffer (selected-window)))))
+      (when-let ((root (vc-find-root buff-name
+                                     "lakefile.lean")))
+          (lsp-workspace-folders-add root)))))
 
 ;; Automode List
 ;;;###autoload
