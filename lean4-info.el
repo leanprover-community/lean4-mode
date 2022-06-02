@@ -82,19 +82,26 @@
 (lsp-defun lean4-diagnostic-full-end-line ((&lean:Diagnostic :full-range (&Range :end (&Position :line))))
   line)
 
-(defun lean4-mk-message-section (caption errors)
+(defun lean4-mk-message-section (uri caption errors)
   (when errors
     (magit-insert-section (magit-section)
       (magit-insert-heading caption)
       (magit-insert-section-body
         (dolist (e errors)
           (-let (((&Diagnostic :message :range (&Range :start (&Position :line :character))) e))
-            (magit-insert-section (magit-section)
-              (magit-insert-heading (format "%d:%d: " (1+ (lsp-translate-line line)) (lsp-translate-column character)))
+	    (magit-insert-section (magit-section)
+	      (magit-insert-heading)
+	      (insert-button (format "%s %d:%d" uri (1+ (lsp-translate-line line)) (lsp-translate-column character))
+			     'action (lambda (btn)
+				       (message (format "clicked %s" uri))
+				       (with-current-buffer (find-file-other-window (lsp--uri-to-path uri))
+					 (goto-line (lsp-translate-line line))
+					 (move-to-column (lsp-translate-column character)))))
+	      (insert "\n")
               (magit-insert-section-body
                 (insert message "\n")))))))))
 
-(defun lean4-info-buffer-redisplay ()
+(defun lean4-info-buffer-redisplay (uri)
   (when (lean4-info-buffer-active lean4-info-buffer-name)
     (-let* ((deactivate-mark) ; keep transient mark
             (pos (apply #'lsp-make-position (lsp--cur-position)))
@@ -121,9 +128,9 @@
            (magit-insert-heading "Expected type:")
            (magit-insert-section-body
              (insert (lsp--fontlock-with-mode lean4-term-goal 'lean4-info-mode) "\n"))))
-       (lean4-mk-message-section "Messages here:" errors-here)
-       (lean4-mk-message-section "Messages below:" errors-below)
-       (lean4-mk-message-section "Messages above:" errors-above)
+       (lean4-mk-message-section uri "Messages here:" errors-here)
+       (lean4-mk-message-section uri "Messages below:" errors-below)
+       (lean4-mk-message-section uri "Messages above:" errors-above)
        (when lean4-highlight-inaccessible-names
          (goto-char 0)
          (while (re-search-forward "\\(\\sw+\\)✝\\([¹²³⁴-⁹⁰]*\\)" nil t)
@@ -137,18 +144,20 @@
     (lsp-request-async
      "$/lean/plainGoal"
      (lsp--text-document-position-params)
-     (-lambda ((_ &as &lean:PlainGoal? :goals))
+     (-lambda ((x &as &lean:PlainGoal? :goals))
        (setq lean4-goals goals)
-       (lean4-info-buffer-redisplay))
+       (lean4-info-buffer-redisplay-debounced lsp-buffer-uri))
      :error-handler #'ignore
      :mode 'tick
      :cancel-token :plain-goal)
     (lsp-request-async
      "$/lean/plainTermGoal"
      (lsp--text-document-position-params)
-     (-lambda ((_ &as &lean:PlainTermGoal? :goal))
+     (-lambda ((x &as &lean:PlainTermGoal? :goal))
+       ;; (message-box "FOO")
+       ;; (message-box lsp-buffer-uri)
        (setq lean4-term-goal goal)
-       (lean4-info-buffer-redisplay))
+       (lean4-info-buffer-redisplay-debounced lsp-buffer-uri))
      :error-handler #'ignore
      :mode 'tick
      :cancel-token :plain-term-goal)
