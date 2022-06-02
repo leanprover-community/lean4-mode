@@ -154,8 +154,6 @@
      "$/lean/plainTermGoal"
      (lsp--text-document-position-params)
      (-lambda ((x &as &lean:PlainTermGoal? :goal))
-       ;; (message-box "FOO")
-       ;; (message-box lsp-buffer-uri)
        (setq lean4-term-goal goal)
        (lean4-info-buffer-redisplay-debounced lsp-buffer-uri))
      :error-handler #'ignore
