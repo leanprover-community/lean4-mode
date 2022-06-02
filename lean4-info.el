@@ -93,7 +93,6 @@
 	      (magit-insert-heading)
 	      (insert-button (format "%s %d:%d" uri (1+ (lsp-translate-line line)) (lsp-translate-column character))
 			     'action (lambda (btn)
-				       (message (format "clicked %s" uri))
 				       (with-current-buffer (find-file-other-window (lsp--uri-to-path uri))
 					 (goto-line (lsp-translate-line line))
 					 (move-to-column (lsp-translate-column character)))))
