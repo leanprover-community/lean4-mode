@@ -22,8 +22,6 @@
 
 (defvar-local lean4-fringe-delay-timer nil)
 
-(defvar-local lean4-fringe-overlays nil)
-
 (lsp-defun lean4-fringe-region ((&lean:LeanFileProgressProcessingInfo :range))
   (lsp--range-to-region range))
 
@@ -48,13 +46,13 @@
 (defvar-local lean4-fringe-data nil)
 
 (defun lean4-fringe-update-progress-overlays ()
-  (dolist (ov lean4-fringe-overlays) (delete-overlay ov))
-  (setq lean4-fringe-overlays nil)
+  (dolist (ov (flatten-tree (overlay-lists)))
+    (when (eq (overlay-get ov 'face) 'lean4-fringe-face)
+      (delete-overlay ov)))
   (when lean4-show-file-progress
     (seq-doseq (item lean4-fringe-data)
       (let* ((reg (lean4-fringe-region item))
              (ov (make-overlay (car reg) (cdr reg))))
-        (setq lean4-fringe-overlays (cons ov lean4-fringe-overlays))
         (overlay-put ov 'face 'lean4-fringe-face)
         (overlay-put ov 'line-prefix
                      (propertize " " 'display
