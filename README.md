@@ -1,6 +1,8 @@
 Installation
 ============
 
+Before using this major mode, you need to [install Lean 4](https://leanprover.github.io/lean4/doc/setup.html#basic-setup).
+
 To use `lean4-mode` in Emacs, add the following to your `init.el`:
 ```
 ;; You need to modify the following line
