@@ -17,7 +17,7 @@
 
 (eval-when-compile
   (lsp-interface
-    (lean:LeanFileProgressProcessingInfo (:range) nil)
+    (lean:LeanFileProgressProcessingInfo (:range :kind) nil)
     (lean:LeanFileProgressParams (:textDocument :processing) nil)))
 
 (defvar-local lean4-fringe-delay-timer nil)
@@ -34,14 +34,28 @@
   (define-fringe-bitmap 'lean4-fringe-fringe-bitmap
     (vector) 16 8))
 
-(defface lean4-fringe-fringe-face
+(defface lean4-fringe-fringe-processing-face
   '((((class color) (background light))
      :background "chocolate1")
     (((class color) (background dark))
      :background "navajo white")
     (t :inverse-video t))
-  "Face to highlight the fringe of Lean file progress."
+  "Face to highlight the fringe of Lean file processing progress."
   :group 'lean)
+
+(defface lean4-fringe-fringe-fatal-error-face
+  '((((class color) (background light))
+     :background "red")
+    (((class color) (background dark))
+     :background "red")
+    (t :inverse-video t))
+  "Face to highlight the fringe of Lean file fatal errors."
+  :group 'lean)
+
+(lsp-defun lean4-fringe-fringe-face ((&lean:LeanFileProgressProcessingInfo :kind))
+  (cond
+   ((eq kind 1) 'lean4-fringe-fringe-processing-face)
+   (t 'lean4-fringe-fringe-fatal-error-face)))
 
 (defvar-local lean4-fringe-data nil)
 
@@ -56,7 +70,7 @@
         (overlay-put ov 'face 'lean4-fringe-face)
         (overlay-put ov 'line-prefix
                      (propertize " " 'display
-                                 '(left-fringe lean4-fringe-fringe-bitmap lean4-fringe-fringe-face)))
+                                 `(left-fringe lean4-fringe-fringe-bitmap ,(lean4-fringe-fringe-face item))))
         (overlay-put ov 'help-echo (format "processing..."))))))
 
 (defvar-local lean4-fringe-delay-timer nil)
