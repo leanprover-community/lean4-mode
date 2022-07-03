@@ -219,10 +219,9 @@
   (if (not lean4-info-buffer-debounce-begin-time) 
       (setq lean4-info-buffer-debounce-begin-time (current-time)))
   ;; if time since we began debouncing is too long...
-  (if (>= (time-convert
+  (if (>= (time-to-seconds
 	   (time-subtract (current-time)
-			  lean4-info-buffer-debounce-begin-time)
-	   'integer)
+			  lean4-info-buffer-debounce-begin-time))
 	  lean4-info-buffer-debounce-upper-bound-sec)
       ;;  then redisplay immediately.
       (progn
