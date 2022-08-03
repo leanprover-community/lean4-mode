@@ -37,6 +37,42 @@ If you are a doom-emacs user, adding the following to `packages.el` should work:
   (:host github
    :repo "leanprover/lean4-mode"))
 ```
+If you are using nix to manage doom-emacs, you will need to uncomment the `lean` doom module in `init.el`, add `(package! lean4-mode)` to `packages.el`, and package `lean4-mode` using [`emacsPackagesOverlay`](https://github.com/nix-community/nix-doom-emacs#Installing-emacs-packages). 
+For example, with nix-doom-emacs managed via home-manager, `home.nix` could look like:
+```
+{ pkgs, ... }:
+
+let
+  doom-emacs = pkgs.callPackage (builtins.fetchTarball {
+    url = https://github.com/nix-community/nix-doom-emacs/archive/master.tar.gz;
+  }) {
+    doomPrivateDir = ./doom.d;  # Directory containing your config.el init.el
+                                # and packages.el files
+    
+    emacsPackagesOverlay = self: super: {
+      lean4-mode = self.melpaBuild rec {
+        pname = "lean4-mode";
+        version = "1";
+        commit = "37d5c99b7b29c80ab78321edd6773200deb0bca6";
+        src = pkgs.fetchFromGitHub {
+          owner = "leanprover";
+          repo = "lean4-mode";
+          rev = commit;
+          sha256 = "sha256-+dRaXB7uvN/weSZiKcfSKWhcdJVNg9Vg8k0pJkDNjpc=";
+        };
+        packageRequires = with self.melpaPackages;
+          [ dash f flycheck magit-section lsp-mode s ];
+        recipe = pkgs.writeText "recipe" ''
+                  (lean4-mode :repo "leanprover/lean4-mode" :fetcher github)
+                '';
+      };
+    };
+  };
+in
+{
+  home-manager.users.your-user-name.home.packages = [ doom-emacs ];
+}
+```
 
 Trying It Out
 =============
