@@ -1143,8 +1143,12 @@ Each pair in the list has the form (KEY-SEQUENCE . TRANSLATION)."
 TRANS is a list of pairs (KEY-SEQUENCE . TRANSLATION). The
 translations are appended to the current translations."
   (with-temp-buffer
-    (dolist (tr (lean4-input-concat-map (eval lean4-input-tweak-all) trans))
-      (quail-defrule (car tr) (cdr tr) "Lean" t))))
+    (map-do (lambda (key tr)
+              (unless (null key)
+                (quail-defrule (concat "\\" key)
+                               tr
+                               "Lean" t)))
+            trans)))
 
 (defun lean4-input-inherit-package (qp &optional fun)
   "Let the Lean input method inherit the translations from the
