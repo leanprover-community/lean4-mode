@@ -252,10 +252,13 @@ tasks as well."
                                         lean4-input-user-translations))
   (lean4-input-add-translations (with-temp-buffer
                                   (insert-file-contents (expand-file-name
-                                                         "translations.json"
+                                                         "abbreviations.json"
                                                          lean4-input-data-directory))
                                   (goto-char (point-min))
-                                  (json-parse-buffer)))
+                                  (thread-last
+                                    (json-parse-buffer)
+                                    (map-filter (lambda (_ s)
+                                                  (not (string-match-p "\\$CURSOR" s)))))))
   (dolist (def lean4-input-inherit)
     (lean4-input-inherit-package (car def)
                                 (eval (cdr def)))))
