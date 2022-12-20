@@ -272,7 +272,8 @@ Invokes `lean4-mode-hook'.
  (make-lsp-client :new-connection (lsp-stdio-connection #'lean4--server-cmd)
                   :major-modes '(lean4-mode)
                   :server-id 'lean4-lsp
-                  :notification-handlers (ht ("$/lean/fileProgress" #'lean4-fringe-update))))
+                  :notification-handlers (ht ("$/lean/fileProgress" #'lean4-fringe-update))
+                  :semantic-tokens-faces-overrides '(:types (("leanSorryLike" . font-lock-warning-face)))))
 
 (add-hook 'lean4-mode-hook #'lsp)
 
