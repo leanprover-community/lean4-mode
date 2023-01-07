@@ -39,7 +39,8 @@ If you are a doom-emacs user, adding the following to `packages.el` should work:
 ```
 (package! lean4-mode :recipe
   (:host github
-   :repo "leanprover/lean4-mode"))
+   :repo "leanprover/lean4-mode"
+   :files ("*.el" "data")))
 ```
 
 Trying It Out
