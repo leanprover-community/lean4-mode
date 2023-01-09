@@ -8,6 +8,7 @@
 
 (require 's)
 (require 'json)
+(require 'comint)
 (require 'lean4-util)
 (require 'lean4-settings)
 
