@@ -275,7 +275,8 @@ Suitable for use in the :set field of `defcustom'."
 
 ;; Set up the input method.
 
-(lean4-input-setup)
+(cl-eval-when (load)
+  (lean4-input-setup))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Administrative details
