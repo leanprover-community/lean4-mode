@@ -204,15 +204,15 @@
 
 
 (defvar lean4-info-buffer-debounce-begin-time nil
-  "Time we have begun debouncing. Is 'nil' if we are not
+  "Time we have begun debouncing. Is nil if we are not
    currently debouncing. Otherwise, is a timestamp as given
-   by 'current-time'.")
+   by `current-time'.")
 
 (defcustom lean4-info-buffer-debounce-upper-bound-sec
   0.5
   "Maximum time we are allowed to stagger debouncing. If we recieve
    a request such that we have been debouncing for longer than
-   'lean4-info-buffer-debounce-begin-time', then we immediately
+   `lean4-info-buffer-debounce-begin-time', then we immediately
    run the request."
   :group 'lean4-info
   :type 'number)
