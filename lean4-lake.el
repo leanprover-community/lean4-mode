@@ -1,4 +1,5 @@
 (require 'lean4-util)
+(require 'lean4-settings)
 
 (defun lean4-lake-find-dir-in (dir)
   (when dir

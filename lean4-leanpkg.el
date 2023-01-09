@@ -9,6 +9,7 @@
 (require 's)
 (require 'json)
 (require 'lean4-util)
+(require 'lean4-settings)
 
 (defun lean4-leanpkg-find-dir-in (dir)
   (when dir
