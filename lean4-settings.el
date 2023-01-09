@@ -51,7 +51,9 @@
   :type 'number)
 
 (defcustom lean4-timeout-limit 100000
-  "Deterministic timeout limit (it is approximately the maximum number of memory allocations in thousands)"
+  "Deterministic timeout limit.
+
+It is approximately the maximum number of memory allocations in thousands."
   :group 'lean
   :type 'number)
 

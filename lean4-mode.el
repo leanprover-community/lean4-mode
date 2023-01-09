@@ -80,7 +80,10 @@
   (lean4-execute))
 
 (defun lean4-refresh-file-dependencies ()
-  "Restart the server subprocess for the current file, recompiling & reloading all imports"
+  "Refresh the file dependencies.
+
+This function restarts the server subprocess for the current
+file, recompiling, and reloading all imports."
   (interactive)
   (lsp-notify
    "textDocument/didClose"
