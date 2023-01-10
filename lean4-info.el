@@ -190,7 +190,8 @@
 
 
 (defcustom lean4-info-buffer-debounce-delay-sec 0.1
-  "Duration of time we wait before writing to *Lean Goal*")
+  "Duration of time we wait before writing to *Lean Goal*"
+  :type 'number)
 
 
 (defvar lean4-info-buffer-debounce-timer nil
@@ -207,7 +208,8 @@
   "Maximum time we are allowed to stagger debouncing. If we recieve
    a request such that we have been debouncing for longer than
    'lean4-info-buffer-debounce-begin-time', then we immediately
-   run the request.")
+   run the request."
+  :type 'number)
 
 ;;  Debounce implementation modifed from lsp-lens
 ;; https://github.com/emacs-lsp/lsp-mode/blob/2f0ea2e396ec9a570f2a2aeb097c304ddc61ebee/lsp-lens.el#L140
