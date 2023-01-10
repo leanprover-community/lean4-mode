@@ -106,9 +106,9 @@ file, recompiling, and reloading all imports."
   (local-set-key lean4-keybinding-std-exe2                  #'lean4-std-exe)
   (local-set-key lean4-keybinding-show-key                  #'quail-show-key)
   (local-set-key lean4-keybinding-tab-indent                #'lean4-tab-indent)
-  (local-set-key lean4-keybinding-hole                      #'lean4-hole)
+  ;; (local-set-key lean4-keybinding-hole                      #'lean4-hole)
   (local-set-key lean4-keybinding-lean4-toggle-info         #'lean4-toggle-info)
-  (local-set-key lean4-keybinding-lean4-message-boxes-toggle #'lean4-message-boxes-toggle)
+  ;; (local-set-key lean4-keybinding-lean4-message-boxes-toggle #'lean4-message-boxes-toggle)
   (local-set-key lean4-keybinding-leanpkg-configure         #'lean4-leanpkg-configure)
   (local-set-key lean4-keybinding-leanpkg-build             #'lean4-leanpkg-build)
   (local-set-key lean4-keybinding-leanpkg-test              #'lean4-leanpkg-test)
@@ -116,7 +116,7 @@ file, recompiling, and reloading all imports."
   (local-set-key lean4-keybinding-refresh-file-dependencies #'lean4-refresh-file-dependencies)
   ;; This only works as a mouse binding due to the event, so it is not abstracted
   ;; to avoid user confusion.
-  (local-set-key (kbd "<mouse-3>")                         #'lean4-right-click-show-menu)
+  ;; (local-set-key (kbd "<mouse-3>")                         #'lean4-right-click-show-menu)
   )
 
 (define-abbrev-table 'lean4-abbrev-table
