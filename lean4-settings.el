@@ -18,16 +18,16 @@
   :prefix "lean4-"
   :group 'lean)
 
-(defvar-local lean4-default-executable-name
+(defconst lean4-default-executable-name
   (cl-case system-type
-    ('windows-nt   "lean.exe")
-    (t             "lean"))
+    (windows-nt "lean.exe")
+    (t          "lean"))
   "Default executable name of Lean")
 
-(defvar-local lean4-default-lake-name
+(defconst lean4-default-lake-name
   (cl-case system-type
-    ('windows-nt   "lake.exe")
-    (t             "lake"))
+    (windows-nt "lake.exe")
+    (t          "lake"))
   "Default executable name of Lake")
 
 (defcustom lean4-rootdir nil
@@ -51,7 +51,9 @@
   :type 'number)
 
 (defcustom lean4-timeout-limit 100000
-  "Deterministic timeout limit (it is approximately the maximum number of memory allocations in thousands)"
+  "Deterministic timeout limit.
+
+It is approximately the maximum number of memory allocations in thousands."
   :group 'lean
   :type 'number)
 

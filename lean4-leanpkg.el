@@ -8,7 +8,9 @@
 
 (require 's)
 (require 'json)
+(require 'comint)
 (require 'lean4-util)
+(require 'lean4-settings)
 
 (defun lean4-leanpkg-find-dir-in (dir)
   (when dir
@@ -21,7 +23,7 @@
 
 (defun lean4-leanpkg-find-dir-safe ()
   (or (lean4-leanpkg-find-dir)
-      (error (format "cannot find leanpkg.toml for %s" (buffer-file-name)))))
+      (error "cannot find leanpkg.toml for %s" (buffer-file-name))))
 
 (defun lean4-leanpkg-executable ()
   (lean4-get-executable "leanpkg"))

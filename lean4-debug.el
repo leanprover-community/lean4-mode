@@ -33,12 +33,12 @@
       (ignore-errors
         (select-window (get-buffer-window buffer-name t)))
       (goto-char (point-max))
-      (insert (apply 'format format-string args)))))
+      (insert (apply #'format format-string args)))))
 
 (defun lean4-debug (format-string &rest args)
   "Display a message at the bottom of the *lean4-debug* buffer."
   (when lean4-debug-mode
-    (let ((time-str (format-time-string "%H:%M:%S.%3N" (current-time))))
+    (let ((time-str (format-time-string "%T.%3N" (current-time))))
       (lean4-output-to-buffer lean4-debug-buffer-name
                              (concat "%s -- " format-string "\n")
                              (cons (propertize time-str 'face 'font-lock-keyword-face)

@@ -1,4 +1,5 @@
 (require 'lean4-util)
+(require 'lean4-settings)
 
 (defun lean4-lake-find-dir-in (dir)
   (when dir
@@ -11,7 +12,7 @@
 
 (defun lean4-lake-find-dir-safe ()
   (or (lean4-lake-find-dir)
-      (error (format "cannot find lakefile.lean for %s" (buffer-file-name)))))
+      (error "cannot find lakefile.lean for %s" (buffer-file-name))))
 
 (defun lean4-lake-build ()
   "Call lake build"

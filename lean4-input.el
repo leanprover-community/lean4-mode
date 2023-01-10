@@ -24,6 +24,9 @@
 
 (require 'quail)
 (require 'cl-lib)
+(require 'subr-x)
+(require 'dash)
+(require 'map)
 
 ;; Quail is quite stateful, so be careful when editing this code.  Note
 ;; that with-temp-buffer is used below whenever buffer-local state is
@@ -34,7 +37,7 @@
 
 (defun lean4-input-concat-map (f xs)
   "Concat (map F XS)."
-  (apply 'append (mapcar f xs)))
+  (apply #'append (mapcar f xs)))
 
 (defun lean4-input-to-string-list (s)
   "Convert a string S to a list of one-character strings, after
@@ -213,7 +216,7 @@ TRANS is a list of pairs (KEY-SEQUENCE . TRANSLATION). The
 translations are appended to the current translations."
   (with-temp-buffer
     (map-do (lambda (key tr)
-              (unless (null key)
+              (when key
                 (quail-defrule (concat "\\" key)
                                tr
                                "Lean" t)))
@@ -272,7 +275,8 @@ Suitable for use in the :set field of `defcustom'."
 
 ;; Set up the input method.
 
-(lean4-input-setup)
+(cl-eval-when (load)
+  (lean4-input-setup))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Administrative details

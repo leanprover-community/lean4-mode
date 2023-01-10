@@ -21,6 +21,10 @@
 (require 'lsp-protocol)
 (require 'magit-section)
 
+(defgroup lean4-info nil
+  "Lean Info"
+  :group 'lean)
+
 ;; Lean Info Mode (for "*lean4-info*" buffer)
 ;; Automode List
 ;;;###autoload
@@ -97,7 +101,6 @@
 (defun lean4-info-buffer-redisplay ()
   (when (lean4-info-buffer-active lean4-info-buffer-name)
     (-let* ((deactivate-mark) ; keep transient mark
-            (pos (apply #'lsp-make-position (lsp--cur-position)))
             (line (lsp--cur-line))
             (errors (lsp--get-buffer-diagnostics))
             (errors (-sort (-on #'< #'lean4-diagnostic-full-end-line) errors))
@@ -190,7 +193,9 @@
 
 
 (defcustom lean4-info-buffer-debounce-delay-sec 0.1
-  "Duration of time we wait before writing to *Lean Goal*")
+  "Duration of time we wait before writing to *Lean Goal*"
+  :group 'lean4-info
+  :type 'number)
 
 
 (defvar lean4-info-buffer-debounce-timer nil
@@ -198,16 +203,18 @@
 
 
 (defvar lean4-info-buffer-debounce-begin-time nil
-  "Time we have begun debouncing. Is 'nil' if we are not
+  "Time we have begun debouncing. Is nil if we are not
    currently debouncing. Otherwise, is a timestamp as given
-   by 'current-time'.")
+   by `current-time'.")
 
 (defcustom lean4-info-buffer-debounce-upper-bound-sec
   0.5
   "Maximum time we are allowed to stagger debouncing. If we recieve
    a request such that we have been debouncing for longer than
-   'lean4-info-buffer-debounce-begin-time', then we immediately
-   run the request.")
+   `lean4-info-buffer-debounce-begin-time', then we immediately
+   run the request."
+  :group 'lean4-info
+  :type 'number)
 
 ;;  Debounce implementation modifed from lsp-lens
 ;; https://github.com/emacs-lsp/lsp-mode/blob/2f0ea2e396ec9a570f2a2aeb097c304ddc61ebee/lsp-lens.el#L140

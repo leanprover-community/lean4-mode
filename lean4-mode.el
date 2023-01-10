@@ -10,7 +10,7 @@
 ;; Maintainer: Sebastian Ullrich <sebasti@nullri.ch>
 ;; Created: Jan 09, 2014
 ;; Keywords: languages
-;; Package-Requires: ((emacs "26.3") (dash "2.18.0") (s "1.10.0") (f "0.19.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
+;; Package-Requires: ((emacs "28.1") (dash "2.18.0") (s "1.10.0") (f "0.19.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
 ;; URL: https://github.com/leanprover/lean4
 
 ;; Released under Apache 2.0 license as described in the file LICENSE.
@@ -35,13 +35,20 @@
 (require 'lean4-eri)
 (require 'lean4-util)
 (require 'lean4-settings)
-(require 'lean4-input)
 (require 'lean4-syntax)
 (require 'lean4-info)
 (require 'lean4-leanpkg)
 (require 'lean4-dev)
 (require 'lean4-fringe)
 (require 'lean4-lake)
+
+;; Silence byte-compiler
+(defvar lsp--cur-version)
+(defvar markdown-code-lang-modes)
+(defvar compilation-mode-font-lock-keywords)
+(declare-function lean-mode "ext:lean-mode")
+(declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
+(declare-function quail-show-key "quail")
 
 (defun lean4-compile-string (lake-name exe-name args file-name)
   "Concatenate EXE-NAME, ARGS, and FILE-NAME."
@@ -65,7 +72,7 @@
          (target-file-name
           (or
            (buffer-file-name)
-           (flymake-init-create-temp-buffer-copy 'lean4-create-temp-in-system-tempdir))))
+           (flymake-proc-init-create-temp-buffer-copy 'lean4-create-temp-in-system-tempdir))))
     (compile (lean4-compile-string
 	      (if use-lake (shell-quote-argument (f-full (lean4-get-executable lean4-lake-name))) nil)
               (shell-quote-argument (f-full (lean4-get-executable lean4-executable-name)))
@@ -80,7 +87,10 @@
   (lean4-execute))
 
 (defun lean4-refresh-file-dependencies ()
-  "Restart the server subprocess for the current file, recompiling & reloading all imports"
+  "Refresh the file dependencies.
+
+This function restarts the server subprocess for the current
+file, recompiling, and reloading all imports."
   (interactive)
   (lsp-notify
    "textDocument/didClose"
@@ -104,9 +114,9 @@
   (local-set-key lean4-keybinding-std-exe2                  #'lean4-std-exe)
   (local-set-key lean4-keybinding-show-key                  #'quail-show-key)
   (local-set-key lean4-keybinding-tab-indent                #'lean4-tab-indent)
-  (local-set-key lean4-keybinding-hole                      #'lean4-hole)
+  ;; (local-set-key lean4-keybinding-hole                      #'lean4-hole)
   (local-set-key lean4-keybinding-lean4-toggle-info         #'lean4-toggle-info)
-  (local-set-key lean4-keybinding-lean4-message-boxes-toggle #'lean4-message-boxes-toggle)
+  ;; (local-set-key lean4-keybinding-lean4-message-boxes-toggle #'lean4-message-boxes-toggle)
   (local-set-key lean4-keybinding-leanpkg-configure         #'lean4-leanpkg-configure)
   (local-set-key lean4-keybinding-leanpkg-build             #'lean4-leanpkg-build)
   (local-set-key lean4-keybinding-leanpkg-test              #'lean4-leanpkg-test)
@@ -114,7 +124,7 @@
   (local-set-key lean4-keybinding-refresh-file-dependencies #'lean4-refresh-file-dependencies)
   ;; This only works as a mouse binding due to the event, so it is not abstracted
   ;; to avoid user confusion.
-  (local-set-key (kbd "<mouse-3>")                         #'lean4-right-click-show-menu)
+  ;; (local-set-key (kbd "<mouse-3>")                         #'lean4-right-click-show-menu)
   )
 
 (define-abbrev-table 'lean4-abbrev-table
@@ -209,6 +219,7 @@ Invokes `lean4-mode-hook'.
   (set (make-local-variable 'font-lock-defaults) lean4-font-lock-defaults)
   (set (make-local-variable 'indent-tabs-mode) nil)
   (set 'compilation-mode-font-lock-keywords '())
+  (require 'lean4-input)
   (set-input-method "Lean")
   (set (make-local-variable 'lisp-indent-function)
        'common-lisp-indent-function)
@@ -227,12 +238,12 @@ Invokes `lean4-mode-hook'.
     (setq version-line (string-remove-prefix "Lean (version " version-line))
     (setq version-line (split-string version-line (rx (or "." " " ","))))
     (-take 3 version-line)))
-(defalias 'lean4--version 'lean--version)
+(defalias 'lean4--version #'lean--version)
 
 (defun lean-show-version ()
   (interactive)
-  (message "Lean %s" (mapconcat 'identity (lean--version) ".")))
-(defalias 'lean4-show-version 'lean-show-version)
+  (message "Lean %s" (mapconcat #'identity (lean--version) ".")))
+(defalias 'lean4-show-version #'lean-show-version)
 
 ;;;###autoload
 (defun lean-select-mode ()
@@ -242,7 +253,7 @@ Invokes `lean4-mode-hook'.
               ((equal (car version) "3") (lean-mode))))
     (lean4-mode)))
 ;;;###autoload
-(defalias 'lean4-select-mode 'lean-select-mode)
+(defalias 'lean4-select-mode #'lean-select-mode)
 
 ;; Automatically use lean4-mode for .lean files.
 ;;;###autoload

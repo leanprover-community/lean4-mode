@@ -8,6 +8,7 @@
 (require 'f)
 (require 's)
 (require 'dash)
+(require 'lean4-settings)
 
 (defun lean4-setup-rootdir ()
   (let ((root (executable-find lean4-executable-name)))
