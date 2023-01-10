@@ -101,7 +101,6 @@
 (defun lean4-info-buffer-redisplay ()
   (when (lean4-info-buffer-active lean4-info-buffer-name)
     (-let* ((deactivate-mark) ; keep transient mark
-            (pos (apply #'lsp-make-position (lsp--cur-position)))
             (line (lsp--cur-line))
             (errors (lsp--get-buffer-diagnostics))
             (errors (-sort (-on #'< #'lean4-diagnostic-full-end-line) errors))
