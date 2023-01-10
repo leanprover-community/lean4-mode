@@ -20,7 +20,7 @@
 (defun lean4-eri-maximum (xs)
   "Calculate maximum element in XS.
 Returns nil if the list is empty."
-  (if xs (apply 'max xs)))
+  (if xs (apply #'max xs)))
 
 (defun lean4-eri-take (n xs)
   "Return the first N elements of XS."
@@ -51,19 +51,19 @@ Example (positions marked with ^ are returned):
     (save-excursion
       (save-restriction
         (beginning-of-line)
-        ; To make \\` work in the regexp below:
+                                        ; To make \\` work in the regexp below:
         (narrow-to-region (line-beginning-position) (line-end-position))
         (while
             (progn
               (let ((pos (and (search-forward-regexp
                                "\\(?:\\s-\\|\\`\\)\\(\\S-\\)" nil t)
                               (match-beginning 1))))
-                (when (not (null pos))
+                (unless (null pos)
                   (let ((pos1 (- pos (line-beginning-position))))
                     (when (or (null max) (< pos1 max))
                       (add-to-list 'result pos1))))
                 (and pos
-                     (< (point) (line-end-position))
+                     (not (eolp))
                      (or (null max) (< (current-column) max))))))
         (nreverse result) ; Destructive operation.
         ))))

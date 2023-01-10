@@ -238,12 +238,12 @@ Invokes `lean4-mode-hook'.
     (setq version-line (string-remove-prefix "Lean (version " version-line))
     (setq version-line (split-string version-line (rx (or "." " " ","))))
     (-take 3 version-line)))
-(defalias 'lean4--version 'lean--version)
+(defalias 'lean4--version #'lean--version)
 
 (defun lean-show-version ()
   (interactive)
-  (message "Lean %s" (mapconcat 'identity (lean--version) ".")))
-(defalias 'lean4-show-version 'lean-show-version)
+  (message "Lean %s" (mapconcat #'identity (lean--version) ".")))
+(defalias 'lean4-show-version #'lean-show-version)
 
 ;;;###autoload
 (defun lean-select-mode ()
@@ -253,7 +253,7 @@ Invokes `lean4-mode-hook'.
               ((equal (car version) "3") (lean-mode))))
     (lean4-mode)))
 ;;;###autoload
-(defalias 'lean4-select-mode 'lean-select-mode)
+(defalias 'lean4-select-mode #'lean-select-mode)
 
 ;; Automatically use lean4-mode for .lean files.
 ;;;###autoload

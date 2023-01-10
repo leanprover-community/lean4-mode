@@ -23,7 +23,7 @@
 
 (defun lean4-leanpkg-find-dir-safe ()
   (or (lean4-leanpkg-find-dir)
-      (error (format "cannot find leanpkg.toml for %s" (buffer-file-name)))))
+      (error "cannot find leanpkg.toml for %s" (buffer-file-name))))
 
 (defun lean4-leanpkg-executable ()
   (lean4-get-executable "leanpkg"))
