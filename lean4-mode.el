@@ -42,6 +42,14 @@
 (require 'lean4-fringe)
 (require 'lean4-lake)
 
+;; Silence byte-compiler
+(defvar lsp--cur-version)
+(defvar markdown-code-lang-modes)
+(defvar compilation-mode-font-lock-keywords)
+(declare-function lean-mode "ext:lean-mode")
+(declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
+(declare-function quail-show-key "quail")
+
 (defun lean4-compile-string (lake-name exe-name args file-name)
   "Concatenate EXE-NAME, ARGS, and FILE-NAME."
   (if lake-name
@@ -64,7 +72,7 @@
          (target-file-name
           (or
            (buffer-file-name)
-           (flymake-init-create-temp-buffer-copy 'lean4-create-temp-in-system-tempdir))))
+           (flymake-proc-init-create-temp-buffer-copy 'lean4-create-temp-in-system-tempdir))))
     (compile (lean4-compile-string
 	      (if use-lake (shell-quote-argument (f-full (lean4-get-executable lean4-lake-name))) nil)
               (shell-quote-argument (f-full (lean4-get-executable lean4-executable-name)))
