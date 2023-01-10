@@ -21,6 +21,10 @@
 (require 'lsp-protocol)
 (require 'magit-section)
 
+(defgroup lean4-info nil
+  "Lean Info"
+  :group 'lean)
+
 ;; Lean Info Mode (for "*lean4-info*" buffer)
 ;; Automode List
 ;;;###autoload
@@ -191,6 +195,7 @@
 
 (defcustom lean4-info-buffer-debounce-delay-sec 0.1
   "Duration of time we wait before writing to *Lean Goal*"
+  :group 'lean4-info
   :type 'number)
 
 
@@ -209,6 +214,7 @@
    a request such that we have been debouncing for longer than
    'lean4-info-buffer-debounce-begin-time', then we immediately
    run the request."
+  :group 'lean4-info
   :type 'number)
 
 ;;  Debounce implementation modifed from lsp-lens
