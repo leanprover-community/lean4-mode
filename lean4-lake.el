@@ -17,9 +17,8 @@
 (defun lean4-lake-build ()
   "Call lake build"
   (interactive)
-  (let* ((default-directory (file-name-as-directory (lean4-lake-find-dir-safe))))
-    (with-existing-directory
-      (compile (concat (lean4-get-executable lean4-lake-name) " build")))))
+  (let ((default-directory (file-name-as-directory (lean4-lake-find-dir-safe))))
+    (compile (concat (lean4-get-executable lean4-lake-name) " build"))))
 
 (provide 'lean4-lake)
 
