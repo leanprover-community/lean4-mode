@@ -259,8 +259,9 @@ tasks as well."
                            lean4-input-data-directory))
     (thread-last
       (let ((json-key-type 'string)) ;; make sure json key is a string.
+        ;; Prefer emacs native support implemented in C (since 27.1).
+        ;; Back-up is still useful in case Emacs in not compiled `--with-json`.
         (if (fboundp 'json-parse-buffer)
-            ;; Prefer emacs native support implemented in C (since 27.1).
             (json-parse-buffer)
           (json-read)))
       (map-filter (lambda (_ s)
