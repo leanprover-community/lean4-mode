@@ -253,15 +253,20 @@ tasks as well."
 
   (lean4-input-add-translations (mapcar (lambda (tr) (cons (car tr) (vconcat (cdr tr))))
                                         lean4-input-user-translations))
-  (lean4-input-add-translations (with-temp-buffer
-                                  (insert-file-contents (expand-file-name
-                                                         "abbreviations.json"
-                                                         lean4-input-data-directory))
-                                  (goto-char (point-min))
-                                  (thread-last
-                                    (json-parse-buffer)
-                                    (map-filter (lambda (_ s)
-                                                  (not (string-match-p "\\$CURSOR" s)))))))
+  (with-temp-buffer
+    (insert-file-contents (expand-file-name
+                           "abbreviations.json"
+                           lean4-input-data-directory))
+    (thread-last
+      (let ((json-key-type 'string)) ;; make sure json key is a string.
+        ;; Prefer emacs native support implemented in C (since 27.1).
+        ;; Back-up is still useful in case Emacs in not compiled `--with-json`.
+        (if (fboundp 'json-parse-buffer)
+            (json-parse-buffer)
+          (json-read)))
+      (map-filter (lambda (_ s)
+                    (not (string-match-p "\\$CURSOR" s))))
+      lean4-input-add-translations))
   (dolist (def lean4-input-inherit)
     (lean4-input-inherit-package (car def)
                                 (eval (cdr def)))))
