@@ -280,7 +280,7 @@ Suitable for use in the :set field of `defcustom'."
 
 ;; Set up the input method.
 
-(cl-eval-when (load)
+(cl-eval-when (load eval)
   (lean4-input-setup))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
