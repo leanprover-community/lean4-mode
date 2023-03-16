@@ -11,6 +11,10 @@
 
 ;; Released under Apache 2.0 license as described in the file LICENSE.
 
+;;; Commentary:
+
+;; FIXME
+
 ;;; Code:
 
 (require 'cl-lib)

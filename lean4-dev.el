@@ -11,13 +11,17 @@
 
 ;; Released under Apache 2.0 license as described in the file LICENSE.
 
+;;; Commentary:
+
+;; FIXME
+
 ;;; Code:
 
 (require 'f)
 (require 'lean4-util)
 
 (defun lean4-diff-test-file ()
-  "Use interactive ./test_input.sh on file of current buffer"
+  "Use interactive ./test_input.sh on file of current buffer."
   (interactive)
   (save-buffer)
                                         ; yes: auto-agree to copying missing files
