@@ -1,5 +1,7 @@
 ;;; lean4-eri.el --- Enhanced relative indentation (eri) -*- lexical-binding: t -*-
 
+;; SPDX-License-Identifier: Apache-2.0
+
 ;;; Commentary:
 
 ;; Adapted from agda-mode (https://github.com/agda/agda/blob/master/src/data/emacs-mode/eri.el)

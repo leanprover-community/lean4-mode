@@ -1,5 +1,6 @@
 ;;; lean4-lake.el --- Lake integration for lean4-mode -*- lexical-binding: t -*-
 
+;; SPDX-License-Identifier: Apache-2.0
 ;; This file is not part of GNU Emacs.
 
 ;;; License:

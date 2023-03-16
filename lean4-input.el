@@ -2,6 +2,7 @@
 ;;;
 ;;; DISCLAIMER: This file is based on agda-input.el provided with the Agda language.
 ;;; We did minor modifications
+;; SPDX-License-Identifier: Apache-2.0
 ;;
 ;;; Commentary:
 ;;

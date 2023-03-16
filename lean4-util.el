@@ -4,6 +4,7 @@
 ;; Released under Apache 2.0 license as described in the file LICENSE.
 ;;
 ;; Author: Soonho Kong
+;; SPDX-License-Identifier: Apache-2.0
 ;;
 ;;; Code:
 

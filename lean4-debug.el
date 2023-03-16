@@ -3,6 +3,7 @@
 ;; Copyright (c) 2014 Microsoft Corporation. All rights reserved.
 
 ;; Author: Soonho Kong
+;; SPDX-License-Identifier: Apache-2.0
 
 ;; This file is not part of GNU Emacs.
 

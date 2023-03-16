@@ -8,6 +8,7 @@
 ;; Keywords: languages
 ;; Version: 0.1
 ;; URL: https://github.com/leanprover/lean/blob/master/src/emacs
+;; SPDX-License-Identifier: Apache-2.0
 ;;
 ;; Released under Apache 2.0 license as described in the file LICENSE.
 ;;
