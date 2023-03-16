@@ -10,12 +10,12 @@
 
 (require 'cl-lib)
 
-(defgroup lean nil
-  "Lean Theorem Prover"
+(defgroup lean4 nil
+  "Lean 4 programming language and theorem prover"
   :prefix "lean4-"
   :group 'languages
   :link '(url-link :tag "Website" "http://leanprover.github.io")
-  :link '(url-link :tag "Github"  "https://github.com/leanprover/lean"))
+  :link '(url-link :tag "Github"  "https://github.com/leanprover/lean4"))
 
 (defgroup lean4-keybinding nil
   "Keybindings for lean4-mode."
