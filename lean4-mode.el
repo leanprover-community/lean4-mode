@@ -40,7 +40,6 @@
 (require 'lean4-settings)
 (require 'lean4-syntax)
 (require 'lean4-info)
-(require 'lean4-leanpkg)
 (require 'lean4-dev)
 (require 'lean4-fringe)
 (require 'lean4-lake)
@@ -120,9 +119,6 @@ file, recompiling, and reloading all imports."
   ;; (local-set-key lean4-keybinding-hole                      #'lean4-hole)
   (local-set-key lean4-keybinding-lean4-toggle-info         #'lean4-toggle-info)
   ;; (local-set-key lean4-keybinding-lean4-message-boxes-toggle #'lean4-message-boxes-toggle)
-  (local-set-key lean4-keybinding-leanpkg-configure         #'lean4-leanpkg-configure)
-  (local-set-key lean4-keybinding-leanpkg-build             #'lean4-leanpkg-build)
-  (local-set-key lean4-keybinding-leanpkg-test              #'lean4-leanpkg-test)
   (local-set-key lean4-keybinding-lake-build                #'lean4-lake-build)
   (local-set-key lean4-keybinding-refresh-file-dependencies #'lean4-refresh-file-dependencies)
   ;; This only works as a mouse binding due to the event, so it is not abstracted
