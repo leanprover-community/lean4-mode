@@ -180,8 +180,7 @@
      (,(rx (and (group "«") (group (one-or-more (not (any "»")))) (group "»")))
       (1 font-lock-comment-face t)
       (2 nil t)
-      (3 font-lock-comment-face t))
-     )))
+      (3 font-lock-comment-face t)))))
 
 ;; Syntax Highlighting for Lean Info Mode
 (defconst lean4-info-font-lock-defaults

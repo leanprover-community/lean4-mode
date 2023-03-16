@@ -142,8 +142,7 @@ translations using `lean4-input-show-translations'."
                 (lean4-input-compose
                  (lean4-input-drop '("^o"))
                  (lean4-input-prefix "^"))
-                (lean4-input-prefix "_")))))
-    )
+                (lean4-input-prefix "_"))))))
   "A list of Quail input methods whose translations should be
 inherited by the Lean input method (with the exception of
 translations corresponding to ASCII characters).
@@ -306,7 +305,7 @@ leanprover.github.io/tutorial/js/input-method.js"
           (cond ((vectorp outputs)
                  (insert (elt outputs 0)))
                 (t (insert-char outputs)))
-          (insert (format "\",\n" input))))
+          (insert (format "\",\n"))))
       (insert "};"))))
 
 (defun lean4-input-export-translations-to-stdout ()

@@ -168,13 +168,12 @@ file, recompiling, and reloading all imports."
 (defconst lean4-hooks-alist
   '(
     ;; Handle events that may start automatic syntax checks
-    (before-save-hook                    . lean4-whitespace-cleanup)
+    (before-save-hook . lean4-whitespace-cleanup)
     ;; info view
     ;; update errors immediately, but delay querying goal
-    (flycheck-after-syntax-check-hook    . lean4-info-buffer-redisplay-debounced)
-    (post-command-hook                   . lean4-info-buffer-redisplay-debounced)
-    (lsp-on-idle-hook                    . lean4-info-buffer-refresh)
-    )
+    (flycheck-after-syntax-check-hook . lean4-info-buffer-redisplay-debounced)
+    (post-command-hook . lean4-info-buffer-redisplay-debounced)
+    (lsp-on-idle-hook . lean4-info-buffer-refresh))
   "Hooks which lean4-mode needs to hook in.
 
 The `car' of each pair is a hook variable, the `cdr' a function

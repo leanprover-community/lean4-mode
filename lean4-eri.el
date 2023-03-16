@@ -58,10 +58,10 @@ Example (positions marked with ^ are returned):
               (let ((pos (and (search-forward-regexp
                                "\\(?:\\s-\\|\\`\\)\\(\\S-\\)" nil t)
                               (match-beginning 1))))
-                (unless (null pos)
+                (when pos
                   (let ((pos1 (- pos (line-beginning-position))))
                     (when (or (null max) (< pos1 max))
-                      (add-to-list 'result pos1))))
+                      (cl-pushnew pos1 result))))
                 (and pos
                      (not (eolp))
                      (or (null max) (< (current-column) max))))))
