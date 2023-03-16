@@ -1,4 +1,4 @@
-;;; lean4-eri.el --- Enhanced relative indentation (eri)
+;;; lean4-eri.el --- Enhanced relative indentation (eri) -*- lexical-binding: t -*-
 
 ;;; Commentary:
 

@@ -1,4 +1,4 @@
-;;; lean4-fringe.el -*- lexical-binding: t; -*-
+;;; lean4-fringe.el --- Show Lean processing progress in the editor fringe -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2016 Microsoft Corporation. All rights reserved.
 ;; Released under Apache 2.0 license as described in the file LICENSE.

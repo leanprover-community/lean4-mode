@@ -1,10 +1,11 @@
-;;  -*- lexical-binding: t -*-
+;;; lean4-leanpkg.el --- Leanpkg integration for lean4-mode -*- lexical-binding: t -*-
 ;;
 ;; Copyright (c) 2017 Microsoft Corporation. All rights reserved.
 ;; Released under Apache 2.0 license as described in the file LICENSE.
 ;;
 ;; Author: Gabriel Ebner
 ;;
+;;; Code:
 
 (require 's)
 (require 'json)
@@ -96,3 +97,4 @@
     (plist-get path-out :leanpkg_path_file)))
 
 (provide 'lean4-leanpkg)
+;;; lean4-leanpkg.el ends here

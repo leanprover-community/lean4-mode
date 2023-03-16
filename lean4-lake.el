@@ -1,3 +1,13 @@
+;;; lean4-lake.el --- Lake integration for lean4-mode -*- lexical-binding: t -*-
+
+;; This file is not part of GNU Emacs.
+
+;;; License:
+
+;; Released under Apache 2.0 license as described in the file LICENSE.
+
+;;; Code:
+
 (require 'lean4-util)
 (require 'lean4-settings)
 
@@ -21,4 +31,4 @@
     (compile (concat (lean4-get-executable lean4-lake-name) " build"))))
 
 (provide 'lean4-lake)
-
+;;; lean4-lake.el ends here

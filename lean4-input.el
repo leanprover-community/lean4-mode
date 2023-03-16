@@ -1,5 +1,4 @@
-;;;  -*- lexical-binding: t -*-
-;;; lean4-input.el --- The Lean input method (based/copied from Agda)
+;;; lean4-input.el --- The Lean input method (based/copied from Agda) -*- lexical-binding: t -*-
 ;;;
 ;;; DISCLAIMER: This file is based on agda-input.el provided with the Agda language.
 ;;; We did minor modifications

@@ -1,9 +1,12 @@
+;;; lean4-syntax.el --- Syntax definitions for lean4-mode -*- lexical-binding: t -*-
+
 ;; Copyright (c) 2013, 2014 Microsoft Corporation. All rights reserved.
 ;; Released under Apache 2.0 license as described in the file LICENSE.
 ;;
 ;; Author: Leonardo de Moura
 ;;         Soonho Kong
 ;;
+;;; Code:
 
 (require 'dash)
 (require 'rx)
@@ -198,3 +201,4 @@
     `(,(-concat new-entries inherited-entries))))
 
 (provide 'lean4-syntax)
+;;; lean4-syntax.el ends here

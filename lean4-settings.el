@@ -1,8 +1,11 @@
+;;; lean4-settings.el --- Custom variables for lean4-mode -*- lexical-binding: t -*-
+
 ;; Copyright (c) 2014 Microsoft Corporation. All rights reserved.
 ;; Released under Apache 2.0 license as described in the file LICENSE.
 ;;
 ;; Author: Soonho Kong
 ;;
+;;; Code:
 
 (require 'cl-lib)
 
@@ -136,3 +139,4 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   :group 'lean4-keybinding :type 'key-sequence)
 
 (provide 'lean4-settings)
+;;; lean4-settings.el ends here

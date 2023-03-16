@@ -1,6 +1,4 @@
-;; -*- lexical-binding: t -*-
-;;
-;;; lean4-info.el --- Emacs mode for Lean theorem prover
+;;; lean4-info.el --- Emacs mode for Lean theorem prover -*- lexical-binding: t -*-
 ;;
 ;; Copyright (c) 2016 Gabriel Ebner. All rights reserved.
 ;;
@@ -13,6 +11,7 @@
 ;;
 ;; Released under Apache 2.0 license as described in the file LICENSE.
 ;;
+;;; Code:
 
 (require 'dash)
 (require 'lean4-syntax)
@@ -278,3 +277,4 @@
   (lean4-info-buffer-refresh))
 
 (provide 'lean4-info)
+;;; lean4-info.el ends here

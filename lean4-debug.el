@@ -1,8 +1,17 @@
+;;; lean4-debug.el --- Debug mode for lean4-mode -*- lexical-binding: t -*-
+
 ;; Copyright (c) 2014 Microsoft Corporation. All rights reserved.
-;; Released under Apache 2.0 license as described in the file LICENSE.
-;;
+
 ;; Author: Soonho Kong
-;;
+
+;; This file is not part of GNU Emacs.
+
+;;; License:
+
+;; Released under Apache 2.0 license as described in the file LICENSE.
+
+;;; Code:
+
 (require 'cl-lib)
 
 (defvar lean4-debug-mode nil)
@@ -45,3 +54,4 @@
                                    args)))))
 
 (provide 'lean4-debug)
+;;; lean4-debug.el ends here
