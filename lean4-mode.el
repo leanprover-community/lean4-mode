@@ -239,29 +239,25 @@ Invokes `lean4-mode-hook'.
     (add-hook hook fn nil 'local))
   (lean4-mode-setup))
 
-(defun lean--version ()
+(defun lean4--version ()
   (let ((version-line
          (car (last (process-lines (lean4-get-executable "lean")
                                    "-v")))))
     (setq version-line (string-remove-prefix "Lean (version " version-line))
     (setq version-line (split-string version-line (rx (or "." " " ","))))
     (-take 3 version-line)))
-(defalias 'lean4--version #'lean--version)
 
-(defun lean-show-version ()
+(defun lean4-show-version ()
   (interactive)
-  (message "Lean %s" (mapconcat #'identity (lean--version) ".")))
-(defalias 'lean4-show-version #'lean-show-version)
+  (message "Lean %s" (mapconcat #'identity (lean4--version) ".")))
 
 ;;;###autoload
-(defun lean-select-mode ()
+(defun lean4-select-mode ()
   (if lean4-autodetect-lean3
-      (let ((version (lean--version)))
+      (let ((version (lean4--version)))
         (cond ((equal (car version) "4") (lean4-mode))
               ((equal (car version) "3") (lean-mode))))
     (lean4-mode)))
-;;;###autoload
-(defalias 'lean4-select-mode #'lean-select-mode)
 
 ;; Automatically use lean4-mode for .lean files.
 ;;;###autoload
