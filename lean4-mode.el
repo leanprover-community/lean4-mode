@@ -240,23 +240,22 @@ Invokes `lean4-mode-hook'.
   (lean4-mode-setup))
 
 (defun lean4--version ()
-  (let ((version-line
-         (car (last (process-lines (lean4-get-executable "lean")
-                                   "-v")))))
-    (setq version-line (string-remove-prefix "Lean (version " version-line))
-    (setq version-line (split-string version-line (rx (or "." " " ","))))
-    (-take 3 version-line)))
+  (with-temp-buffer
+    (call-process (lean4-get-executable "lean") nil (list t nil) nil
+                  "-v")
+    (goto-char (point-min))
+    (re-search-forward (rx bol "Lean (version " (group (+ digit) (+ "." (+ digit)))))
+    (version-to-list (match-string 1))))
 
 (defun lean4-show-version ()
   (interactive)
-  (message "Lean %s" (mapconcat #'identity (lean4--version) ".")))
+  (message "Lean %s" (mapconcat #'number-to-string (lean4--version) ".")))
 
 ;;;###autoload
 (defun lean4-select-mode ()
-  (if lean4-autodetect-lean3
-      (let ((version (lean4--version)))
-        (cond ((equal (car version) "4") (lean4-mode))
-              ((equal (car version) "3") (lean-mode))))
+  (if (and lean4-autodetect-lean3
+           (eq 3 (car (lean4--version))))
+      (lean-mode)
     (lean4-mode)))
 
 ;; Automatically use lean4-mode for .lean files.
