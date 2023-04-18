@@ -1,17 +1,40 @@
+;;; lean4-settings.el --- Custom variables for lean4-mode -*- lexical-binding: t -*-
+
 ;; Copyright (c) 2014 Microsoft Corporation. All rights reserved.
 ;; Released under Apache 2.0 license as described in the file LICENSE.
 ;;
 ;; Author: Soonho Kong
+;; SPDX-License-Identifier: Apache-2.0
 ;;
+
+;;; License:
+
+;; Licensed under the Apache License, Version 2.0 (the "License");
+;; you may not use this file except in compliance with the License.
+;; You may obtain a copy of the License at:
+;;
+;;     http://www.apache.org/licenses/LICENSE-2.0
+;;
+;; Unless required by applicable law or agreed to in writing, software
+;; distributed under the License is distributed on an "AS IS" BASIS,
+;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+;; See the License for the specific language governing permissions and
+;; limitations under the License.
+
+;;; Commentary:
+
+;; This library defines custom variables for `lean4-mode'.
+
+;;; Code:
 
 (require 'cl-lib)
 
-(defgroup lean nil
-  "Lean Theorem Prover"
+(defgroup lean4 nil
+  "Lean 4 programming language and theorem prover"
   :prefix "lean4-"
   :group 'languages
   :link '(url-link :tag "Website" "http://leanprover.github.io")
-  :link '(url-link :tag "Github"  "https://github.com/leanprover/lean"))
+  :link '(url-link :tag "Github"  "https://github.com/leanprover/lean4"))
 
 (defgroup lean4-keybinding nil
   "Keybindings for lean4-mode."
@@ -119,15 +142,6 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
 (defcustom lean4-keybinding-lean4-message-boxes-toggle (kbd "C-c C-b")
   "Lean Keybinding for lean4-message-boxes-toggle"
   :group 'lean4-keybinding :type 'key-sequence)
-(defcustom lean4-keybinding-leanpkg-configure (kbd "C-c C-p C-c")
-  "Lean Keybinding for lean4-leanpkg-configure"
-  :group 'lean4-keybinding :type 'key-sequence)
-(defcustom lean4-keybinding-leanpkg-build (kbd "C-c C-p C-b")
-  "Lean Keybinding for lean4-leanpkg-build"
-  :group 'lean4-keybinding :type 'key-sequence)
-(defcustom lean4-keybinding-leanpkg-test (kbd "C-c C-p C-t")
-  "Lean Keybinding for lean4-leanpkg-test"
-  :group 'lean4-keybinding :type 'key-sequence)
 (defcustom lean4-keybinding-lake-build (kbd "C-c C-p C-l")
   "Lean Keybinding for lean4-lake-build"
   :group 'lean4-keybinding :type 'key-sequence)
@@ -136,3 +150,4 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   :group 'lean4-keybinding :type 'key-sequence)
 
 (provide 'lean4-settings)
+;;; lean4-settings.el ends here

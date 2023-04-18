@@ -11,9 +11,22 @@
 ;; Created: Jan 09, 2014
 ;; Keywords: languages
 ;; Package-Requires: ((emacs "27.1") (dash "2.18.0") (s "1.10.0") (f "0.19.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
-;; URL: https://github.com/leanprover/lean4
+;; URL: https://github.com/leanprover/lean4-mode
+;; SPDX-License-Identifier: Apache-2.0
 
-;; Released under Apache 2.0 license as described in the file LICENSE.
+;;; License:
+
+;; Licensed under the Apache License, Version 2.0 (the "License");
+;; you may not use this file except in compliance with the License.
+;; You may obtain a copy of the License at:
+;;
+;;     http://www.apache.org/licenses/LICENSE-2.0
+;;
+;; Unless required by applicable law or agreed to in writing, software
+;; distributed under the License is distributed on an "AS IS" BASIS,
+;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+;; See the License for the specific language governing permissions and
+;; limitations under the License.
 
 ;;; Commentary:
 
@@ -37,7 +50,6 @@
 (require 'lean4-settings)
 (require 'lean4-syntax)
 (require 'lean4-info)
-(require 'lean4-leanpkg)
 (require 'lean4-dev)
 (require 'lean4-fringe)
 (require 'lean4-lake)
@@ -117,9 +129,6 @@ file, recompiling, and reloading all imports."
   ;; (local-set-key lean4-keybinding-hole                      #'lean4-hole)
   (local-set-key lean4-keybinding-lean4-toggle-info         #'lean4-toggle-info)
   ;; (local-set-key lean4-keybinding-lean4-message-boxes-toggle #'lean4-message-boxes-toggle)
-  (local-set-key lean4-keybinding-leanpkg-configure         #'lean4-leanpkg-configure)
-  (local-set-key lean4-keybinding-leanpkg-build             #'lean4-leanpkg-build)
-  (local-set-key lean4-keybinding-leanpkg-test              #'lean4-leanpkg-test)
   (local-set-key lean4-keybinding-lake-build                #'lean4-lake-build)
   (local-set-key lean4-keybinding-refresh-file-dependencies #'lean4-refresh-file-dependencies)
   ;; This only works as a mouse binding due to the event, so it is not abstracted
@@ -168,13 +177,12 @@ file, recompiling, and reloading all imports."
 (defconst lean4-hooks-alist
   '(
     ;; Handle events that may start automatic syntax checks
-    (before-save-hook                    . lean4-whitespace-cleanup)
+    (before-save-hook . lean4-whitespace-cleanup)
     ;; info view
     ;; update errors immediately, but delay querying goal
-    (flycheck-after-syntax-check-hook    . lean4-info-buffer-redisplay-debounced)
-    (post-command-hook                   . lean4-info-buffer-redisplay-debounced)
-    (lsp-on-idle-hook                    . lean4-info-buffer-refresh)
-    )
+    (flycheck-after-syntax-check-hook . lean4-info-buffer-redisplay-debounced)
+    (post-command-hook . lean4-info-buffer-redisplay-debounced)
+    (lsp-on-idle-hook . lean4-info-buffer-refresh))
   "Hooks which lean4-mode needs to hook in.
 
 The `car' of each pair is a hook variable, the `cdr' a function
@@ -231,29 +239,24 @@ Invokes `lean4-mode-hook'.
     (add-hook hook fn nil 'local))
   (lean4-mode-setup))
 
-(defun lean--version ()
-  (let ((version-line
-         (car (last (process-lines (lean4-get-executable "lean")
-                                   "-v")))))
-    (setq version-line (string-remove-prefix "Lean (version " version-line))
-    (setq version-line (split-string version-line (rx (or "." " " ","))))
-    (-take 3 version-line)))
-(defalias 'lean4--version #'lean--version)
+(defun lean4--version ()
+  (with-temp-buffer
+    (call-process (lean4-get-executable "lean") nil (list t nil) nil
+                  "-v")
+    (goto-char (point-min))
+    (re-search-forward (rx bol "Lean (version " (group (+ digit) (+ "." (+ digit)))))
+    (version-to-list (match-string 1))))
 
-(defun lean-show-version ()
+(defun lean4-show-version ()
   (interactive)
-  (message "Lean %s" (mapconcat #'identity (lean--version) ".")))
-(defalias 'lean4-show-version #'lean-show-version)
+  (message "Lean %s" (mapconcat #'number-to-string (lean4--version) ".")))
 
 ;;;###autoload
-(defun lean-select-mode ()
-  (if lean4-autodetect-lean3
-      (let ((version (lean--version)))
-        (cond ((equal (car version) "4") (lean4-mode))
-              ((equal (car version) "3") (lean-mode))))
+(defun lean4-select-mode ()
+  (if (and lean4-autodetect-lean3
+           (eq 3 (car (lean4--version))))
+      (lean-mode)
     (lean4-mode)))
-;;;###autoload
-(defalias 'lean4-select-mode #'lean-select-mode)
 
 ;; Automatically use lean4-mode for .lean files.
 ;;;###autoload
