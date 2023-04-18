@@ -19,7 +19,8 @@
 
 ;;; Commentary:
 
-;; FIXME
+;; This library provides integration with Lake, Lean 4 build system and package
+;; manager.
 
 ;;; Code:
 

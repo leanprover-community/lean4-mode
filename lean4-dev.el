@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; FIXME
+;; This library currently provides `lean4-diff-test-file' command.
 
 ;;; Code:
 

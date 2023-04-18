@@ -25,7 +25,8 @@
 ;; limitations under the License.
 
 ;;; Commentary:
-;;
+
+;; This library provides an advanced LSP feature for `lean4-mode'.
 
 ;;; Code:
 

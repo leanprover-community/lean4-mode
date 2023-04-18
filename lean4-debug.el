@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; FIXME
+;; This library provides a debug mode for `lean4-mode'.
 
 ;;; Code:
 

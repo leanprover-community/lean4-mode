@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; FIXME
+;; This library defines custom variables for `lean4-mode'.
 
 ;;; Code:
 

@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; FIXME
+;; This library defines syntaxes for `lean4-mode'.
 
 ;;; Code:
 
