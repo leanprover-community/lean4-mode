@@ -1,4 +1,4 @@
-;;; lean4-debug.el --- Debug mode for lean4-mode -*- lexical-binding: t -*-
+;;; lean4-dev.el --- Development commands for lean4-mode -*- lexical-binding: t -*-
 
 ;; Copyright (c) 2017 Microsoft Corporation. All rights reserved.
 
