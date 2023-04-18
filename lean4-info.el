@@ -7,7 +7,7 @@
 ;; Created: Oct 29, 2016
 ;; Keywords: languages
 ;; Version: 0.1
-;; URL: https://github.com/leanprover/lean/blob/master/src/emacs
+;; URL: https://github.com/leanprover/lean4-mode
 ;; SPDX-License-Identifier: Apache-2.0
 
 ;;; License:
