@@ -1,0 +1,23 @@
+name: Update abbreviations.json
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - run: |
+        curl "$src" |  jq 'del(.[] | select(. | match("\\$CURSOR")))' \
+          > data/abbreviations.json
+      env:
+        src: https://raw.githubusercontent.com/leanprover/vscode-lean4/master/vscode-lean4/src/abbreviation/abbreviations.json
+
+    - uses: peter-evans/create-pull-request@v4
+      with:
+        title: 'chore: Update abbreviations.json'
+        branch: update-abbreviations
+        labels: automation,update
