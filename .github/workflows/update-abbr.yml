@@ -18,6 +18,8 @@ jobs:
 
     - uses: peter-evans/create-pull-request@v4
       with:
-        title: 'chore: Update abbreviations.json'
+        title: 'Update abbreviations.json'
+        commit-message: 'chore: update abbreviations.json'
         branch: update-abbreviations
         labels: automation,update
+        
