@@ -74,11 +74,11 @@ removing all space and newline characters."
 ;; Functions used to tweak translation pairs
 
 (defun lean4-input-compose (f g)
-  "\x -> concatMap F (G x)"
+  "\\x -> concatMap F (G x)"
   (lambda (x) (lean4-input-concat-map f (funcall g x))))
 
 (defun lean4-input-or (f g)
-  "\x -> F x ++ G x"
+  "\\x -> F x ++ G x"
   (lambda (x) (append (funcall f x) (funcall g x))))
 
 (defun lean4-input-nonempty ()
