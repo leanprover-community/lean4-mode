@@ -34,6 +34,9 @@
 (defvar lean4-debug-buffer-name "*lean4-debug*")
 
 (defun lean4-turn-on-debug-mode (&optional print-msg)
+  "Turn on Lean debug.
+Print message \"lean: turn on debug mode\" if PRINT-MSG or if called
+interactively."
   (interactive)
   (when (or (called-interactively-p 'any) print-msg)
     (message "lean: turn on debug mode"))
@@ -44,6 +47,9 @@
   (setq lean4-debug-mode t))
 
 (defun lean4-turn-off-debug-mode (&optional print-msg)
+  "Turn off Lean debug.
+Print message \"lean: turn off debug mode\" if PRINT-MSG or if called
+interactively."
   (interactive)
   (when (eq major-mode 'lean4-mode)
     (when (or (called-interactively-p 'any) print-msg)
