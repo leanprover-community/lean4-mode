@@ -126,17 +126,11 @@ outside a project will default to that mode."
 (defcustom lean4-keybinding-server-restart (kbd "C-c C-r")
   "Lean Keybinding for server-restart."
   :group 'lean4-keybinding  :type 'key-sequence)
-(defcustom lean4-keybinding-server-switch-version (kbd "C-c C-s")
-  "Lean Keybinding for `lean4-server-switch-version'."
-  :group 'lean4-keybinding :type 'key-sequence)
 (defcustom lean4-keybinding-tab-indent (kbd "TAB")
   "Lean Keybinding for `lean4-tab-indent'."
   :group 'lean4-keybinding  :type 'key-sequence)
 (defcustom lean4-keybinding-auto-complete (kbd "S-SPC")
   "Lean Keybinding for auto completion."
-  :group 'lean4-keybinding  :type 'key-sequence)
-(defcustom lean4-keybinding-hole (kbd "C-c SPC")
-  "Lean Keybinding for hole manipulation."
   :group 'lean4-keybinding  :type 'key-sequence)
 (defcustom lean4-keybinding-lean4-toggle-info (kbd "C-c C-i")
   "Lean Keybinding for `lean4-toggle-info'."
