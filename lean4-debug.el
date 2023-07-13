@@ -51,6 +51,9 @@
     (setq lean4-debug-mode nil)))
 
 (defun lean4-output-to-buffer (buffer-name format-string args)
+  "Output a message to a buffer.
+The buffer is given by BUFFER-NAME.  The message is given by FORMAT-STRING
+and ARGS."
   (with-current-buffer
       (get-buffer-create buffer-name)
     (save-selected-window
@@ -60,7 +63,8 @@
       (insert (apply #'format format-string args)))))
 
 (defun lean4-debug (format-string &rest args)
-  "Display a message at the bottom of the *lean4-debug* buffer."
+  "Display a message at the bottom of the *lean4-debug* buffer.
+The message is given by FORMAT-STRING and ARGS."
   (when lean4-debug-mode
     (let ((time-str (format-time-string "%T.%3N" (current-time))))
       (lean4-output-to-buffer lean4-debug-buffer-name
