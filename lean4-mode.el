@@ -142,36 +142,13 @@ file, recompiling, and reloading all imports."
 (defvar lean4-mode-map (make-sparse-keymap)
   "Keymap used in Lean mode")
 
-(defun lean4-mk-check-menu-option (text sym)
-  `[,text (lean4-set-check-mode ',sym)
-         :style radio :selected (eq lean4-server-check-mode ',sym)])
-
 (easy-menu-define lean4-mode-menu lean4-mode-map
   "Menu for the Lean major mode"
   `("Lean 4"
     ["Execute lean"         lean4-execute                      t]
-    ;; ["Create a new project" (call-interactively 'lean4-project-create) (not (lean4-project-inside-p))]
-    "-----------------"
-    ["Show type info"       lean4-show-type                    (and lean4-eldoc-use eldoc-mode)]
     ["Toggle info display"  lean4-toggle-info                  t]
-    ["Toggle message boxes" lean4-message-boxes-toggle         t]
-    ["Highlight pending tasks"  lean4-server-toggle-show-pending-tasks
-     :active t :style toggle :selected lean4-server-show-pending-tasks]
-    "-----------------"
-    ["List of errors"       flycheck-list-errors              flycheck-mode]
-    "-----------------"
-    ["Restart lean process" lean4-server-restart               t]
-    "-----------------"
-    ,(lean4-mk-check-menu-option "Check nothing" 'nothing)
-    ,(lean4-mk-check-menu-option "Check visible lines" 'visible-lines)
-    ,(lean4-mk-check-menu-option "Check visible lines and above" 'visible-lines-and-above)
-    ,(lean4-mk-check-menu-option "Check visible files" 'visible-files)
-    ,(lean4-mk-check-menu-option "Check open files" 'open-files)
-    "-----------------"
-    ("Configuration"
-     ["Show type at point"
-      lean4-toggle-eldoc-mode :active t :style toggle :selected eldoc-mode])
-    "-----------------"
+    ["List of errors"       flycheck-list-errors               flycheck-mode]
+    ["Restart lean process" lsp-workspace-restart              t]
     ["Customize lean4-mode" (customize-group 'lean)            t]))
 
 (defconst lean4-hooks-alist
