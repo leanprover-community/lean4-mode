@@ -33,31 +33,37 @@
 (require 'lean4-settings)
 
 (defun lean4-setup-rootdir ()
+  "Search for lean executable in variable `exec-path'.
+Try to find an executable named `lean4-executable-name' in variable `exec-path'.
+On succsess, return path to the directory with this executable."
   (let ((root (executable-find lean4-executable-name)))
     (when root
       (setq lean4-rootdir (f-dirname (f-dirname root))))
     lean4-rootdir))
 
 (defun lean4-get-rootdir ()
+  "Search for lean executable in `lean4-rootdir' and variable `exec-path'.
+First try to find an executable named `lean4-executable-name' in
+`lean4-rootdir'.  On failure, search in variable `exec-path'."
   (if lean4-rootdir
       (let ((lean4-path (f-full (f-join lean4-rootdir "bin" lean4-executable-name))))
         (unless (f-exists? lean4-path)
-          (error "Incorrect 'lean4-rootdir' value, path '%s' does not exist." lean4-path))
+          (error "Incorrect `lean4-rootdir' value, path '%s' does not exist" lean4-path))
         lean4-rootdir)
     (or
      (lean4-setup-rootdir)
      (error
-      (concat "Lean was not found in the 'exec-path' and 'lean4-rootdir' is not defined. "
+      (concat "Lean was not found in the `exec-path' and `lean4-rootdir' is not defined. "
               "Please set it via M-x customize-variable RET lean4-rootdir RET.")))))
 
 (defun lean4-get-executable (exe-name)
-  "Return fullpath of lean executable"
+  "Return fullpath of lean executable EXE-NAME."
   (let ((lean4-bin-dir-name "bin"))
     (f-full (f-join (lean4-get-rootdir) lean4-bin-dir-name exe-name))))
 
 (defun lean4-line-offset (&optional pos)
-  "Return the byte-offset of `pos` or current position, counting from the
-  beginning of the line"
+  "Return the byte-offset of POS or current position.
+Counts from the beginning of the line."
   (interactive)
   (let* ((pos (or pos (point)))
          (bol-pos
@@ -68,7 +74,7 @@
     (- pos bol-pos)))
 
 (defun lean4-pos-at-line-col (l c)
-  "Return the point of the given line and column."
+  "Return the point of the given line L and column C."
   ;; http://emacs.stackexchange.com/a/8083
   (save-excursion
     (goto-char (point-min))
@@ -77,18 +83,22 @@
     (point)))
 
 (defun lean4-whitespace-cleanup ()
-    (when lean4-delete-trailing-whitespace
+  "Delete trailing whitespace if `lean4-delete-trailing-whitespace' is t."
+  (when lean4-delete-trailing-whitespace
       (delete-trailing-whitespace)))
 
 (defun lean4-in-comment-p ()
-  "t if a current point is inside of comment block
-   nil otherwise"
+  "Return t if a current point is inside of comment block.  Return nil otherwise."
   (nth 4 (syntax-ppss)))
 
 ;; The following function is a slightly modified version of
 ;; f--collect-entries written by Johan Andersson
 ;; The URL is at https://github.com/rejeep/f.el/blob/master/f.el#L416-L435
 (defun lean4--collect-entries (path recursive)
+  "Find all files in PATH.  If RECURSIVE, then descend into subfolders.
+This is a modified version of `f--collect-entries' that waits for 0.0001s before
+descending into subfolders.  This allows `wait-timeout' function to check the
+timer and kill the execution of this function."
   (let (result
         (entries
          (-reject
@@ -118,7 +128,8 @@
 ;; f-files function written by Johan Andersson The URL is at
 ;; https://github.com/rejeep/f.el/blob/master/f.el#L478-L481
 (defun lean4-find-files (path &optional fn recursive)
-  "Find all files in PATH."
+  "Find all files in PATH.
+Optionally filter files satisfying predicate FN and/or use RECURSIVE search."
   ;; It calls lean4--collect-entries instead of f--collect-entries
   (let ((files (-select 'f-file? (lean4--collect-entries path recursive))))
     (if fn (-select fn files) files)))

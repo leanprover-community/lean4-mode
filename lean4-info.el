@@ -56,6 +56,7 @@
        'common-lisp-indent-function))
 
 (defmacro lean4-with-info-output-to-buffer (buffer &rest body)
+  "Execute BODY redirecting `print' output to BUFFER."
   `(let ((buf (get-buffer ,buffer)))
      (with-current-buffer buf
        (setq buffer-read-only nil)
@@ -65,6 +66,8 @@
        (setq buffer-read-only t))))
 
 (defun lean4-ensure-info-buffer (buffer)
+  "Create BUFFER if it does not exist.
+Also choose settings used for the *Lean Goal* buffer."
   (unless (get-buffer buffer)
     (with-current-buffer (get-buffer-create buffer)
       (buffer-disable-undo)
@@ -73,6 +76,8 @@
       (setq buffer-read-only t))))
 
 (defun lean4-toggle-info-buffer (buffer)
+  "Create or delete BUFFER.
+The buffer is supposed to be the *Lean Goal* buffer."
   (-if-let (window (get-buffer-window buffer))
       (quit-window nil window)
     (lean4-ensure-info-buffer buffer)
@@ -103,6 +108,7 @@
   line)
 
 (defun lean4-mk-message-section (caption errors)
+  "Add a section with caption CAPTION and contents ERRORS."
   (when errors
     (magit-insert-section (magit-section)
       (magit-insert-heading caption)
@@ -156,7 +162,7 @@
 ;; ~~~~~~~~~~~
 ;; We want to update the Lean4 info buffer as seldom as possible,
 ;; since magit-section is slow at rendering. We
-;; wait a small duration ('debounce-delay-sec') when we get a
+;; wait a small duration (`debounce-delay-sec') when we get a
 ;; redisplay request, to see if there is a redisplay request in the
 ;; future that invalidates the current request (debouncing).
 ;; Pictorially,
@@ -188,12 +194,12 @@
 ;; ---------------------r4(cancel r3.wait)
 ;; ---------------------...
 ;; We prevent this pathological case by keeping track of when
-;; when we began debouncing in 'lean4-info-buffer-debounce-begin-time'.
+;; when we began debouncing in `lean4-info-buffer-debounce-begin-time'.
 ;; If we have been debouncing for longer than
-;; 'lean4-info-buffer-debounce-upper-bound-sec', then we
+;; `lean4-info-buffer-debounce-upper-bound-sec', then we
 ;; immediately write instead of debouncing;
-;; 'max-debounces' times. Upon trying to stagger the
-;; 'max-debounces'th request, we immediately render:
+;; `max-debounces' times. Upon trying to stagger the
+;; `max-debounces'th request, we immediately render:
 ;; begin-time:nil----t0----------------nil-------
 ;;            -------r1                |
 ;;            -------r1.wait           |
@@ -204,7 +210,7 @@
 ;;            -------|-----------------r4(cancel r3.wait)
 ;;            -------|-----------------|
 ;;                   >-----------------<
-;;                   >longer than 'debounce-upper-bound-sec'<
+;;                   >longer than `debounce-upper-bound-sec'<
 ;;            -------------------------r4.render(FORCED)
 
 
@@ -236,9 +242,9 @@ If we recieve a request such that we have been debouncing for longer than
 ;;  Debounce implementation modifed from lsp-lens
 ;; https://github.com/emacs-lsp/lsp-mode/blob/2f0ea2e396ec9a570f2a2aeb097c304ddc61ebee/lsp-lens.el#L140
 (defun lean4-info-buffer-redisplay-debounced ()
-  "Debounced version of lean4-info-buffer-redisplay that ensures that
-info buffer is not repeatedly written to. This is to prevent lag,
-because magit is quite slow at building sections."
+  "Debounced version of `lean4-info-buffer-redisplay'.
+This version ensures that info buffer is not repeatedly written to.  This is to
+prevent lag, because magit is quite slow at building sections."
   ;;  if we have not begun debouncing, setup debouncing begin time.
   (if (not lean4-info-buffer-debounce-begin-time)
       (setq lean4-info-buffer-debounce-begin-time (current-time)))
@@ -265,6 +271,7 @@ because magit is quite slow at building sections."
 
 
 (defun lean4-info-buffer-refresh ()
+  "Refresh the *Lean Goal* buffer."
   (when (lean4-info-buffer-active lean4-info-buffer-name)
     (lsp-request-async
      "$/lean/plainGoal"

@@ -44,7 +44,7 @@
     "exists" "if" "then" "else" "from" "init_quot" "return"
     "mutual" "def" "run_cmd" "declare_syntax_cat" "syntax" "macro_rules" "macro" "scoped" "elab"
     "initialize" "builtin_initialize" "register_builtin_option" "induction" "cases" "generalizing" "unif_hint" "deriving")
-  "lean keywords ending with `word' (not symbol)")
+  "Lean keywords ending with `word' (not symbol).")
 (defconst lean4-keywords1-regexp
   (eval `(rx word-start (or ,@lean4-keywords1) word-end)))
 (defconst lean4-constants
@@ -55,17 +55,17 @@
     "⬝e" "⬝i" "⬝o" "⬝op" "⬝po" "⬝h" "⬝v" "⬝hp" "⬝vp" "⬝ph" "⬝pv" "⬝r" "◾" "◾o"
     "∘n" "∘f" "∘fi" "∘nf" "∘fn" "∘n1f" "∘1nf" "∘f1n" "∘fn1"
     "^c" "≃c" "≅c" "×c" "×f" "×n" "+c" "+f" "+n" "ℕ₋₂")
-  "lean constants")
+  "Lean constants.")
 (defconst lean4-constants-regexp (regexp-opt lean4-constants))
 (defconst lean4-numerals-regexp
   (eval `(rx word-start
              (one-or-more digit) (optional (and "." (zero-or-more digit)))
              word-end)))
 
-(defconst lean4-warnings '("sorry") "lean warnings")
+(defconst lean4-warnings '("sorry") "Lean warnings.")
 (defconst lean4-warnings-regexp
   (eval `(rx word-start (or ,@lean4-warnings) word-end)))
-(defconst lean4-debugging '("unreachable" "panic" "assert" "dbgTrace") "lean debugging")
+(defconst lean4-debugging '("unreachable" "panic" "assert" "dbgTrace") "Lean debugging.")
 (defconst lean4-debugging-regexp
   (eval `(rx word-start (or ,@lean4-debugging))))
 
