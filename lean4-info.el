@@ -276,7 +276,7 @@ prevent lag, because magit is quite slow at building sections."
     (lsp-request-async
      "$/lean/plainGoal"
      (lsp--text-document-position-params)
-     (-lambda ((_ &as &lean:PlainGoal? :goals))
+     (-lambda ((ignored &as &lean:PlainGoal? :goals))
        (setq lean4-goals goals)
        (lean4-info-buffer-redisplay-debounced))
      :error-handler #'ignore
@@ -285,7 +285,7 @@ prevent lag, because magit is quite slow at building sections."
     (lsp-request-async
      "$/lean/plainTermGoal"
      (lsp--text-document-position-params)
-     (-lambda ((_ &as &lean:PlainTermGoal? :goal))
+     (-lambda ((ignored &as &lean:PlainTermGoal? :goal))
        (setq lean4-term-goal goal)
        (lean4-info-buffer-redisplay-debounced))
      :error-handler #'ignore
