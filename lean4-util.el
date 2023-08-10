@@ -113,15 +113,14 @@ timer and kill the execution of this function."
     ;; of this function.
     (sit-for 0.0001)
     (cond (recursive
-           (ignore
-             (-map
-              (lambda (entry)
-                (if (f-file? entry)
-                    (setq result (cons entry result))
-                  (when (f-directory? entry)
-                    (setq result (cons entry result))
-                    (setq result (append result (lean4--collect-entries entry recursive))))))
-              entries)))
+           (mapc
+            (lambda (entry)
+              (if (f-file? entry)
+                  (setq result (cons entry result))
+                (when (f-directory? entry)
+                  (setq result (cons entry result))
+                  (setq result (append result (lean4--collect-entries entry recursive))))))
+            entries))
           (t (setq result entries)))
     result))
 
