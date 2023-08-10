@@ -51,7 +51,6 @@
   (set (make-local-variable 'font-lock-defaults) lean4-info-font-lock-defaults)
   (set (make-local-variable 'indent-tabs-mode) nil)
   (set 'compilation-mode-font-lock-keywords '())
-  (set-input-method "Lean")
   (set (make-local-variable 'lisp-indent-function)
        'common-lisp-indent-function))
 
