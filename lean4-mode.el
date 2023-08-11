@@ -64,8 +64,8 @@
 
 (defun lean4-compile-string (lake-name exe-name args file-name)
   "Command to run EXE-NAME with extra ARGS and FILE-NAME.
-If LAKE-NAME is nonempty, then prepend `LAKE-NAME env' to the command
-`EXE-NAME ARGS FILE-NAME'."
+If LAKE-NAME is nonempty, then prepend \"LAKE-NAME env\" to the command
+\"EXE-NAME ARGS FILE-NAME\"."
   (if lake-name
       (format "%s env %s %s %s" lake-name exe-name args file-name)
       (format "%s %s %s" exe-name args file-name)))
