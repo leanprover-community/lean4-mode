@@ -256,6 +256,7 @@ a list of such pairs."
 ;; Setting up the input method
 
 (defvar json-key-type)
+(declare-function json-read "json")
 
 (defun lean4-input-setup ()
   "Set up the Lean input method.
