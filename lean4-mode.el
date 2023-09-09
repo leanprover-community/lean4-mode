@@ -279,5 +279,11 @@ otherwise return '/path/to/lean --server'."
 
 (add-hook 'lean4-mode-hook #'lsp)
 
+;; Register LSP with eglot
+;; Ref: https://www.gnu.org/software/emacs/manual/html_node/eglot/Setting-Up-LSP-Servers.html
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(lean4-mode . (lambda (_ignore) (lean4--server-cmd)))))
+
 (provide 'lean4-mode)
 ;;; lean4-mode.el ends here
