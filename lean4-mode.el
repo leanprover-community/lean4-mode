@@ -10,7 +10,7 @@
 ;; Maintainer: Sebastian Ullrich <sebasti@nullri.ch>
 ;; Created: Jan 09, 2014
 ;; Keywords: languages
-;; Package-Requires: ((emacs "27.1") (dash "2.18.0") (s "1.10.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
+;; Package-Requires: ((emacs "27.1") (dash "2.18.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
 ;; URL: https://github.com/leanprover/lean4-mode
 ;; SPDX-License-Identifier: Apache-2.0
 
