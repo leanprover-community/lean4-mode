@@ -60,8 +60,8 @@
      (with-current-buffer buf
        (setq buffer-read-only nil)
        (erase-buffer)
-       (setq standard-output buf)
-       ,@body
+       (let ((standard-output buf))
+         ,@body)
        (setq buffer-read-only t))))
 
 (defun lean4-ensure-info-buffer (buffer)
