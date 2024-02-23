@@ -113,7 +113,7 @@ timer and kill the execution of this function."
     ;; of this function.
     (sit-for 0.0001)
     (cond (recursive
-           (-map
+           (mapc
             (lambda (entry)
               (if (f-file? entry)
                   (setq result (cons entry result))
