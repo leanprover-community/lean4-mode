@@ -75,7 +75,7 @@
 (defvar-local lean4-fringe-data nil)
 
 (defun lean4-fringe-update-progress-overlays ()
-  "Update 'processing' bars in the current buffer."
+  "Update processing bars in the current buffer."
   (dolist (ov (flatten-tree (overlay-lists)))
     (when (eq (overlay-get ov 'face) 'lean4-fringe-face)
       (delete-overlay ov)))

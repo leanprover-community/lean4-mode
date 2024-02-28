@@ -64,15 +64,15 @@
 
 (defun lean4-compile-string (lake-name exe-name args file-name)
   "Command to run EXE-NAME with extra ARGS and FILE-NAME.
-If LAKE-NAME is nonempty, then prepend 'LAKE-NAME env' to the command
-'EXE-NAME ARGS FILE-NAME'."
+If LAKE-NAME is nonempty, then prepend \"LAKE-NAME env\" to the command
+\"EXE-NAME ARGS FILE-NAME\"."
   (if lake-name
       (format "%s env %s %s %s" lake-name exe-name args file-name)
       (format "%s %s %s" exe-name args file-name)))
 
 (defun lean4-create-temp-in-system-tempdir (file-name prefix)
   "Create a temp lean file and return its name.
-The new file has prefix PREFIX (defaults to 'flymake') and the same extension as
+The new file has prefix PREFIX (defaults to `flymake') and the same extension as
 FILE-NAME."
   (make-temp-file (or prefix "flymake") nil (f-ext file-name)))
 
@@ -223,7 +223,7 @@ Invokes `lean4-mode-hook'."
   (lean4-mode-setup))
 
 (defun lean4--version ()
-  "Return Lean version as a list '(MAJOR MINOR PATCH)'."
+  "Return Lean version as a list `(MAJOR MINOR PATCH)'."
   (with-temp-buffer
     (call-process (lean4-get-executable "lean") nil (list t nil) nil "-v")
     (goto-char (point-min))

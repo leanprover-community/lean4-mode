@@ -255,6 +255,9 @@ a list of such pairs."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting up the input method
 
+(defvar json-key-type)
+(declare-function json-read "json")
+
 (defun lean4-input-setup ()
   "Set up the Lean input method.
 Use customisable variables and parent input methods to setup Lean input method."
@@ -281,6 +284,7 @@ tasks as well."
         ;; Back-up is still useful in case Emacs in not compiled `--with-json`.
         (if (fboundp 'json-parse-buffer)
             (json-parse-buffer)
+          (require 'json)
           (json-read)))
       (map-filter (lambda (_ s) (not (string-match-p "\\$CURSOR" s))))
       (map-apply (lambda (k s) (cons k (vector s))))

@@ -51,7 +51,6 @@
   (set (make-local-variable 'font-lock-defaults) lean4-info-font-lock-defaults)
   (set (make-local-variable 'indent-tabs-mode) nil)
   (set 'compilation-mode-font-lock-keywords '())
-  (set-input-method "Lean")
   (set (make-local-variable 'lisp-indent-function)
        'common-lisp-indent-function))
 
@@ -61,8 +60,8 @@
      (with-current-buffer buf
        (setq buffer-read-only nil)
        (erase-buffer)
-       (setq standard-output buf)
-       ,@body
+       (let ((standard-output buf))
+         ,@body)
        (setq buffer-read-only t))))
 
 (defun lean4-ensure-info-buffer (buffer)
@@ -276,7 +275,7 @@ prevent lag, because magit is quite slow at building sections."
     (lsp-request-async
      "$/lean/plainGoal"
      (lsp--text-document-position-params)
-     (-lambda ((_ &as &lean:PlainGoal? :goals))
+     (-lambda ((ignored &as &lean:PlainGoal? :goals))
        (setq lean4-goals goals)
        (lean4-info-buffer-redisplay-debounced))
      :error-handler #'ignore
@@ -285,7 +284,7 @@ prevent lag, because magit is quite slow at building sections."
     (lsp-request-async
      "$/lean/plainTermGoal"
      (lsp--text-document-position-params)
-     (-lambda ((_ &as &lean:PlainTermGoal? :goal))
+     (-lambda ((ignored &as &lean:PlainTermGoal? :goal))
        (setq lean4-term-goal goal)
        (lean4-info-buffer-redisplay-debounced))
      :error-handler #'ignore
