@@ -8,7 +8,7 @@ To use `lean4-mode` in Emacs, add the following to your `init.el`:
 ;; You need to modify the following line
 (setq load-path (cons "/path/to/lean4-mode" load-path))
 
-(setq lean4-mode-required-packages '(dash f flycheck lsp-mode magit-section s))
+(setq lean4-mode-required-packages '(dash flycheck lsp-mode magit-section))
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))

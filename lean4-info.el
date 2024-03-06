@@ -152,7 +152,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
          (goto-char 0)
          (while (re-search-forward "\\(\\sw+\\)✝\\([¹²³⁴-⁹⁰]*\\)" nil t)
            (replace-match
-            (propertize (s-concat (match-string-no-properties 1) (match-string-no-properties 2))
+            (propertize (concat (match-string-no-properties 1) (match-string-no-properties 2))
                         'font-lock-face 'font-lock-comment-face)
             'fixedcase 'literal)))))))
 

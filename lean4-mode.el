@@ -10,7 +10,7 @@
 ;; Maintainer: Sebastian Ullrich <sebasti@nullri.ch>
 ;; Created: Jan 09, 2014
 ;; Keywords: languages
-;; Package-Requires: ((emacs "27.1") (dash "2.18.0") (s "1.10.0") (f "0.19.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
+;; Package-Requires: ((emacs "27.1") (dash "2.18.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
 ;; URL: https://github.com/leanprover/lean4-mode
 ;; SPDX-License-Identifier: Apache-2.0
 
@@ -74,7 +74,7 @@ If LAKE-NAME is nonempty, then prepend \"LAKE-NAME env\" to the command
   "Create a temp lean file and return its name.
 The new file has prefix PREFIX (defaults to `flymake') and the same extension as
 FILE-NAME."
-  (make-temp-file (or prefix "flymake") nil (f-ext file-name)))
+  (make-temp-file (or prefix "flymake") nil (file-name-extension file-name)))
 
 (defun lean4-execute (&optional arg)
   "Execute Lean in the current buffer with an optional argument ARG."
@@ -90,10 +90,10 @@ FILE-NAME."
            (buffer-file-name)
            (flymake-proc-init-create-temp-buffer-copy 'lean4-create-temp-in-system-tempdir))))
     (compile (lean4-compile-string
-	      (if use-lake (shell-quote-argument (f-full (lean4-get-executable lean4-lake-name))) nil)
-              (shell-quote-argument (f-full (lean4-get-executable lean4-executable-name)))
+	      (if use-lake (shell-quote-argument (expand-file-name (lean4-get-executable lean4-lake-name))) nil)
+              (shell-quote-argument (expand-file-name (lean4-get-executable lean4-executable-name)))
               (or arg "")
-              (shell-quote-argument (f-full target-file-name))))
+              (shell-quote-argument (expand-file-name target-file-name))))
     ;; restore old value
     (setq compile-command cc)
     (setq default-directory dd)))

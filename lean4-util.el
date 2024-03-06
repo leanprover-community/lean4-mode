@@ -27,8 +27,6 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'f)
-(require 's)
 (require 'dash)
 (require 'lean4-settings)
 
@@ -38,7 +36,9 @@ Try to find an executable named `lean4-executable-name' in variable `exec-path'.
 On succsess, return path to the directory with this executable."
   (let ((root (executable-find lean4-executable-name)))
     (when root
-      (setq lean4-rootdir (f-dirname (f-dirname root))))
+      (setq lean4-rootdir (file-name-directory
+                           (directory-file-name
+                            (file-name-directory root)))))
     lean4-rootdir))
 
 (defun lean4-get-rootdir ()
@@ -46,8 +46,8 @@ On succsess, return path to the directory with this executable."
 First try to find an executable named `lean4-executable-name' in
 `lean4-rootdir'.  On failure, search in variable `exec-path'."
   (if lean4-rootdir
-      (let ((lean4-path (f-full (f-join lean4-rootdir "bin" lean4-executable-name))))
-        (unless (f-exists? lean4-path)
+      (let ((lean4-path (expand-file-name lean4-executable-name (expand-file-name "bin" lean4-rootdir))))
+        (unless (file-exists-p lean4-path)
           (error "Incorrect `lean4-rootdir' value, path '%s' does not exist" lean4-path))
         lean4-rootdir)
     (or
@@ -58,8 +58,8 @@ First try to find an executable named `lean4-executable-name' in
 
 (defun lean4-get-executable (exe-name)
   "Return fullpath of lean executable EXE-NAME."
-  (let ((lean4-bin-dir-name "bin"))
-    (f-full (f-join (lean4-get-rootdir) lean4-bin-dir-name exe-name))))
+  (let ((default-directory (lean4-get-rootdir)))
+    (expand-file-name exe-name (expand-file-name "bin"))))
 
 (defun lean4-line-offset (&optional pos)
   "Return the byte-offset of POS or current position.
@@ -104,8 +104,8 @@ timer and kill the execution of this function."
          (-reject
           (lambda (file)
             (or
-             (equal (f-filename file) ".")
-             (equal (f-filename file) "..")))
+             (equal (file-name-nondirectory file) ".")
+             (equal (file-name-nondirectory file) "..")))
           (directory-files path t))))
     ;; The following line is the only modification that I made
     ;; It waits 0.0001 second for an event. This wait allows
@@ -115,9 +115,9 @@ timer and kill the execution of this function."
     (cond (recursive
            (mapc
             (lambda (entry)
-              (if (f-file? entry)
+              (if (file-regular-p entry)
                   (setq result (cons entry result))
-                (when (f-directory? entry)
+                (when (file-directory-p entry)
                   (setq result (cons entry result))
                   (setq result (append result (lean4--collect-entries entry recursive))))))
             entries))
