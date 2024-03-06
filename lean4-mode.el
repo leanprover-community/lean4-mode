@@ -186,11 +186,21 @@ enabled and disabled respectively.")
 
 (defun lean4-create-lsp-workspace ()
   "Create an LSP workspace.
-This will allow us to use Emacs when a repo contains multiple lean packages."
-  (when-let ((file-name (buffer-file-name))
-             (root (vc-find-root (buffer-file-name)
-                                 "lakefile.lean")))
-    (lsp-workspace-folders-add root)))
+
+Starting from `(buffer-file-name)`, repeatedly look up the
+directory hierarchy for a directory containing a file
+\"lakefile.lean\", and use the last such directory found, if any.
+This allows us to edit files in child packages using the settings
+of the parent project."
+  (let (root)
+    (when-let ((file-name (buffer-file-name)))
+      (while-let ((dir (locate-dominating-file file-name "lakefile.lean")))
+        ;; We found a lakefile, but maybe it belongs to a package.
+        ;; Continue looking until there are no more lakefiles.
+        (setq root dir
+              file-name (file-name-directory (directory-file-name dir)))))
+    (when root
+      (lsp-workspace-folders-add root))))
 
 ;; Automode List
 ;;;###autoload
