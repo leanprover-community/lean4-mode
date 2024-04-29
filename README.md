@@ -56,7 +56,7 @@ the word ``#check`` will be underlined, and hovering over it will show
 you the type of ``id``. The mode line will show ``FlyC:0/1``, indicating
 that there are no errors and one piece of information displayed.
 
-To **show tactic state** run `lean4-info-mode` with <kbd>C-c C-i</kbd> (or <kbd>C-c TAB</kbd>) - it will launch a separate window.
+To view proof state run `lean4-info-mode` - this will show `*Lean Goals*` buffer (like *Lean Goal* pane in VSCode) in a separate window.
 
 Settings
 ========
