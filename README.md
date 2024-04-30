@@ -56,6 +56,8 @@ the word ``#check`` will be underlined, and hovering over it will show
 you the type of ``id``. The mode line will show ``FlyC:0/1``, indicating
 that there are no errors and one piece of information displayed.
 
+To view the proof state, run `lean4-toggle-info` (`C-c` `C-i`). This will show the `*Lean Goals*` buffer (like the `Lean infoview` pane in VSCode) in a separate window.
+
 Settings
 ========
 
