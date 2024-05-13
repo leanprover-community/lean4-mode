@@ -189,14 +189,14 @@ enabled and disabled respectively.")
 
 Starting from `(buffer-file-name)`, repeatedly look up the
 directory hierarchy for a directory containing a file
-\"lakefile.lean\", and use the last such directory found, if any.
+\"lean-toolchain\", and use the last such directory found, if any.
 This allows us to edit files in child packages using the settings
 of the parent project."
   (let (root)
     (when-let ((file-name (buffer-file-name)))
-      (while-let ((dir (locate-dominating-file file-name "lakefile.lean")))
-        ;; We found a lakefile, but maybe it belongs to a package.
-        ;; Continue looking until there are no more lakefiles.
+      (while-let ((dir (locate-dominating-file file-name "lean-toolchain")))
+        ;; We found a toolchain file, but maybe it belongs to a package.
+        ;; Continue looking until there are no more toolchain files.
         (setq root dir
               file-name (file-name-directory (directory-file-name dir)))))
     (when root
