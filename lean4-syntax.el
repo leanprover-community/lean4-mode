@@ -65,9 +65,9 @@
 (defconst lean4-warnings '("sorry") "Lean warnings.")
 (defconst lean4-warnings-regexp
   (eval `(rx word-start (or ,@lean4-warnings) word-end)))
-(defconst lean4-debugging '("unreachable" "panic" "assert" "dbgTrace") "Lean debugging.")
+(defconst lean4-debugging '("unreachable!" "panic!" "assert!" "dbg_trace") "Lean debugging.")
 (defconst lean4-debugging-regexp
-  (eval `(rx word-start (or ,@lean4-debugging))))
+  (eval `(rx word-start (or ,@lean4-debugging) word-end)))
 
 
 (defconst lean4-syntax-table
@@ -187,6 +187,8 @@
      (,(rx word-start (group (or "Prop" "Type" "Sort")) ".") (1 'font-lock-type-face))
      ;; String
      ("\"[^\"]*\"" . 'font-lock-string-face)
+     ;; Debugging builtins
+     (,lean4-debugging-regexp . 'font-lock-warning-face)
      ;; ;; Constants
      (,lean4-constants-regexp . 'font-lock-constant-face)
      (,lean4-numerals-regexp . 'font-lock-constant-face)
@@ -194,7 +196,6 @@
      (,(rx symbol-start "_" symbol-end) . 'font-lock-preprocessor-face)
      ;; warnings
      (,lean4-warnings-regexp . 'font-lock-warning-face)
-     (,lean4-debugging-regexp . 'font-lock-warning-face)
      ;; escaped identifiers
      (,(rx (and (group "«") (group (one-or-more (not (any "»")))) (group "»")))
       (1 font-lock-comment-face t)
