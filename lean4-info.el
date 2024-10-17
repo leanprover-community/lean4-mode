@@ -54,16 +54,6 @@
   (set (make-local-variable 'lisp-indent-function)
        'common-lisp-indent-function))
 
-(defmacro lean4-with-info-output-to-buffer (buffer &rest body)
-  "Execute BODY redirecting `print' output to BUFFER."
-  `(let ((buf (get-buffer ,buffer)))
-     (with-current-buffer buf
-       (setq buffer-read-only nil)
-       (erase-buffer)
-       (let ((standard-output buf))
-         ,@body)
-       (setq buffer-read-only t))))
-
 (defun lean4-ensure-info-buffer (buffer)
   "Create BUFFER if it does not exist.
 Also choose settings used for the *Lean Goal* buffer."
@@ -106,22 +96,57 @@ The buffer is supposed to be the *Lean Goal* buffer."
 (lsp-defun lean4-diagnostic-full-end-line ((&lean:Diagnostic :full-range (&Range :end (&Position :line))))
   line)
 
-(defun lean4-mk-message-section (caption errors)
-  "Add a section with caption CAPTION and contents ERRORS."
-  (when errors
-    (magit-insert-section (magit-section)
+(defun lean4-info--error-button-action (data)
+  (let ((buffer (nth 0 data))
+        (line (nth 1 data))
+        (column (nth 2 data)))
+    (when (buffer-live-p buffer)
+      (pop-to-buffer buffer)
+      (goto-char (point-min))
+      (forward-line (1- line))
+      (forward-char column))))
+
+(defun lean4-info--insert-highlight-inaccessible-names (&rest text)
+  (let ((begin (point)))
+    (apply #'insert text)
+    (when lean4-highlight-inaccessible-names
+      (let ((end (point-marker)))
+        (goto-char begin)
+        (while (re-search-forward "\\(\\sw+\\)✝\\([¹²³⁴-⁹⁰]*\\)" end t)
+          (replace-match
+           (propertize (concat (match-string-no-properties 1)
+                               (match-string-no-properties 2))
+                       'font-lock-face 'font-lock-comment-face)
+           'fixedcase 'literal))
+        (goto-char end)))))
+
+(defun lean4--insert-goal-text (text delimiter)
+  (lean4-info--insert-highlight-inaccessible-names
+   (lsp--fontlock-with-mode text 'lean4-info-mode)
+   delimiter))
+
+(defun lean4-info--mk-message-section (value caption messages buffer)
+  "Add a section with id VALUE, caption CAPTION and contents ERRORS."
+  (when-let (msgs messages) ;; captured for deferred rendering
+    (magit-insert-section (magit-section value)
       (magit-insert-heading caption)
       (magit-insert-section-body
-        (dolist (e errors)
+        (dolist (e msgs)
           (-let (((&Diagnostic :message :range (&Range :start (&Position :line :character))) e))
-            (magit-insert-section (magit-section)
-              (magit-insert-heading (format "%d:%d: " (1+ (lsp-translate-line line)) (lsp-translate-column character)))
-              (magit-insert-section-body
-                (insert message "\n")))))))))
+            (let ((ln (1+ (lsp-translate-line line)))
+                  (col (lsp-translate-column character)))
+              (insert-text-button (format "%d:%d:" ln col)
+                                  'action #'lean4-info--error-button-action
+                                  'button-data (list buffer ln col)
+                                  'face 'magit-section-heading
+                                  'help-echo "mouse-2: visit this file, line and column"))
+            (lean4-info--insert-highlight-inaccessible-names "\n" message "\n")))))))
 
 (defun lean4-info-buffer-redisplay ()
   (when (lean4-info-buffer-active lean4-info-buffer-name)
     (-let* ((deactivate-mark) ; keep transient mark
+            (inhibit-read-only t)
+            (buffer (current-buffer))
             (line (lsp--cur-line))
             (errors (lsp--get-buffer-diagnostics))
             (errors (-sort (-on #'< #'lean4-diagnostic-full-end-line) errors))
@@ -129,33 +154,27 @@ The buffer is supposed to be the *Lean Goal* buffer."
              (--split-with (< (lean4-diagnostic-full-end-line it) line) errors))
             ((errors-here errors-below)
              (--split-with (<= (lean4-diagnostic-full-start-line it) line) errors)))
-      (lean4-with-info-output-to-buffer
-       lean4-info-buffer-name
-       (when lean4-goals
-         (magit-insert-section (magit-section)
-           (magit-insert-heading "Goals:")
-           (magit-insert-section-body
-             (if (> (length lean4-goals) 0)
-                 (seq-doseq (g lean4-goals)
-                   (magit-insert-section (magit-section)
-                     (insert (lsp--fontlock-with-mode g 'lean4-info-mode) "\n\n")))
-               (insert "goals accomplished\n\n")))))
-       (when lean4-term-goal
-         (magit-insert-section (magit-section)
-           (magit-insert-heading "Expected type:")
-           (magit-insert-section-body
-             (insert (lsp--fontlock-with-mode lean4-term-goal 'lean4-info-mode) "\n"))))
-       (lean4-mk-message-section "Messages here:" errors-here)
-       (lean4-mk-message-section "Messages below:" errors-below)
-       (lean4-mk-message-section "Messages above:" errors-above)
-       (when lean4-highlight-inaccessible-names
-         (goto-char 0)
-         (while (re-search-forward "\\(\\sw+\\)✝\\([¹²³⁴-⁹⁰]*\\)" nil t)
-           (replace-match
-            (propertize (concat (match-string-no-properties 1) (match-string-no-properties 2))
-                        'font-lock-face 'font-lock-comment-face)
-            'fixedcase 'literal)))))))
-
+      (with-current-buffer lean4-info-buffer-name
+        (progn
+          (erase-buffer)
+          (magit-insert-section (magit-section 'root)
+            (when-let ((goals lean4-goals)) ;; capture for deferred rendering
+              (magit-insert-section (magit-section 'goals)
+                (magit-insert-heading "Goals:")
+                (magit-insert-section-body
+                (if (> (length goals) 0)
+                    (seq-doseq (g goals)
+                      (magit-insert-section (magit-section)
+                        (lean4--insert-goal-text g "\n\n")))
+                  (insert "goals accomplished\n\n")))))
+            (when-let ((term-goal lean4-term-goal)) ;; capture for deferred rendering
+              (magit-insert-section (magit-section 'term-goal)
+                (magit-insert-heading "Expected type:")
+                (magit-insert-section-body
+                  (lean4--insert-goal-text term-goal "\n"))))
+            (lean4-info--mk-message-section 'errors-here "Messages here:" errors-here buffer)
+            (lean4-info--mk-message-section 'errors-below "Messages below:" errors-below buffer)
+            (lean4-info--mk-message-section 'errors-above "Messages above:" errors-above buffer)))))))
 
 ;; Debouncing
 ;; ~~~~~~~~~~~
