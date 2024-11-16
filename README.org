@@ -1,10 +1,11 @@
-Installation
-============
+#+title: ~lean4-mode~ - An Emacs major-mode for the Lean language
 
-Before using this major mode, you need to [install Lean 4](https://leanprover.github.io/lean4/doc/setup.html#basic-setup).
+* Installation
 
-To use `lean4-mode` in Emacs, add the following to your `init.el`:
-```
+Before using this major mode, you need to [[https://leanprover.github.io/lean4/doc/setup.html#basic-setup][install Lean 4]].
+
+To use ~lean4-mode~ in Emacs, add the following to your =init.el=:
+#+begin_src elisp
 ;; You need to modify the following line
 (setq load-path (cons "/path/to/lean4-mode" load-path))
 
@@ -22,10 +23,11 @@ To use `lean4-mode` in Emacs, add the following to your `init.el`:
       (package-install p))))
 
 (require 'lean4-mode)
-```
-Alternatively if you are a fan of `use-package` and `straight.el` you
+#+end_src
+
+Alternatively if you are a fan of ~use-package~ and =straight.el= you
 can use:
-```
+#+begin_src elisp
 (use-package lean4-mode
   :straight (lean4-mode
 	     :type git
@@ -34,51 +36,49 @@ can use:
 	     :files ("*.el" "data"))
   ;; to defer loading the package until required
   :commands (lean4-mode))
-```
-If you are a doom-emacs user, adding the following to `packages.el` should work:
-```
+#+end_src
+
+If you are a doom-emacs user, adding the following to =packages.el= should work:
+#+begin_src elisp
 (package! lean4-mode :recipe
   (:host github
    :repo "leanprover/lean4-mode"
    :files ("*.el" "data")))
-```
+#+end_src
 
-Trying It Out
-=============
+* Trying It Out
 
-If things are working correctly, you should see the word ``Lean 4`` in the
-Emacs mode line when you open a file with extension `.lean`. Emacs will ask you
+If things are working correctly, you should see the word "Lean 4" in the
+Emacs mode line when you open a file with extension =.lean=. Emacs will ask you
 to identify the "project" this file belongs to. If you then type
-```lean
+#+begin_src lean
 #check id
-```
-the word ``#check`` will be underlined, and hovering over it will show
-you the type of ``id``. The mode line will show ``FlyC:0/1``, indicating
+#+end_src
+the word =#check= will be underlined, and hovering over it will show
+you the type of ~id~. The mode line will show =FlyC:0/1=, indicating
 that there are no errors and one piece of information displayed.
 
-To view the proof state, run `lean4-toggle-info` (`C-c` `C-i`). This will show the `*Lean Goals*` buffer (like the `Lean infoview` pane in VSCode) in a separate window.
+To view the proof state, run ~lean4-toggle-info~ (=C-c C-i=). This will show the =*Lean Goals*= buffer (like the =Lean infoview= pane in VSCode) in a separate window.
 
-Settings
-========
+* Settings
 
-Set these with e.g. `M-x customize-variable`.
+Set these with e.g. =M-x customize-variable=.
 
-* `lsp-headerline-breadcrumb-enable`: show a "breadcrumb bar" of namespaces and sections surrounding the current location (default: off)
+- ~lsp-headerline-breadcrumb-enable~: show a "breadcrumb bar" of namespaces and sections surrounding the current location (default: off)
 
-Key Bindings and Commands
-=========================
+* Key Bindings and Commands
 
-| Key                | Function                                                                        |
-|--------------------|---------------------------------------------------------------------------------|
-| <kbd>C-c C-k</kbd> | show the keystroke needed to input the symbol under the cursor                  |
-| <kbd>C-c C-d</kbd> | recompile & reload imports (`lean4-refresh-file-dependencies`)                  |
-| <kbd>C-c C-x</kbd> | execute Lean in stand-alone mode (`lean4-std-exe`)                              |
-| <kbd>C-c C-p C-l</kbd> | builds package with lake (`lean4-lake-build`)                                   |
-| <kbd>C-c C-i</kbd> | toggle info view showing goals and errors at point (`lean4-toggle-info-buffer`) |
-| <kbd>C-c ! n</kbd> | flycheck: go to next error                                                      |
-| <kbd>C-c ! p</kbd> | flycheck: go to previous error                                                  |
+| Key           | Function                                                                        |
+|---------------+---------------------------------------------------------------------------------|
+| =C-c C-k=     | show the keystroke needed to input the symbol under the cursor                  |
+| =C-c C-d=     | recompile & reload imports (~lean4-refresh-file-dependencies~)                  |
+| =C-c C-x=     | execute Lean in stand-alone mode (~lean4-std-exe~)                              |
+| =C-c C-p C-l= | builds package with lake (~lean4-lake-build~)                                   |
+| =C-c C-i=     | toggle info view showing goals and errors at point (~lean4-toggle-info-buffer~) |
+| =C-c ! n=     | flycheck: go to next error                                                      |
+| =C-c ! p=     | flycheck: go to previous error                                                  |
 
-For `lsp-mode` bindings, see https://emacs-lsp.github.io/lsp-mode/page/keybindings/ (not all capabilities are supported currently).
+For ~lsp-mode~ bindings, see https://emacs-lsp.github.io/lsp-mode/page/keybindings/ (not all capabilities are supported currently).
 
-In the default configuration, the Flycheck annotation `FlyC:n/n` indicates the
-number of errors / responses from Lean; clicking on `FlyC` opens the Flycheck menu.
+In the default configuration, the Flycheck annotation =FlyC:n/n= indicates the
+number of errors / responses from Lean; clicking on =FlyC= opens the Flycheck menu.
