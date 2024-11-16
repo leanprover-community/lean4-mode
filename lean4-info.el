@@ -3,7 +3,6 @@
 ;; Copyright (c) 2016 Gabriel Ebner. All rights reserved.
 ;;
 ;; Author: Gabriel Ebner <gebner@gebner.org>
-;; Maintainer: Gabriel Ebner <gebner@gebner.org>
 ;; Created: Oct 29, 2016
 ;; Keywords: languages
 ;; Version: 0.1
