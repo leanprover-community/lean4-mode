@@ -38,7 +38,8 @@ can use:
   :commands (lean4-mode))
 #+end_src
 
-If you are a doom-emacs user, adding the following to =packages.el= should work:
+If you are a doom-emacs user, adding the following to =packages.el=
+should work:
 #+begin_src elisp
 (package! lean4-mode :recipe
   (:host github
@@ -48,23 +49,28 @@ If you are a doom-emacs user, adding the following to =packages.el= should work:
 
 * Trying It Out
 
-If things are working correctly, you should see the word "Lean 4" in the
-Emacs mode line when you open a file with extension =.lean=. Emacs will ask you
-to identify the "project" this file belongs to. If you then type
+If things are working correctly, you should see the word "Lean 4" in
+the Emacs mode line when you open a file with extension =.lean=.
+Emacs will ask you to identify the "project" this file belongs to.  If
+you then type
 #+begin_src lean
 #check id
 #+end_src
 the word =#check= will be underlined, and hovering over it will show
-you the type of ~id~. The mode line will show =FlyC:0/1=, indicating
+you the type of ~id~.  The mode line will show =FlyC:0/1=, indicating
 that there are no errors and one piece of information displayed.
 
-To view the proof state, run ~lean4-toggle-info~ (=C-c C-i=). This will show the =*Lean Goals*= buffer (like the =Lean infoview= pane in VSCode) in a separate window.
+To view the proof state, run ~lean4-toggle-info~ (=C-c C-i=).  This
+will show the =*Lean Goals*= buffer (like the =Lean infoview= pane in
+VSCode) in a separate window.
 
 * Settings
 
 Set these with e.g. =M-x customize-variable=.
 
-- ~lsp-headerline-breadcrumb-enable~: show a "breadcrumb bar" of namespaces and sections surrounding the current location (default: off)
+- ~lsp-headerline-breadcrumb-enable~: Show a "breadcrumb bar" of
+  namespaces and sections surrounding the current location (default:
+  off)
 
 * Key Bindings and Commands
 
@@ -78,7 +84,10 @@ Set these with e.g. =M-x customize-variable=.
 | =C-c ! n=     | flycheck: go to next error                                                      |
 | =C-c ! p=     | flycheck: go to previous error                                                  |
 
-For ~lsp-mode~ bindings, see https://emacs-lsp.github.io/lsp-mode/page/keybindings/ (not all capabilities are supported currently).
+For ~lsp-mode~ bindings, see
+https://emacs-lsp.github.io/lsp-mode/page/keybindings/ (not all
+capabilities are supported currently).
 
-In the default configuration, the Flycheck annotation =FlyC:n/n= indicates the
-number of errors / responses from Lean; clicking on =FlyC= opens the Flycheck menu.
+In the default configuration, the Flycheck annotation =FlyC:n/n=
+indicates the number of errors / responses from Lean; clicking on
+=FlyC= opens the Flycheck menu.
