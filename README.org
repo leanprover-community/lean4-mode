@@ -1,45 +1,105 @@
 #+title: ~lean4-mode~ - An Emacs major-mode for the Lean language
 
+This package extends GNU Emacs by providing a major-mode for editing
+code written in version 4 of the programming language and theorem
+prover Lean.
+
+For version 3 of Lean, use [[https://github.com/leanprover/lean3-mode][Lean3-Mode]] (formerly known as /Lean-Mode/).
+
 * Installation
 
-Before using this major mode, you need to [[https://leanprover.github.io/lean4/doc/setup.html#basic-setup][install Lean 4]].
+** Brief and Generic Instructions
 
-To use ~lean4-mode~ in Emacs, add the following to your =init.el=:
+Install dependencies:
+- [[https://lean-lang.org/lean4/doc/setup.html][Lean version 4]]
+- Emacs version 27 or later
+- Emacs packages [[https://github.com/magnars/dash.el][Dash]], [[https://www.flycheck.org][Flycheck]], [[https://emacs-lsp.github.io/lsp-mode][lsp-mode]] and [[https://github.com/magit/magit/blob/main/lisp/magit-section.el][Magit-Section]] (which are
+  available on the Melpa package-archive)
+
+Install Lean4-Mode:
+- Clone the [[https://github.com/leanprover-community/lean4-mode][Git repository of Lean4-Mode]].
+- In your [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html][Emacs initialization file]], add the path to that local
+  repository to the ~load-path~ list and
+- load Lean4-Mode with =(require 'lean4-mode)=.
+
+** Detailed and Concrete Instructions
+
+Install Lean version 4.
+
+Install Emacs version 27 or later.
+
+Install the Emacs packages Dash, Flycheck, lsp-mode and Magit-Section.
+Dash is the only one of these packages that is available in the
+default [[https://elpa.gnu.org][GNU Elpa]] package-archive.  You can install the remaining three
+packages either from source or from [[https://melpa.org/#/getting-started][Melpa]] package-archive.  For later
+approach, add the following to your Emacs initialization file
+(e.g. =~/.emacs.d/init.el=):
+
 #+begin_src elisp
-;; You need to modify the following line
-(setq load-path (cons "/path/to/lean4-mode" load-path))
-
-(setq lean4-mode-required-packages '(dash flycheck lsp-mode magit-section))
-
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 (let ((need-to-refresh t))
-  (dolist (p lean4-mode-required-packages)
-    (when (not (package-installed-p p))
+  (dolist (package '(dash flycheck lsp-mode magit-section))
+    (unless (package-installed-p package)
       (when need-to-refresh
         (package-refresh-contents)
         (setq need-to-refresh nil))
-      (package-install p))))
+      (package-install package))))
+#+end_src
 
+Clone the Git repository of Lean4-Mode:
+
+#+begin_src shell
+git clone https://github.com/leanprover-community/lean4-mode.git /path/to/lean4-mode
+#+end_src
+
+In your Emacs initialization file, add the path to your local
+Lean4-Mode repository to the ~load-path~ list and load Lean4-Mode:
+#+begin_src elisp
+(add-to-list 'load-path "/path/to/lean4-mode")
 (require 'lean4-mode)
 #+end_src
 
-Alternatively if you are a fan of ~use-package~ and =straight.el= you
-can use:
+** Instructions for Source-Based Use-Package
+
+If you use a source-based package-manager (e.g. =package-vc.el=,
+Straight or Elpaca), then make sure to list the ="data"= directory in
+your Lean4-Mode package recipe.
+
+If you use the ~use-package~ macro and intent to defer loading of
+packages in order to improve your Emacs startup time, then make sure
+to specify ~lean4-mode~ as a =:command=.
+
+Following subsections show concrete examples.
+
+*** Native =:vc= (Emacs 30 or later)
+
+GNU Emacs comes with =use-package.el= built-in since version 29.  And
+since version 30, it also comes with a built-in =:vc= keyword for the
+~use-package~ macro that utilizes =package-vc.el= to install Emacs
+packages from remote source repositories.
+
 #+begin_src elisp
+;; Use Melpa as package archive:
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+
+;; Install Lean4-Mode:
 (use-package lean4-mode
-  :straight (lean4-mode
-	     :type git
-	     :host github
-	     :repo "leanprover/lean4-mode"
-	     :files ("*.el" "data"))
-  ;; to defer loading the package until required
-  :commands (lean4-mode))
+  :commands lean4-mode
+  :vc (:url "https://github.com/leanprover-community/lean4-mode.git"
+       :rev :newest))
 #+end_src
 
-If you are a doom-emacs user, adding the following to =packages.el=
-should work:
+*** Doom-Emacs
+
+If you use Doom-Emacs, you can place the following code in your Doom
+initialization file:
+
 #+begin_src elisp
 (package! lean4-mode :recipe
   (:host github
@@ -47,42 +107,51 @@ should work:
    :files ("*.el" "data")))
 #+end_src
 
+*** Straight
+
+If you use the Straight package manager through Use-Package, then
+place the following code in your Emacs initialization file:
+
+#+begin_src elisp
+(use-package lean4-mode
+  :commands lean4-mode
+  :straight (lean4-mode :type git :host github
+                        :repo "leanprover/lean4-mode"
+                        :files ("*.el" "data")))
+#+end_src
+
 * Trying It Out
 
 If things are working correctly, you should see the word "Lean 4" in
-the Emacs mode line when you open a file with extension =.lean=.
-Emacs will ask you to identify the "project" this file belongs to.  If
-you then type
-#+begin_src lean
-#check id
-#+end_src
-the word =#check= will be underlined, and hovering over it will show
-you the type of ~id~.  The mode line will show =FlyC:0/1=, indicating
-that there are no errors and one piece of information displayed.
+Emacs mode-line when you open a file with =.lean= extension.  Emacs
+will ask you to identify the /project/ this file belongs to.  If you
+then type =#check id=, the word =#check= will be underlined, and
+hovering over it will show you the type of ~id~.  The mode-line will
+show =FlyC:0/1=, indicating that there are no errors and one piece of
+information displayed.
 
 To view the proof state, run ~lean4-toggle-info~ (=C-c C-i=).  This
-will show the =*Lean Goals*= buffer (like the =Lean infoview= pane in
-VSCode) in a separate window.
+will display the =*Lean Goals*= buffer (like the =Lean infoview= pane
+in VS-Code) in a separate window.
 
 * Settings
 
 Set these with e.g. =M-x customize-variable=.
-
 - ~lsp-headerline-breadcrumb-enable~: Show a "breadcrumb bar" of
-  namespaces and sections surrounding the current location (default:
-  off)
+  namespaces and sections surrounding the current location. Defaults
+  to /off/.
 
 * Key Bindings and Commands
 
 | Key           | Function                                                                        |
 |---------------+---------------------------------------------------------------------------------|
-| =C-c C-k=     | show the keystroke needed to input the symbol under the cursor                  |
-| =C-c C-d=     | recompile & reload imports (~lean4-refresh-file-dependencies~)                  |
-| =C-c C-x=     | execute Lean in stand-alone mode (~lean4-std-exe~)                              |
-| =C-c C-p C-l= | builds package with lake (~lean4-lake-build~)                                   |
-| =C-c C-i=     | toggle info view showing goals and errors at point (~lean4-toggle-info-buffer~) |
-| =C-c ! n=     | flycheck: go to next error                                                      |
-| =C-c ! p=     | flycheck: go to previous error                                                  |
+| =C-c C-k=     | Show the keystroke needed to input the symbol under the cursor                  |
+| =C-c C-d=     | Recompile & reload imports (~lean4-refresh-file-dependencies~)                  |
+| =C-c C-x=     | Execute Lean in stand-alone mode (~lean4-std-exe~)                              |
+| =C-c C-p C-l= | Builds package with lake (~lean4-lake-build~)                                   |
+| =C-c C-i=     | Toggle info view showing goals and errors at point (~lean4-toggle-info-buffer~) |
+| =C-c ! n=     | Flycheck: go to next error                                                      |
+| =C-c ! p=     | Flycheck: go to previous error                                                  |
 
 For ~lsp-mode~ bindings, see
 https://emacs-lsp.github.io/lsp-mode/page/keybindings/ (not all
