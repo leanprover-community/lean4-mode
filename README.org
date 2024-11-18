@@ -143,20 +143,20 @@ Set these with e.g. =M-x customize-variable=.
 
 * Key Bindings and Commands
 
-| Key           | Function                                                                        |
-|---------------+---------------------------------------------------------------------------------|
-| =C-c C-k=     | Show the keystroke needed to input the symbol under the cursor                  |
-| =C-c C-d=     | Recompile & reload imports (~lean4-refresh-file-dependencies~)                  |
-| =C-c C-x=     | Execute Lean in stand-alone mode (~lean4-std-exe~)                              |
-| =C-c C-p C-l= | Builds package with lake (~lean4-lake-build~)                                   |
-| =C-c C-i=     | Toggle info view showing goals and errors at point (~lean4-toggle-info-buffer~) |
-| =C-c ! n=     | Flycheck: go to next error                                                      |
-| =C-c ! p=     | Flycheck: go to previous error                                                  |
+| Key                    | Description                                            | Command                           |
+|------------------------+--------------------------------------------------------+-----------------------------------|
+| =C-c C-k=              | Echo the keystroke needed to input the symbol at point | ~quail-show-key~                  |
+| =C-c C-d=              | Recompile and reload imports                           | ~lean4-refresh-file-dependencies~ |
+| =C-c C-x= or =C-c C-l= | Execute Lean in stand-alone mode                       | ~lean4-std-exe~                   |
+| =C-c C-p C-l=          | Builds package with lake                               | ~lean4-lake-build~                |
+| =C-c C-i=              | Toggle Info-View which shows goals and errors at point | ~lean4-toggle-info-buffer~        |
+|------------------------+--------------------------------------------------------+-----------------------------------|
+| =C-c ! n=              | Flycheck: Go to next error                             | ~flycheck-next-error~             |
+| =C-c ! p=              | Flycheck: Go to previous error                         | ~flycheck-previous-error~         |
 
-For ~lsp-mode~ bindings, see
-https://emacs-lsp.github.io/lsp-mode/page/keybindings/ (not all
-capabilities are supported currently).
+For key bindings from ~lsp-mode~, see [[https://emacs-lsp.github.io/lsp-mode/page/keybindings/][its respective documentation]] and
+note that not all capabilities are supported by Lean4-Mode.
 
-In the default configuration, the Flycheck annotation =FlyC:n/n=
-indicates the number of errors / responses from Lean; clicking on
-=FlyC= opens the Flycheck menu.
+In the default configuration, the Flycheck annotation =FlyC:N/M=
+indicates the number of errors (~N~) and responses (~M~) from Lean;
+clicking on =FlyC= opens the Flycheck menu.
