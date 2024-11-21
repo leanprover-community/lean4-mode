@@ -1,4 +1,9 @@
-#+title: ~lean4-mode~ - An Emacs major-mode for the Lean language
+#+title: Lean4-Mode - Emacs major-mode for Lean language
+#+language: en
+#+export_file_name: lean4-mode.texi
+#+texinfo_dir_category: Emacs misc features
+#+texinfo_dir_title: Lean4-Mode: (lean4-mode).
+#+texinfo_dir_desc: Emacs major-mode for Lean language
 
 This package extends GNU Emacs by providing a major-mode for editing
 code written in version 4 of the programming language and theorem
