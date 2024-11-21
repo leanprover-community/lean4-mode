@@ -125,7 +125,7 @@ place the following code in your Emacs initialization file:
                         :files ("*.el" "data")))
 #+end_src
 
-* Trying It Out
+* Usage
 
 If things are working correctly, you should see the word "Lean 4" in
 Emacs mode-line when you open a file with =.lean= extension.  Emacs
@@ -136,15 +136,12 @@ show =FlyC:0/1=, indicating that there are no errors and one piece of
 information displayed.
 
 To view the proof state, run ~lean4-toggle-info~ (=C-c C-i=).  This
-will display the =*Lean Goals*= buffer (like the =Lean infoview= pane
+will display the =*Lean Goals*= buffer (like the Lean Info-View pane
 in VS-Code) in a separate window.
 
-* Settings
-
-Set these with e.g. =M-x customize-variable=.
-- ~lsp-headerline-breadcrumb-enable~: Show a "breadcrumb bar" of
-  namespaces and sections surrounding the current location. Defaults
-  to /off/.
+If you want breadcrumbs of namespaces and sections to be shown in the
+header-line, set the user option ~lsp-headerline-breadcrumb-enable~ to
+~t~.
 
 * Key Bindings and Commands
 
