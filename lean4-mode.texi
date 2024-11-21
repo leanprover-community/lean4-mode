@@ -77,8 +77,9 @@ Install dependencies:
 @item
 Emacs version 27 or later
 @item
-Emacs packages @uref{https://github.com/magnars/dash.el, Dash}, @uref{https://www.flycheck.org, Flycheck}, @uref{https://emacs-lsp.github.io/lsp-mode, lsp-mode} and @uref{https://github.com/magit/magit/blob/main/lisp/magit-section.el, Magit-Section} (which are
-available on the Melpa package-archive)
+Emacs packages @uref{https://github.com/magnars/dash.el, Dash} (which is available on GNU-Elpa
+package-archive), @uref{https://www.flycheck.org, Flycheck}, @uref{https://emacs-lsp.github.io/lsp-mode, lsp-mode} and @uref{https://github.com/magit/magit/blob/main/lisp/magit-section.el, Magit-Section} (which are
+available on Melpa package-archive)
 @end itemize
 
 Install Lean4-Mode:

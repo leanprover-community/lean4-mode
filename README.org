@@ -23,8 +23,9 @@ known as /Lean-Mode/).
 Install dependencies:
 - [[https://lean-lang.org/lean4/doc/setup.html][Lean version 4]]
 - Emacs version 27 or later
-- Emacs packages [[https://github.com/magnars/dash.el][Dash]], [[https://www.flycheck.org][Flycheck]], [[https://emacs-lsp.github.io/lsp-mode][lsp-mode]] and [[https://github.com/magit/magit/blob/main/lisp/magit-section.el][Magit-Section]] (which are
-  available on the Melpa package-archive)
+- Emacs packages [[https://github.com/magnars/dash.el][Dash]] (which is available on GNU-Elpa
+  package-archive), [[https://www.flycheck.org][Flycheck]], [[https://emacs-lsp.github.io/lsp-mode][lsp-mode]] and [[https://github.com/magit/magit/blob/main/lisp/magit-section.el][Magit-Section]] (which are
+  available on Melpa package-archive)
 
 Install Lean4-Mode:
 - Clone the [[https://github.com/leanprover-community/lean4-mode][Git repository of Lean4-Mode]].
