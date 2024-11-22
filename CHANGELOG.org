@@ -1,0 +1,14 @@
+#+title: Lean4-Mode - Changelog
+#+language: en
+
+* Development
+
+* Version 1.0.1
+
+- Specify Yury G. Kudryashov as maintainer.
+- Rework README.  (Now in Org format).
+- Provide README as Texi and Info manual too.
+
+* Version 1.0
+
+- Specify "Version" in Emacs-Lisp library header.
