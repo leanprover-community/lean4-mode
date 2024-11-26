@@ -26,6 +26,7 @@
 
 ;;; Code:
 
+(require 'compat)
 (require 'lean4-settings)
 
 (defun lean4-setup-rootdir ()
@@ -56,8 +57,7 @@ First try to find an executable named `lean4-executable-name' in
 
 (defun lean4-get-executable (exe-name)
   "Return fullpath of lean executable EXE-NAME."
-  (let ((default-directory (lean4-get-rootdir)))
-    (expand-file-name exe-name (expand-file-name "bin"))))
+  (file-name-concat (lean4-get-rootdir) "bin" exe-name))
 
 (defun lean4-whitespace-cleanup ()
   "Delete trailing whitespace if `lean4-delete-trailing-whitespace' is t."
