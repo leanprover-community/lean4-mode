@@ -256,11 +256,13 @@ Invokes `lean4-mode-hook'."
 
 ;; Automatically use lean4-mode for .lean files.
 ;;;###autoload
-(push '("\\.lean$" . lean4-select-mode) auto-mode-alist)
+(add-to-list 'auto-mode-alist
+             '("\\.lean\\'" . lean4-select-mode))
 
 ;;;###autoload
 (with-eval-after-load 'markdown-mode
-  (add-to-list 'markdown-code-lang-modes '("lean" . lean4-select-mode)))
+  (add-to-list 'markdown-code-lang-modes
+               '("lean" . lean4-select-mode)))
 
 ;; Use utf-8 encoding
 ;;;### autoload
