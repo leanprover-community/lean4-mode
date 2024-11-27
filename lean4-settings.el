@@ -30,11 +30,14 @@
 (require 'cl-lib)
 
 (defgroup lean4 nil
-  "Lean 4 programming language and theorem prover."
-  :prefix "lean4-"
+  "Major mode for Lean4 programming language and theorem prover."
   :group 'languages
-  :link '(url-link :tag "Website" "http://leanprover.github.io")
-  :link '(url-link :tag "Github"  "https://github.com/leanprover/lean4"))
+  :link '(info-link :tag "Info Manual" "(lean4-mode)")
+  :link '(url-link
+          :tag "Website"
+          "https://github.com/leanprover-community/lean4-mode")
+  :link '(emacs-library-link :tag "Library Source" "lean4-mode.el")
+  :prefix "lean4-")
 
 (defgroup lean4-keybinding nil
   "Keybindings for lean4-mode."

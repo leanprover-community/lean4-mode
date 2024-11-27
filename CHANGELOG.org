@@ -3,6 +3,9 @@
 
 * Development
 
+- To =lean4= customization group, add link to local info manual and
+  use Lean4-Mode Github URL as website.
+
 * Version 1.0.1
 
 - Specify Yury G. Kudryashov as maintainer.
