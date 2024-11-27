@@ -1,39 +1,41 @@
-;;; lean4-input.el --- The Lean input method (based/copied from Agda) -*- lexical-binding: t -*-
-;;;
-;;; DISCLAIMER: This file is based on agda-input.el provided with the Agda language.
-;;; We did minor modifications
-;; SPDX-License-Identifier: Apache-2.0
-;;
+;;; lean4-input.el --- Lean4-Mode Input Method  -*- lexical-binding: t; -*-
 
-;;; License:
+;; Copyright (c) 2005-2012 Ulf Norell, Nils Anders Danielsson,
+;; Catarina Coquand, Makoto Takeyama, Andreas Abel, Karl Mehltretter,
+;; Marcin Benke, Darin Morrison.
 
-;; Licensed under the Apache License, Version 2.0 (the "License");
-;; you may not use this file except in compliance with the License.
-;; You may obtain a copy of the License at:
+;; This file is not part of GNU Emacs.
+
+;; Licensed under the Apache License, Version 2.0 (the "License"); you
+;; may not use this file except in compliance with the License.  You
+;; may obtain a copy of the License at
 ;;
 ;;     http://www.apache.org/licenses/LICENSE-2.0
 ;;
 ;; Unless required by applicable law or agreed to in writing, software
 ;; distributed under the License is distributed on an "AS IS" BASIS,
-;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-;; See the License for the specific language governing permissions and
-;; limitations under the License.
+;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+;; implied.  See the License for the specific language governing
+;; permissions and limitations under the License.
 
 ;;; Commentary:
-;;
-;;;; A highly customisable input method which can inherit from other
+
+;; A highly customisable input method which can inherit from other
 ;; Quail input methods.  By default the input method is geared towards
 ;; the input of mathematical and other symbols in Lean programs.
-;;
+
 ;; Use M-x customize-group lean4-input to customise this input method.
 ;; Note that the functions defined under "Functions used to tweak
 ;; translation pairs" below can be used to tweak both the key
 ;; translations inherited from other input methods as well as the
 ;; ones added specifically for this one.
-;;
+
 ;; Use lean4-input-show-translations to see all the characters which
 ;; can be typed using this input method (except for those
 ;; corresponding to ASCII characters).
+
+;; This file is based on agda-input.el from Agda-Mode:
+;; https://github.com/agda/agda/blob/d2cbd2dd4f49fa84c5ca6fcf464c3211adcc0088/src/data/emacs-mode/agda-input.el
 
 ;;; Code:
 
@@ -306,10 +308,7 @@ Suitable for use in the :set field of `defcustom'."
   (lean4-input-setup))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Administrative details
-
-(provide 'lean4-input)
-;;; lean4-input.el ends here
+;; Export Translations
 
 (defun lean4-input-export-translations ()
   "Export the current translations in a javascript format.
@@ -338,3 +337,9 @@ leanprover.github.io/tutorial/js/input-method.js"
   (lean4-input-export-translations)
   (with-current-buffer "*lean4-translations*"
     (princ (buffer-string))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Administrative details
+
+(provide 'lean4-input)
+;;; lean4-input.el ends here
