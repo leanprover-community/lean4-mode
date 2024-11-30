@@ -32,6 +32,7 @@ _Lean-Mode_).
 * Installation::
 * Usage::
 * Key Bindings and Commands::
+* Contributing::
 
 -- The Detailed Node Listing --
 
@@ -72,7 +73,7 @@ Install dependencies:
    • Emacs packages Dash (https://github.com/magnars/dash.el) (which is
      available on GNU-Elpa package-archive), Flycheck
      (https://www.flycheck.org), lsp-mode
-     (https://emacs-lsp.github.io/lsp-mode) and Magit-Section
+     (https://emacs-lsp.github.io/lsp-mode), and Magit-Section
      (https://github.com/magit/magit/blob/main/lisp/magit-section.el)
      (which are available on Melpa package-archive)
 
@@ -220,7 +221,7 @@ header-line, set the user option ‘lsp-headerline-breadcrumb-enable’ to
 ‘t’.
 
 
-File: lean4-mode.info,  Node: Key Bindings and Commands,  Prev: Usage,  Up: Top
+File: lean4-mode.info,  Node: Key Bindings and Commands,  Next: Contributing,  Prev: Usage,  Up: Top
 
 3 Key Bindings and Commands
 ***************************
@@ -243,19 +244,30 @@ not all capabilities are supported by Lean4-Mode.
 indicates the number of errors (‘N’) and responses (‘M’) from Lean;
 clicking on ‘FlyC’ opens the Flycheck menu.
 
+
+File: lean4-mode.info,  Node: Contributing,  Prev: Key Bindings and Commands,  Up: Top
+
+4 Contributing
+**************
+
+When you contribute an addition or modification of a substantial part of
+Lean4-Mode, then you can add a personal copyright like ‘;; Copyright (c)
+2024 John Doe’ to the beginning of the respective files.
+
 
 
 Tag Table:
 Node: Top223
-Node: Installation1324
-Node: Brief and Generic Instructions1567
-Node: Detailed and Concrete Instructions2624
-Node: Instructions for Source-Based Use-Package4178
-Node: Native vc (Emacs 30 or later)4899
-Node: Doom-Emacs5752
-Node: Straight6152
-Node: Usage6642
-Node: Key Bindings and Commands7562
+Node: Installation1341
+Node: Brief and Generic Instructions1584
+Node: Detailed and Concrete Instructions2642
+Node: Instructions for Source-Based Use-Package4196
+Node: Native vc (Emacs 30 or later)4917
+Node: Doom-Emacs5770
+Node: Straight6170
+Node: Usage6660
+Node: Key Bindings and Commands7580
+Node: Contributing9139
 
 End Tag Table
 

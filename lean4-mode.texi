@@ -39,6 +39,7 @@ known as @emph{Lean-Mode}).
 * Installation::
 * Usage::
 * Key Bindings and Commands::
+* Contributing::
 
 @detailmenu
 --- The Detailed Node Listing ---
@@ -78,7 +79,7 @@ Install dependencies:
 Emacs version 27 or later
 @item
 Emacs packages @uref{https://github.com/magnars/dash.el, Dash} (which is available on GNU-Elpa
-package-archive), @uref{https://www.flycheck.org, Flycheck}, @uref{https://emacs-lsp.github.io/lsp-mode, lsp-mode} and @uref{https://github.com/magit/magit/blob/main/lisp/magit-section.el, Magit-Section} (which are
+package-archive), @uref{https://www.flycheck.org, Flycheck}, @uref{https://emacs-lsp.github.io/lsp-mode, lsp-mode}, and @uref{https://github.com/magit/magit/blob/main/lisp/magit-section.el, Magit-Section} (which are
 available on Melpa package-archive)
 @end itemize
 
@@ -257,5 +258,12 @@ note that not all capabilities are supported by Lean4-Mode.
 In the default configuration, the Flycheck annotation @samp{FlyC:N/M}
 indicates the number of errors (@code{N}) and responses (@code{M}) from Lean;
 clicking on @samp{FlyC} opens the Flycheck menu.
+
+@node Contributing
+@chapter Contributing
+
+When you contribute an addition or modification of a substantial part
+of Lean4-Mode, then you can add a personal copyright like @samp{;;
+Copyright (c) 2024 John Doe} to the beginning of the respective files.
 
 @bye

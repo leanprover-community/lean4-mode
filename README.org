@@ -168,3 +168,9 @@ note that not all capabilities are supported by Lean4-Mode.
 In the default configuration, the Flycheck annotation =FlyC:N/M=
 indicates the number of errors (~N~) and responses (~M~) from Lean;
 clicking on =FlyC= opens the Flycheck menu.
+
+* Contributing
+
+When you contribute an addition or modification of a substantial part
+of Lean4-Mode, then you can add a personal copyright like =;;
+Copyright (c) 2024 John Doe= to the beginning of the respective files.
