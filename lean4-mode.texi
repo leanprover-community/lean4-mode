@@ -64,6 +64,7 @@ Usage
 Configuration
 
 * lsp-mode: lsp-mode (1). 
+* Flycheck: Flycheck (1). 
 
 @end detailmenu
 @end menu
@@ -87,8 +88,8 @@ First, install the dependencies of Lean4-Mode:
 @item
 Emacs (version 27 or later)
 @item
-Emacs packages @uref{https://github.com/magnars/dash.el, Dash} (which is available on GNU-Elpa), @uref{https://www.flycheck.org, Flycheck},
-@uref{https://emacs-lsp.github.io/lsp-mode, lsp-mode}, and @uref{https://github.com/magit/magit/blob/main/lisp/magit-section.el, Magit-Section} (which are available on Melpa)
+Emacs packages @uref{https://emacs-lsp.github.io/lsp-mode, lsp-mode}, @uref{https://github.com/magit/magit/blob/main/lisp/magit-section.el, Magit-Section} and optionally @uref{https://www.flycheck.org, Flycheck}
+(which are available on Melpa package-archive)
 @end itemize
 
 Second, install Lean4-Mode itself:
@@ -107,24 +108,22 @@ Install Lean version 4.
 
 Install Emacs version 27 or later.
 
-Install the Emacs packages Dash, Flycheck, lsp-mode and Magit-Section.
-Dash is the only one of these packages that is available in the
-default @uref{https://elpa.gnu.org, GNU Elpa} package-archive.  You can install the remaining three
-packages either from source or from @uref{https://melpa.org/#/getting-started, Melpa} package-archive.  For later
-approach, you may for example use the @code{package-selected-packages}
-variable in your Emacs initialization file (e.g. @samp{~/.emacs.d/init.el})
-as follows:
+Install the Emacs packages lsp-mode and Magit-Section (and optionally
+Flycheck) either from source or from the @uref{https://melpa.org/#/getting-started, Melpa} package-archive.  For
+later approach, add the following to your Emacs initialization file
+(e.g. @samp{~/.emacs.d/init.el}):
 
 @lisp
 (require 'package)
 
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
+             (cons "melpa" "https://melpa.org/packages/"))
 
-(add-to-list 'package-selected-packages 'dash)
-(add-to-list 'package-selected-packages 'flycheck)
 (add-to-list 'package-selected-packages 'lsp-mode)
 (add-to-list 'package-selected-packages 'magit-section)
+
+;; Optional:
+;; (add-to-list 'package-selected-packages 'flycheck)
 
 (package-refresh-contents)
 (package-install-selected-packages 'no-confirm)
@@ -179,7 +178,7 @@ packages from remote source repositories.
 @lisp
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
+             (cons "melpa" "https://melpa.org/packages/"))
 (package-initialize)
 
 (use-package lean4-mode
@@ -266,9 +265,9 @@ note that not all capabilities are supported by Lean4-Mode.
 @node Flycheck
 @section Flycheck
 
-Lean4-Mode uses Flycheck.  The mode-line will show @samp{FlyC:N/M},
-indicating that there are @samp{N} errors and @samp{M} notes.  Following keys
-will be available:
+You may optionally use Lean4-Mode together with Flycheck.  In that
+case, the mode-line will show @samp{FlyC:N/M}, indicating that there are
+@samp{N} errors and @samp{M} notes.  Following keys will be available:
 
 @multitable {aaaaaaaaa} {aaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaa}
 @headitem Key
@@ -287,6 +286,7 @@ will be available:
 
 @menu
 * lsp-mode: lsp-mode (1). 
+* Flycheck: Flycheck (1). 
 @end menu
 
 @node lsp-mode (1)
@@ -296,11 +296,25 @@ If you want breadcrumbs of namespaces and sections to be shown in the
 header-line, set the user option @code{lsp-headerline-breadcrumb-enable} to
 @code{t}.
 
+@node Flycheck (1)
+@section Flycheck
+
+Flycheck is an optional but supported dependency of Lean4-Mode.  If
+Flycheck is installed, lsp-mode and thus Lean4-Mode will by default
+use it.  If you want to customize this behavior, e.g. if you'd like to
+use Emacs' built-in Flymake package instead of Flycheck while keeping
+later installed, then customize the @code{lsp-diagnostics-provider} user
+option accordingly.
+
 @node Contributing
 @chapter Contributing
 
 When you contribute an addition or modification of a substantial part
 of Lean4-Mode, then you can add a personal copyright like @samp{;;
 Copyright (c) 2024 John Doe} to the beginning of the respective files.
+
+You can use Emacs' built-in @code{bug-reference-mode} and
+@code{bug-reference-prog-mode} in this repository to make mentions of
+issues like @samp{#123} clickable.
 
 @bye

@@ -56,6 +56,7 @@ Usage
 Configuration
 
 * lsp-mode: lsp-mode (1).
+* Flycheck: Flycheck (1).
 
 
 
@@ -79,11 +80,11 @@ File: lean4-mode.info,  Node: Brief and Generic Instructions,  Next: Detailed an
 First, install the dependencies of Lean4-Mode:
    • Lean (https://lean-lang.org/lean4/doc/setup.html) (version 4)
    • Emacs (version 27 or later)
-   • Emacs packages Dash (https://github.com/magnars/dash.el) (which is
-     available on GNU-Elpa), Flycheck (https://www.flycheck.org),
-     lsp-mode (https://emacs-lsp.github.io/lsp-mode), and Magit-Section
+   • Emacs packages lsp-mode (https://emacs-lsp.github.io/lsp-mode),
+     Magit-Section
      (https://github.com/magit/magit/blob/main/lisp/magit-section.el)
-     (which are available on Melpa)
+     and optionally Flycheck (https://www.flycheck.org) (which are
+     available on Melpa package-archive)
 
    Second, install Lean4-Mode itself:
    • Clone the Git repository of Lean4-Mode
@@ -102,24 +103,22 @@ Install Lean version 4.
 
    Install Emacs version 27 or later.
 
-   Install the Emacs packages Dash, Flycheck, lsp-mode and
-Magit-Section.  Dash is the only one of these packages that is available
-in the default GNU Elpa (https://elpa.gnu.org) package-archive.  You can
-install the remaining three packages either from source or from Melpa
+   Install the Emacs packages lsp-mode and Magit-Section (and optionally
+Flycheck) either from source or from the Melpa
 (https://melpa.org/#/getting-started) package-archive.  For later
-approach, you may for example use the ‘package-selected-packages’
-variable in your Emacs initialization file (e.g.  ‘~/.emacs.d/init.el’)
-as follows:
+approach, add the following to your Emacs initialization file (e.g.
+‘~/.emacs.d/init.el’):
 
      (require 'package)
 
      (add-to-list 'package-archives
-                  '("melpa" . "https://melpa.org/packages/"))
+                  (cons "melpa" "https://melpa.org/packages/"))
 
-     (add-to-list 'package-selected-packages 'dash)
-     (add-to-list 'package-selected-packages 'flycheck)
      (add-to-list 'package-selected-packages 'lsp-mode)
      (add-to-list 'package-selected-packages 'magit-section)
+
+     ;; Optional:
+     ;; (add-to-list 'package-selected-packages 'flycheck)
 
      (package-refresh-contents)
      (package-install-selected-packages 'no-confirm)
@@ -172,7 +171,7 @@ packages from remote source repositories.
 
      (require 'package)
      (add-to-list 'package-archives
-                  '("melpa" . "https://melpa.org/packages/"))
+                  (cons "melpa" "https://melpa.org/packages/"))
      (package-initialize)
 
      (use-package lean4-mode
@@ -257,9 +256,9 @@ File: lean4-mode.info,  Node: Flycheck,  Prev: lsp-mode,  Up: Usage
 2.2 Flycheck
 ============
 
-Lean4-Mode uses Flycheck.  The mode-line will show ‘FlyC:N/M’,
-indicating that there are ‘N’ errors and ‘M’ notes.  Following keys will
-be available:
+You may optionally use Lean4-Mode together with Flycheck.  In that case,
+the mode-line will show ‘FlyC:N/M’, indicating that there are ‘N’ errors
+and ‘M’ notes.  Following keys will be available:
 
 Key         Description            Command
 ---------------------------------------------------------------
@@ -275,9 +274,10 @@ File: lean4-mode.info,  Node: Configuration,  Next: Contributing,  Prev: Usage, 
 * Menu:
 
 * lsp-mode: lsp-mode (1).
+* Flycheck: Flycheck (1).
 
 
-File: lean4-mode.info,  Node: lsp-mode (1),  Up: Configuration
+File: lean4-mode.info,  Node: lsp-mode (1),  Next: Flycheck (1),  Up: Configuration
 
 3.1 lsp-mode
 ============
@@ -285,6 +285,19 @@ File: lean4-mode.info,  Node: lsp-mode (1),  Up: Configuration
 If you want breadcrumbs of namespaces and sections to be shown in the
 header-line, set the user option ‘lsp-headerline-breadcrumb-enable’ to
 ‘t’.
+
+
+File: lean4-mode.info,  Node: Flycheck (1),  Prev: lsp-mode (1),  Up: Configuration
+
+3.2 Flycheck
+============
+
+Flycheck is an optional but supported dependency of Lean4-Mode.  If
+Flycheck is installed, lsp-mode and thus Lean4-Mode will by default use
+it.  If you want to customize this behavior, e.g.  if you'd like to use
+Emacs' built-in Flymake package instead of Flycheck while keeping later
+installed, then customize the ‘lsp-diagnostics-provider’ user option
+accordingly.
 
 
 File: lean4-mode.info,  Node: Contributing,  Prev: Configuration,  Up: Top
@@ -296,23 +309,28 @@ When you contribute an addition or modification of a substantial part of
 Lean4-Mode, then you can add a personal copyright like ‘;; Copyright (c)
 2024 John Doe’ to the beginning of the respective files.
 
+   You can use Emacs' built-in ‘bug-reference-mode’ and
+‘bug-reference-prog-mode’ in this repository to make mentions of issues
+like ‘#123’ clickable.
+
 
 
 Tag Table:
 Node: Top223
-Node: Installation1405
-Node: Brief and Generic Instructions1648
-Node: Detailed and Concrete Instructions2653
-Node: Instructions for Source-Based Use-Package4445
-Node: Native vc (Emacs 30 or later)5166
-Node: Doom-Emacs6074
-Node: Straight6500
-Node: Usage7000
-Node: lsp-mode8446
-Node: Flycheck8731
-Node: Configuration9234
-Node: lsp-mode (1)9395
-Node: Contributing9643
+Node: Installation1431
+Node: Brief and Generic Instructions1674
+Node: Detailed and Concrete Instructions2629
+Node: Instructions for Source-Based Use-Package4175
+Node: Native vc (Emacs 30 or later)4896
+Node: Doom-Emacs5806
+Node: Straight6232
+Node: Usage6732
+Node: lsp-mode8178
+Node: Flycheck8463
+Node: Configuration9012
+Node: lsp-mode (1)9199
+Node: Flycheck (1)9468
+Node: Contributing9953
 
 End Tag Table
 
