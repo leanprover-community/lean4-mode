@@ -10,7 +10,7 @@
 ;; Maintainer: Yury G. Kudryashov <urkud@urkud.name>
 ;; Created: Jan 09, 2014
 ;; Keywords: languages
-;; Package-Requires: ((emacs "27.1") (compat "28.1") (dash "2.18.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
+;; Package-Requires: ((emacs "27.1") (compat "28.1") (dash "2.18.0") (magit-section "2.90.1") (lsp-mode "8.0.0"))
 ;; URL: https://github.com/leanprover/lean4-mode
 ;; SPDX-License-Identifier: Apache-2.0
 ;; Version: 1.0.1
@@ -44,7 +44,6 @@
 (require 'cl-lib)
 (require 'dash)
 (require 'pcase)
-(require 'flycheck)
 (require 'lsp-mode)
 (require 'lean4-eri)
 (require 'lean4-util)
@@ -55,12 +54,17 @@
 (require 'lean4-fringe)
 (require 'lean4-lake)
 
-;; Silence byte-compiler
+;; Declare symbols defined in external dependencies.  This silences
+;; byte-compiler warnings:
+(defvar compilation-mode-font-lock-keywords)
+(defvar flycheck-after-syntax-check-hook)
+(defvar flycheck-disabled-checkers)
+(defvar flycheck-mode)
 (defvar lsp--cur-version)
 (defvar markdown-code-lang-modes)
-(defvar compilation-mode-font-lock-keywords)
-(declare-function lean-mode "ext:lean-mode")
+(declare-function flycheck-list-errors "ext:flycheck")
 (declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
+(declare-function lean-mode "ext:lean-mode")
 (declare-function quail-show-key "quail")
 
 (defun lean4-compile-string (lake-name exe-name args file-name)
@@ -153,11 +157,15 @@ file, recompiling, and reloading all imports."
 (easy-menu-define lean4-mode-menu lean4-mode-map
   "Menu for the Lean major mode."
   `("Lean 4"
-    ["Execute lean"         lean4-execute                      t]
-    ["Toggle info display"  lean4-toggle-info                  t]
-    ["List of errors"       flycheck-list-errors               flycheck-mode]
-    ["Restart lean process" lsp-workspace-restart              t]
-    ["Customize lean4-mode" (customize-group 'lean)            t]))
+    ["Execute lean"         lean4-execute           t]
+    ["Toggle info display"  lean4-toggle-info       t]
+    ;; TODO: Bug#91: We offers a Flycheck-based menu-item when
+    ;; Flycheck is in use.  Users who use built-in Flymake should also
+    ;; be offered a working menu-item.  Alternatively, the menu-item
+    ;; could also be dropped for both cases.
+    ["List of errors"       flycheck-list-errors    flycheck-mode]
+    ["Restart lean process" lsp-workspace-restart   t]
+    ["Customize lean4-mode" (customize-group 'lean) t]))
 
 (defconst lean4-hooks-alist
   '(

@@ -32,7 +32,6 @@ _Lean-Mode_).
 * Installation::
 * Usage::
 * Configuration::
-* Contributing::
 
 -- The Detailed Node Listing --
 
@@ -80,11 +79,11 @@ File: lean4-mode.info,  Node: Brief and Generic Instructions,  Next: Detailed an
 First, install the dependencies of Lean4-Mode:
    • Lean (https://lean-lang.org/lean4/doc/setup.html) (version 4)
    • Emacs (version 27 or later)
-   • Emacs packages lsp-mode (https://emacs-lsp.github.io/lsp-mode),
+   • Emacs packages Dash (https://github.com/magnars/dash.el) (available
+     on GNU-Elpa), lsp-mode (https://emacs-lsp.github.io/lsp-mode), and
      Magit-Section
      (https://github.com/magit/magit/blob/main/lisp/magit-section.el)
-     and optionally Flycheck (https://www.flycheck.org) (which are
-     available on Melpa package-archive)
+     (available on Melpa)
 
    Second, install Lean4-Mode itself:
    • Clone the Git repository of Lean4-Mode
@@ -103,8 +102,10 @@ Install Lean version 4.
 
    Install Emacs version 27 or later.
 
-   Install the Emacs packages lsp-mode and Magit-Section (and optionally
-Flycheck) either from source or from the Melpa
+   Install the Emacs packages Dash, lsp-mode and Magit-Section.  Dash is
+the only one of these packages that is available in the default GNU Elpa
+(https://elpa.gnu.org) package-archive.  You can install the remaining
+packages either from source or from Melpa
 (https://melpa.org/#/getting-started) package-archive.  For later
 approach, add the following to your Emacs initialization file (e.g.
 ‘~/.emacs.d/init.el’):
@@ -112,13 +113,11 @@ approach, add the following to your Emacs initialization file (e.g.
      (require 'package)
 
      (add-to-list 'package-archives
-                  (cons "melpa" "https://melpa.org/packages/"))
+                  '("melpa" . "https://melpa.org/packages/"))
 
+     (add-to-list 'package-selected-packages 'dash)
      (add-to-list 'package-selected-packages 'lsp-mode)
      (add-to-list 'package-selected-packages 'magit-section)
-
-     ;; Optional:
-     ;; (add-to-list 'package-selected-packages 'flycheck)
 
      (package-refresh-contents)
      (package-install-selected-packages 'no-confirm)
@@ -171,7 +170,7 @@ packages from remote source repositories.
 
      (require 'package)
      (add-to-list 'package-archives
-                  (cons "melpa" "https://melpa.org/packages/"))
+                  '("melpa" . "https://melpa.org/packages/"))
      (package-initialize)
 
      (use-package lean4-mode
@@ -257,8 +256,9 @@ File: lean4-mode.info,  Node: Flycheck,  Prev: lsp-mode,  Up: Usage
 ============
 
 You may optionally use Lean4-Mode together with Flycheck.  In that case,
-the mode-line will show ‘FlyC:N/M’, indicating that there are ‘N’ errors
-and ‘M’ notes.  Following keys will be available:
+the mode-line will show ‘FlyC:E/N’, indicating that there are ‘E’ number
+of errors and ‘N’ number of notes.  Following keys will be available by
+default (via ‘flycheck-mode-map’):
 
 Key         Description            Command
 ---------------------------------------------------------------
@@ -266,7 +266,7 @@ Key         Description            Command
 ‘C-c ! p’   Go to previous error   ‘flycheck-previous-error’
 
 
-File: lean4-mode.info,  Node: Configuration,  Next: Contributing,  Prev: Usage,  Up: Top
+File: lean4-mode.info,  Node: Configuration,  Prev: Usage,  Up: Top
 
 3 Configuration
 ***************
@@ -299,38 +299,23 @@ Emacs' built-in Flymake package instead of Flycheck while keeping later
 installed, then customize the ‘lsp-diagnostics-provider’ user option
 accordingly.
 
-
-File: lean4-mode.info,  Node: Contributing,  Prev: Configuration,  Up: Top
-
-4 Contributing
-**************
-
-When you contribute an addition or modification of a substantial part of
-Lean4-Mode, then you can add a personal copyright like ‘;; Copyright (c)
-2024 John Doe’ to the beginning of the respective files.
-
-   You can use Emacs' built-in ‘bug-reference-mode’ and
-‘bug-reference-prog-mode’ in this repository to make mentions of issues
-like ‘#123’ clickable.
-
 
 
 Tag Table:
 Node: Top223
-Node: Installation1431
-Node: Brief and Generic Instructions1674
-Node: Detailed and Concrete Instructions2629
-Node: Instructions for Source-Based Use-Package4175
-Node: Native vc (Emacs 30 or later)4896
-Node: Doom-Emacs5806
-Node: Straight6232
-Node: Usage6732
-Node: lsp-mode8178
-Node: Flycheck8463
-Node: Configuration9012
-Node: lsp-mode (1)9199
-Node: Flycheck (1)9468
-Node: Contributing9953
+Node: Installation1414
+Node: Brief and Generic Instructions1657
+Node: Detailed and Concrete Instructions2606
+Node: Instructions for Source-Based Use-Package4263
+Node: Native vc (Emacs 30 or later)4984
+Node: Doom-Emacs5892
+Node: Straight6318
+Node: Usage6818
+Node: lsp-mode8264
+Node: Flycheck8549
+Node: Configuration9159
+Node: lsp-mode (1)9325
+Node: Flycheck (1)9594
 
 End Tag Table
 

@@ -6,6 +6,8 @@
 - To =lean4= customization group, add link to local info manual and
   use Lean4-Mode Github URL as website.
 - Introduce new dependency on Elpa package =compat=.
+- Remove dependency on Elpa package Flycheck.  It is still supported
+  but not required.
 
 * Version 1.0.1
 

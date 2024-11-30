@@ -39,7 +39,6 @@ known as @emph{Lean-Mode}).
 * Installation::
 * Usage::
 * Configuration::
-* Contributing::
 
 @detailmenu
 --- The Detailed Node Listing ---
@@ -88,8 +87,8 @@ First, install the dependencies of Lean4-Mode:
 @item
 Emacs (version 27 or later)
 @item
-Emacs packages @uref{https://emacs-lsp.github.io/lsp-mode, lsp-mode}, @uref{https://github.com/magit/magit/blob/main/lisp/magit-section.el, Magit-Section} and optionally @uref{https://www.flycheck.org, Flycheck}
-(which are available on Melpa package-archive)
+Emacs packages @uref{https://github.com/magnars/dash.el, Dash} (available on GNU-Elpa), @uref{https://emacs-lsp.github.io/lsp-mode, lsp-mode}, and
+@uref{https://github.com/magit/magit/blob/main/lisp/magit-section.el, Magit-Section} (available on Melpa)
 @end itemize
 
 Second, install Lean4-Mode itself:
@@ -108,22 +107,22 @@ Install Lean version 4.
 
 Install Emacs version 27 or later.
 
-Install the Emacs packages lsp-mode and Magit-Section (and optionally
-Flycheck) either from source or from the @uref{https://melpa.org/#/getting-started, Melpa} package-archive.  For
-later approach, add the following to your Emacs initialization file
+Install the Emacs packages Dash, lsp-mode and Magit-Section.  Dash is
+the only one of these packages that is available in the default @uref{https://elpa.gnu.org, GNU
+Elpa} package-archive.  You can install the remaining packages either
+from source or from @uref{https://melpa.org/#/getting-started, Melpa} package-archive.  For later approach, add
+the following to your Emacs initialization file
 (e.g. @samp{~/.emacs.d/init.el}):
 
 @lisp
 (require 'package)
 
 (add-to-list 'package-archives
-             (cons "melpa" "https://melpa.org/packages/"))
+             '("melpa" . "https://melpa.org/packages/"))
 
+(add-to-list 'package-selected-packages 'dash)
 (add-to-list 'package-selected-packages 'lsp-mode)
 (add-to-list 'package-selected-packages 'magit-section)
-
-;; Optional:
-;; (add-to-list 'package-selected-packages 'flycheck)
 
 (package-refresh-contents)
 (package-install-selected-packages 'no-confirm)
@@ -178,7 +177,7 @@ packages from remote source repositories.
 @lisp
 (require 'package)
 (add-to-list 'package-archives
-             (cons "melpa" "https://melpa.org/packages/"))
+             '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
 (use-package lean4-mode
@@ -266,8 +265,9 @@ note that not all capabilities are supported by Lean4-Mode.
 @section Flycheck
 
 You may optionally use Lean4-Mode together with Flycheck.  In that
-case, the mode-line will show @samp{FlyC:N/M}, indicating that there are
-@samp{N} errors and @samp{M} notes.  Following keys will be available:
+case, the mode-line will show @samp{FlyC:E/N}, indicating that there are
+@samp{E} number of errors and @samp{N} number of notes.  Following keys will be
+available by default (via @code{flycheck-mode-map}):
 
 @multitable {aaaaaaaaa} {aaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaa}
 @headitem Key
@@ -305,16 +305,5 @@ use it.  If you want to customize this behavior, e.g. if you'd like to
 use Emacs' built-in Flymake package instead of Flycheck while keeping
 later installed, then customize the @code{lsp-diagnostics-provider} user
 option accordingly.
-
-@node Contributing
-@chapter Contributing
-
-When you contribute an addition or modification of a substantial part
-of Lean4-Mode, then you can add a personal copyright like @samp{;;
-Copyright (c) 2024 John Doe} to the beginning of the respective files.
-
-You can use Emacs' built-in @code{bug-reference-mode} and
-@code{bug-reference-prog-mode} in this repository to make mentions of
-issues like @samp{#123} clickable.
 
 @bye
