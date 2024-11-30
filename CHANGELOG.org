@@ -1,7 +1,7 @@
 #+title: Lean4-Mode - Changelog
 #+language: en
 
-* Development
+* Version 1.1.0
 
 - To =lean4= customization group, add link to local info manual and
   use Lean4-Mode Github URL as website.
