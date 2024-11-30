@@ -5,9 +5,9 @@
 #+texinfo_dir_title: Lean4-Mode: (lean4-mode).
 #+texinfo_dir_desc: Emacs major mode for Lean language
 
-This package extends GNU Emacs by providing a major mode for editing
+This package extends [[https://www.gnu.org/software/emacs/][GNU Emacs]] by providing a major mode for editing
 code written in version 4 of the programming language and theorem
-prover Lean.
+prover [[https://lean-lang.org][Lean]].
 
 The Lean4-Mode source code is developed at [[https://github.com/leanprover-community/lean4-mode][Github]] and its issues
 tracked there too.  Further discussions and question-answering takes

@@ -12,9 +12,9 @@ File: lean4-mode.info,  Node: Top,  Next: Installation,  Up: (dir)
 Lean4-Mode - Emacs major mode for Lean language
 ***********************************************
 
-This package extends GNU Emacs by providing a major mode for editing
-code written in version 4 of the programming language and theorem prover
-Lean.
+This package extends GNU Emacs (https://www.gnu.org/software/emacs/) by
+providing a major mode for editing code written in version 4 of the
+programming language and theorem prover Lean (https://lean-lang.org).
 
    The Lean4-Mode source code is developed at Github
 (https://github.com/leanprover-community/lean4-mode) and its issues
@@ -303,19 +303,19 @@ accordingly.
 
 Tag Table:
 Node: Top223
-Node: Installation1414
-Node: Brief and Generic Instructions1657
-Node: Detailed and Concrete Instructions2606
-Node: Instructions for Source-Based Use-Package4263
-Node: Native vc (Emacs 30 or later)4984
-Node: Doom-Emacs5892
-Node: Straight6318
-Node: Usage6818
-Node: lsp-mode8264
-Node: Flycheck8549
-Node: Configuration9159
-Node: lsp-mode (1)9325
-Node: Flycheck (1)9594
+Node: Installation1476
+Node: Brief and Generic Instructions1719
+Node: Detailed and Concrete Instructions2668
+Node: Instructions for Source-Based Use-Package4325
+Node: Native vc (Emacs 30 or later)5046
+Node: Doom-Emacs5954
+Node: Straight6380
+Node: Usage6880
+Node: lsp-mode8326
+Node: Flycheck8611
+Node: Configuration9221
+Node: lsp-mode (1)9387
+Node: Flycheck (1)9656
 
 End Tag Table
 

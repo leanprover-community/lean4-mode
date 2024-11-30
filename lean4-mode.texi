@@ -22,9 +22,9 @@
 @node Top
 @top Lean4-Mode - Emacs major mode for Lean language
 
-This package extends GNU Emacs by providing a major mode for editing
+This package extends @uref{https://www.gnu.org/software/emacs/, GNU Emacs} by providing a major mode for editing
 code written in version 4 of the programming language and theorem
-prover Lean.
+prover @uref{https://lean-lang.org, Lean}.
 
 The Lean4-Mode source code is developed at @uref{https://github.com/leanprover-community/lean4-mode, Github} and its issues
 tracked there too.  Further discussions and question-answering takes
