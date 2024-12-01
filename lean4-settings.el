@@ -23,6 +23,7 @@
 ;;; Code:
 
 (require 'cl-lib)
+(require 'lsp-mode)
 
 (defgroup lean4 nil
   "Major mode for Lean4 programming language and theorem prover."
@@ -50,6 +51,12 @@
     (windows-nt "lake.exe")
     (t          "lake"))
   "Default executable name of Lake.")
+
+(defcustom lean4-mode-hook (list #'lsp)
+  "Hook run after entering `lean4-mode'."
+  :options '(flycheck-mode lsp)
+  :type 'hook
+  :group 'lean4)
 
 (defcustom lean4-rootdir nil
   "Full pathname of lean root directory.  It should be defined by user."

@@ -211,12 +211,11 @@ of the parent project."
     (when root
       (lsp-workspace-folders-add root))))
 
-;; Automode List
 ;;;###autoload
 (define-derived-mode lean4-mode prog-mode "Lean 4"
-  "Major mode for Lean.
-\\{lean4-mode-map}
-Invokes `lean4-mode-hook'."
+  "Major mode for Lean language.
+
+\\{lean4-mode-map}"
   :syntax-table lean4-syntax-table
   :abbrev-table lean4-abbrev-table
   :group 'lean
@@ -297,8 +296,6 @@ otherwise return '/path/to/lean --server'."
                   :server-id 'lean4-lsp
                   :notification-handlers (ht ("$/lean/fileProgress" #'lean4-fringe-update))
                   :semantic-tokens-faces-overrides '(:types (("leanSorryLike" . font-lock-warning-face)))))
-
-(add-hook 'lean4-mode-hook #'lsp)
 
 (provide 'lean4-mode)
 ;;; lean4-mode.el ends here
