@@ -65,7 +65,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
     (display-buffer buffer)))
 
 (defun lean4-info-buffer-active (buffer)
-  "Check whether the given info BUFFER should show info for the current buffer."
+  "Check whether given info BUFFER should show info for current buffer."
   (and
    ;; info buffer visible (on any frame)
    (get-buffer-window buffer t)
