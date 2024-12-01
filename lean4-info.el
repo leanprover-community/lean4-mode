@@ -30,14 +30,14 @@
 (require 'magit-section)
 
 (defgroup lean4-info nil
-  "Lean Info."
+  "Lean4-Mode Info."
   :group 'lean)
 
 ;; Lean Info Mode (for "*lean4-info*" buffer)
 ;; Automode List
 ;;;###autoload
 (define-derived-mode lean4-info-mode prog-mode "Lean-Info"
-  "Major mode for Lean Info Buffer."
+  "Major mode for Lean4-Mode Info Buffer."
   :syntax-table lean4-syntax-table
   :group 'lean
   (set (make-local-variable 'font-lock-defaults) lean4-info-font-lock-defaults)
@@ -244,8 +244,9 @@ Otherwise, is a timestamp as given by `current-time'.")
   0.5
   "Maximum time we are allowed to stagger debouncing.
 
-If we recieve a request such that we have been debouncing for longer than
-`lean4-info-buffer-debounce-begin-time', then we immediately run the request."
+If we recieve a request such that we have been debouncing for longer
+than `lean4-info-buffer-debounce-begin-time', then we immediately run
+the request."
   :group 'lean4-info
   :type 'number)
 
@@ -253,8 +254,10 @@ If we recieve a request such that we have been debouncing for longer than
 ;; https://github.com/emacs-lsp/lsp-mode/blob/2f0ea2e396ec9a570f2a2aeb097c304ddc61ebee/lsp-lens.el#L140
 (defun lean4-info-buffer-redisplay-debounced ()
   "Debounced version of `lean4-info-buffer-redisplay'.
-This version ensures that info buffer is not repeatedly written to.  This is to
-prevent lag, because magit is quite slow at building sections."
+
+This version ensures that info buffer is not repeatedly written to.
+This is to prevent lag, because magit is quite slow at building
+sections."
   ;;  if we have not begun debouncing, setup debouncing begin time.
   (if (not lean4-info-buffer-debounce-begin-time)
       (setq lean4-info-buffer-debounce-begin-time (current-time)))
