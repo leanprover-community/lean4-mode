@@ -46,7 +46,7 @@ interactively."
 Print message \"lean: turn off debug mode\" if PRINT-MSG or if called
 interactively."
   (interactive)
-  (when (eq major-mode 'lean4-mode)
+  (when (derived-mode-p 'lean4-mode)
     (when (or (called-interactively-p 'any) print-msg)
       (message "lean: turn off debug mode"))
     (setq lean4-debug-mode nil)))
