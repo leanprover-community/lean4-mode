@@ -25,7 +25,11 @@ jobs:
       env:
         LOCAL_REPO: ${{ github.workspace }}
         # RECIPE is your recipe as written for MELPA:
-        RECIPE: (lean4-mode :fetcher github :repo "leanprover/lean4-mode" :files (:defaults ("data" "data/*.json")))
+        RECIPE: >-
+          (lean4-mode
+            :fetcher github
+            :repo "leanprover-community/lean4-mode"
+            :files (:defaults ("data" "data/*.json")))
         # set this to false (or remove it) if the package isn't on MELPA:
         # EXIST_OK: true
       run: echo $GITHUB_REF && make -C ~/melpazoid
