@@ -1,24 +1,27 @@
-;;; lean4-eri.el --- Enhanced relative indentation (eri) -*- lexical-binding: t -*-
+;;; lean4-eri.el --- Lean4-Mode Indentation  -*- lexical-binding: t; -*-
 
-;; SPDX-License-Identifier: Apache-2.0
+;; Copyright (c) 2005-2010 Ulf Norell, Nils Anders Danielsson,
+;; Catarina Coquand, Makoto Takeyama, Andreas Abel, Karl Mehltretter,
+;; Marcin Benke, Darin Morrison.
 
-;;; License:
+;; This file is not part of GNU Emacs.
 
-;; Licensed under the Apache License, Version 2.0 (the "License");
-;; you may not use this file except in compliance with the License.
-;; You may obtain a copy of the License at:
+;; Licensed under the Apache License, Version 2.0 (the "License"); you
+;; may not use this file except in compliance with the License.  You
+;; may obtain a copy of the License at
 ;;
 ;;     http://www.apache.org/licenses/LICENSE-2.0
 ;;
 ;; Unless required by applicable law or agreed to in writing, software
 ;; distributed under the License is distributed on an "AS IS" BASIS,
-;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-;; See the License for the specific language governing permissions and
-;; limitations under the License.
+;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+;; implied.  See the License for the specific language governing
+;; permissions and limitations under the License.
 
 ;;; Commentary:
 
-;; Adapted from agda-mode (https://github.com/agda/agda/blob/master/src/data/emacs-mode/eri.el)
+;; This file is based on eri.el which was part of Agda-Mode:
+;; https://github.com/agda/agda/blob/b40c6fc2e0ced7b547553654f81e5898082d700c/src/data/emacs-mode/eri.el
 
 ;;; Code:
 

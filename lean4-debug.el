@@ -1,25 +1,20 @@
-;;; lean4-debug.el --- Debug mode for lean4-mode -*- lexical-binding: t -*-
+;;; lean4-debug.el --- Lean4-Mode Debug Mode  -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2014 Microsoft Corporation. All rights reserved.
 
-;; Author: Soonho Kong
-;; SPDX-License-Identifier: Apache-2.0
-
 ;; This file is not part of GNU Emacs.
 
-;;; License:
-
-;; Licensed under the Apache License, Version 2.0 (the "License");
-;; you may not use this file except in compliance with the License.
-;; You may obtain a copy of the License at:
+;; Licensed under the Apache License, Version 2.0 (the "License"); you
+;; may not use this file except in compliance with the License.  You
+;; may obtain a copy of the License at
 ;;
 ;;     http://www.apache.org/licenses/LICENSE-2.0
 ;;
 ;; Unless required by applicable law or agreed to in writing, software
 ;; distributed under the License is distributed on an "AS IS" BASIS,
-;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-;; See the License for the specific language governing permissions and
-;; limitations under the License.
+;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+;; implied.  See the License for the specific language governing
+;; permissions and limitations under the License.
 
 ;;; Commentary:
 
@@ -51,7 +46,7 @@ interactively."
 Print message \"lean: turn off debug mode\" if PRINT-MSG or if called
 interactively."
   (interactive)
-  (when (eq major-mode 'lean4-mode)
+  (when (derived-mode-p 'lean4-mode)
     (when (or (called-interactively-p 'any) print-msg)
       (message "lean: turn off debug mode"))
     (setq lean4-debug-mode nil)))

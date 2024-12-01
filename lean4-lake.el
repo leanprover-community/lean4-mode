@@ -1,21 +1,18 @@
-;;; lean4-lake.el --- Lake integration for lean4-mode -*- lexical-binding: t -*-
+;;; lean4-lake.el --- Lean4-Mode Lake Integration  -*- lexical-binding: t; -*-
 
-;; SPDX-License-Identifier: Apache-2.0
 ;; This file is not part of GNU Emacs.
 
-;;; License:
-
-;; Licensed under the Apache License, Version 2.0 (the "License");
-;; you may not use this file except in compliance with the License.
-;; You may obtain a copy of the License at:
+;; Licensed under the Apache License, Version 2.0 (the "License"); you
+;; may not use this file except in compliance with the License.  You
+;; may obtain a copy of the License at
 ;;
 ;;     http://www.apache.org/licenses/LICENSE-2.0
 ;;
 ;; Unless required by applicable law or agreed to in writing, software
 ;; distributed under the License is distributed on an "AS IS" BASIS,
-;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-;; See the License for the specific language governing permissions and
-;; limitations under the License.
+;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+;; implied.  See the License for the specific language governing
+;; permissions and limitations under the License.
 
 ;;; Commentary:
 

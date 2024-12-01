@@ -3,18 +3,18 @@ lean4-mode.texi.
 
 INFO-DIR-SECTION Emacs misc features
 START-INFO-DIR-ENTRY
-* Lean4-Mode: (lean4-mode). Emacs major-mode for Lean language.
+* Lean4-Mode: (lean4-mode). Emacs major mode for Lean language.
 END-INFO-DIR-ENTRY
 
 
 File: lean4-mode.info,  Node: Top,  Next: Installation,  Up: (dir)
 
-Lean4-Mode - Emacs major-mode for Lean language
+Lean4-Mode - Emacs major mode for Lean language
 ***********************************************
 
-This package extends GNU Emacs by providing a major-mode for editing
-code written in version 4 of the programming language and theorem prover
-Lean.
+This package extends GNU Emacs (https://www.gnu.org/software/emacs/) by
+providing a major mode for editing code written in version 4 of the
+programming language and theorem prover Lean (https://lean-lang.org).
 
    The Lean4-Mode source code is developed at Github
 (https://github.com/leanprover-community/lean4-mode) and its issues
@@ -31,7 +31,7 @@ _Lean-Mode_).
 
 * Installation::
 * Usage::
-* Key Bindings and Commands::
+* Configuration::
 
 -- The Detailed Node Listing --
 
@@ -46,6 +46,16 @@ Instructions for Source-Based Use-Package
 * Native vc (Emacs 30 or later)::
 * Doom-Emacs::
 * Straight::
+
+Usage
+
+* lsp-mode::
+* Flycheck::
+
+Configuration
+
+* lsp-mode: lsp-mode (1).
+* Flycheck: Flycheck (1).
 
 
 
@@ -66,23 +76,21 @@ File: lean4-mode.info,  Node: Brief and Generic Instructions,  Next: Detailed an
 1.1 Brief and Generic Instructions
 ==================================
 
-Install dependencies:
-   • Lean version 4 (https://lean-lang.org/lean4/doc/setup.html)
-   • Emacs version 27 or later
-   • Emacs packages Dash (https://github.com/magnars/dash.el) (which is
-     available on GNU-Elpa package-archive), Flycheck
-     (https://www.flycheck.org), lsp-mode
-     (https://emacs-lsp.github.io/lsp-mode) and Magit-Section
+First, install the dependencies of Lean4-Mode:
+   • Lean (https://lean-lang.org/lean4/doc/setup.html) (version 4)
+   • Emacs (version 27 or later)
+   • Emacs packages Dash (https://github.com/magnars/dash.el) (available
+     on GNU-Elpa), lsp-mode (https://emacs-lsp.github.io/lsp-mode), and
+     Magit-Section
      (https://github.com/magit/magit/blob/main/lisp/magit-section.el)
-     (which are available on Melpa package-archive)
+     (available on Melpa)
 
-   Install Lean4-Mode:
+   Second, install Lean4-Mode itself:
    • Clone the Git repository of Lean4-Mode
      (https://github.com/leanprover-community/lean4-mode).
    • In your Emacs initialization file
      (https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html),
-     add the path to that local repository to the ‘load-path’ list and
-   • load Lean4-Mode with ‘(require 'lean4-mode)’.
+     add the path to that local repository to the ‘load-path’ list.
 
 
 File: lean4-mode.info,  Node: Detailed and Concrete Instructions,  Next: Instructions for Source-Based Use-Package,  Prev: Brief and Generic Instructions,  Up: Installation
@@ -94,33 +102,37 @@ Install Lean version 4.
 
    Install Emacs version 27 or later.
 
-   Install the Emacs packages Dash, Flycheck, lsp-mode and
-Magit-Section.  Dash is the only one of these packages that is available
-in the default GNU Elpa (https://elpa.gnu.org) package-archive.  You can
-install the remaining three packages either from source or from Melpa
+   Install the Emacs packages Dash, lsp-mode and Magit-Section.  Dash is
+the only one of these packages that is available in the default GNU Elpa
+(https://elpa.gnu.org) package-archive.  You can install the remaining
+packages either from source or from Melpa
 (https://melpa.org/#/getting-started) package-archive.  For later
 approach, add the following to your Emacs initialization file (e.g.
 ‘~/.emacs.d/init.el’):
 
      (require 'package)
+
      (add-to-list 'package-archives
                   '("melpa" . "https://melpa.org/packages/"))
-     (package-initialize)
-     (let ((need-to-refresh t))
-       (dolist (package '(dash flycheck lsp-mode magit-section))
-         (unless (package-installed-p package)
-           (when need-to-refresh
-             (package-refresh-contents)
-             (setq need-to-refresh nil))
-           (package-install package))))
+
+     (add-to-list 'package-selected-packages 'dash)
+     (add-to-list 'package-selected-packages 'lsp-mode)
+     (add-to-list 'package-selected-packages 'magit-section)
+
+     (package-refresh-contents)
+     (package-install-selected-packages 'no-confirm)
 
    Clone the Git repository of Lean4-Mode:
 
-     git clone https://github.com/leanprover-community/lean4-mode.git /path/to/lean4-mode
+     git clone https://github.com/leanprover-community/lean4-mode.git ~/path/to/lean4-mode
 
    In your Emacs initialization file, add the path to your local
-Lean4-Mode repository to the ‘load-path’ list and load Lean4-Mode:
-     (add-to-list 'load-path "/path/to/lean4-mode")
+Lean4-Mode repository to the ‘load-path’ list:
+     (add-to-list 'load-path "~/path/to/lean4-mode")
+
+   Lean4-Mode should now already be enabled when you open a file with
+‘.lean’ extension.  But you can optionally also already load Lean4-Mode
+on Emacs startup, e.g.  in order to customize variables:
      (require 'lean4-mode)
 
 
@@ -156,17 +168,18 @@ since version 30, it also comes with a built-in ‘:vc’ keyword for the
 ‘use-package’ macro that utilizes ‘package-vc.el’ to install Emacs
 packages from remote source repositories.
 
-     ;; Use Melpa as package archive:
      (require 'package)
      (add-to-list 'package-archives
                   '("melpa" . "https://melpa.org/packages/"))
      (package-initialize)
 
-     ;; Install Lean4-Mode:
      (use-package lean4-mode
        :commands lean4-mode
        :vc (:url "https://github.com/leanprover-community/lean4-mode.git"
-            :rev :newest))
+            :rev :last-release
+            ;; Or, if you prefer the bleeding edge version of Lean4-Mode:
+            ;; :rev :newest
+            ))
 
 
 File: lean4-mode.info,  Node: Doom-Emacs,  Next: Straight,  Prev: Native vc (Emacs 30 or later),  Up: Instructions for Source-Based Use-Package
@@ -177,10 +190,10 @@ File: lean4-mode.info,  Node: Doom-Emacs,  Next: Straight,  Prev: Native vc (Ema
 If you use Doom-Emacs, you can place the following code in your Doom
 initialization file:
 
-     (package! lean4-mode :recipe
-       (:host github
-        :repo "leanprover/lean4-mode"
-        :files ("*.el" "data")))
+     (package! lean4-mode
+       :recipe (:host github
+                :repo "leanprover-community/lean4-mode"
+                :files ("*.el" "data")))
 
 
 File: lean4-mode.info,  Node: Straight,  Prev: Doom-Emacs,  Up: Instructions for Source-Based Use-Package
@@ -194,11 +207,11 @@ the following code in your Emacs initialization file:
      (use-package lean4-mode
        :commands lean4-mode
        :straight (lean4-mode :type git :host github
-                             :repo "leanprover/lean4-mode"
+                             :repo "leanprover-community/lean4-mode"
                              :files ("*.el" "data")))
 
 
-File: lean4-mode.info,  Node: Usage,  Next: Key Bindings and Commands,  Prev: Installation,  Up: Top
+File: lean4-mode.info,  Node: Usage,  Next: Configuration,  Prev: Installation,  Up: Top
 
 2 Usage
 *******
@@ -207,23 +220,11 @@ If things are working correctly, you should see the word "Lean 4" in
 Emacs mode-line when you open a file with ‘.lean’ extension.  Emacs will
 ask you to identify the _project_ this file belongs to.  If you then
 type ‘#check id’, the word ‘#check’ will be underlined, and hovering
-over it will show you the type of ‘id’.  The mode-line will show
-‘FlyC:0/1’, indicating that there are no errors and one piece of
-information displayed.
+over it will show you the type of ‘id’.
 
    To view the proof state, run ‘lean4-toggle-info’ (‘C-c C-i’).  This
 will display the ‘*Lean Goals*’ buffer (like the Lean Info-View pane in
 VS-Code) in a separate window.
-
-   If you want breadcrumbs of namespaces and sections to be shown in the
-header-line, set the user option ‘lsp-headerline-breadcrumb-enable’ to
-‘t’.
-
-
-File: lean4-mode.info,  Node: Key Bindings and Commands,  Prev: Usage,  Up: Top
-
-3 Key Bindings and Commands
-***************************
 
 Key                      Description                                              Command
 ----------------------------------------------------------------------------------------------------------------------
@@ -232,30 +233,89 @@ Key                      Description                                            
 ‘C-c C-x’ or ‘C-c C-l’   Execute Lean in stand-alone mode                         ‘lean4-std-exe’
 ‘C-c C-p C-l’            Builds package with lake                                 ‘lean4-lake-build’
 ‘C-c C-i’                Toggle Info-View which shows goals and errors at point   ‘lean4-toggle-info-buffer’
-‘C-c ! n’                Flycheck: Go to next error                               ‘flycheck-next-error’
-‘C-c ! p’                Flycheck: Go to previous error                           ‘flycheck-previous-error’
 
-   For key bindings from ‘lsp-mode’, see its respective documentation
+* Menu:
+
+* lsp-mode::
+* Flycheck::
+
+
+File: lean4-mode.info,  Node: lsp-mode,  Next: Flycheck,  Up: Usage
+
+2.1 lsp-mode
+============
+
+For key bindings from lsp-mode, see its respective documentation
 (https://emacs-lsp.github.io/lsp-mode/page/keybindings/) and note that
 not all capabilities are supported by Lean4-Mode.
 
-   In the default configuration, the Flycheck annotation ‘FlyC:N/M’
-indicates the number of errors (‘N’) and responses (‘M’) from Lean;
-clicking on ‘FlyC’ opens the Flycheck menu.
+
+File: lean4-mode.info,  Node: Flycheck,  Prev: lsp-mode,  Up: Usage
+
+2.2 Flycheck
+============
+
+You may optionally use Lean4-Mode together with Flycheck.  In that case,
+the mode-line will show ‘FlyC:E/N’, indicating that there are ‘E’ number
+of errors and ‘N’ number of notes.  Following keys will be available by
+default (via ‘flycheck-mode-map’):
+
+Key         Description            Command
+---------------------------------------------------------------
+‘C-c ! n’   Go to next error       ‘flycheck-next-error’
+‘C-c ! p’   Go to previous error   ‘flycheck-previous-error’
+
+
+File: lean4-mode.info,  Node: Configuration,  Prev: Usage,  Up: Top
+
+3 Configuration
+***************
+
+* Menu:
+
+* lsp-mode: lsp-mode (1).
+* Flycheck: Flycheck (1).
+
+
+File: lean4-mode.info,  Node: lsp-mode (1),  Next: Flycheck (1),  Up: Configuration
+
+3.1 lsp-mode
+============
+
+If you want breadcrumbs of namespaces and sections to be shown in the
+header-line, set the user option ‘lsp-headerline-breadcrumb-enable’ to
+‘t’.
+
+
+File: lean4-mode.info,  Node: Flycheck (1),  Prev: lsp-mode (1),  Up: Configuration
+
+3.2 Flycheck
+============
+
+Flycheck is an optional but supported dependency of Lean4-Mode.  If
+Flycheck is installed, lsp-mode and thus Lean4-Mode will by default use
+it.  If you want to customize this behavior, e.g.  if you'd like to use
+Emacs' built-in Flymake package instead of Flycheck while keeping later
+installed, then customize the ‘lsp-diagnostics-provider’ user option
+accordingly.
 
 
 
 Tag Table:
 Node: Top223
-Node: Installation1324
-Node: Brief and Generic Instructions1567
-Node: Detailed and Concrete Instructions2624
-Node: Instructions for Source-Based Use-Package4178
-Node: Native vc (Emacs 30 or later)4899
-Node: Doom-Emacs5752
-Node: Straight6152
-Node: Usage6642
-Node: Key Bindings and Commands7562
+Node: Installation1476
+Node: Brief and Generic Instructions1719
+Node: Detailed and Concrete Instructions2668
+Node: Instructions for Source-Based Use-Package4325
+Node: Native vc (Emacs 30 or later)5046
+Node: Doom-Emacs5954
+Node: Straight6380
+Node: Usage6880
+Node: lsp-mode8326
+Node: Flycheck8611
+Node: Configuration9221
+Node: lsp-mode (1)9387
+Node: Flycheck (1)9656
 
 End Tag Table
 

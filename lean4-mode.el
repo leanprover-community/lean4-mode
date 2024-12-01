@@ -1,4 +1,4 @@
-;;; lean4-mode.el --- A major mode for the Lean language -*- lexical-binding: t -*-
+;;; lean4-mode.el --- Major mode for Lean language  -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2013, 2014 Microsoft Corporation. All rights reserved.
 ;; Copyright (c) 2014, 2015 Soonho Kong. All rights reserved.
@@ -10,24 +10,24 @@
 ;; Maintainer: Yury G. Kudryashov <urkud@urkud.name>
 ;; Created: Jan 09, 2014
 ;; Keywords: languages
-;; Package-Requires: ((emacs "27.1") (dash "2.18.0") (flycheck "30") (magit-section "2.90.1") (lsp-mode "8.0.0"))
-;; URL: https://github.com/leanprover/lean4-mode
+;; Package-Requires: ((emacs "27.1") (compat "28.1") (dash "2.18.0") (magit-section "2.90.1") (lsp-mode "8.0.0"))
+;; URL: https://github.com/leanprover-community/lean4-mode
 ;; SPDX-License-Identifier: Apache-2.0
-;; Version: 1.0.1
+;; Version: 1.1.0
 
-;;; License:
+;; This file is not part of GNU Emacs.
 
-;; Licensed under the Apache License, Version 2.0 (the "License");
-;; you may not use this file except in compliance with the License.
-;; You may obtain a copy of the License at:
+;; Licensed under the Apache License, Version 2.0 (the "License"); you
+;; may not use this file except in compliance with the License.  You
+;; may obtain a copy of the License at
 ;;
 ;;     http://www.apache.org/licenses/LICENSE-2.0
 ;;
 ;; Unless required by applicable law or agreed to in writing, software
 ;; distributed under the License is distributed on an "AS IS" BASIS,
-;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-;; See the License for the specific language governing permissions and
-;; limitations under the License.
+;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+;; implied.  See the License for the specific language governing
+;; permissions and limitations under the License.
 
 ;;; Commentary:
 
@@ -44,7 +44,6 @@
 (require 'cl-lib)
 (require 'dash)
 (require 'pcase)
-(require 'flycheck)
 (require 'lsp-mode)
 (require 'lean4-eri)
 (require 'lean4-util)
@@ -55,12 +54,17 @@
 (require 'lean4-fringe)
 (require 'lean4-lake)
 
-;; Silence byte-compiler
+;; Declare symbols defined in external dependencies.  This silences
+;; byte-compiler warnings:
+(defvar compilation-mode-font-lock-keywords)
+(defvar flycheck-after-syntax-check-hook)
+(defvar flycheck-disabled-checkers)
+(defvar flycheck-mode)
 (defvar lsp--cur-version)
 (defvar markdown-code-lang-modes)
-(defvar compilation-mode-font-lock-keywords)
-(declare-function lean-mode "ext:lean-mode")
+(declare-function flycheck-list-errors "ext:flycheck")
 (declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
+(declare-function lean-mode "ext:lean-mode")
 (declare-function quail-show-key "quail")
 
 (defun lean4-compile-string (lake-name exe-name args file-name)
@@ -153,11 +157,15 @@ file, recompiling, and reloading all imports."
 (easy-menu-define lean4-mode-menu lean4-mode-map
   "Menu for the Lean major mode."
   `("Lean 4"
-    ["Execute lean"         lean4-execute                      t]
-    ["Toggle info display"  lean4-toggle-info                  t]
-    ["List of errors"       flycheck-list-errors               flycheck-mode]
-    ["Restart lean process" lsp-workspace-restart              t]
-    ["Customize lean4-mode" (customize-group 'lean)            t]))
+    ["Execute lean"         lean4-execute           t]
+    ["Toggle info display"  lean4-toggle-info       t]
+    ;; TODO: Bug#91: We offers a Flycheck-based menu-item when
+    ;; Flycheck is in use.  Users who use built-in Flymake should also
+    ;; be offered a working menu-item.  Alternatively, the menu-item
+    ;; could also be dropped for both cases.
+    ["List of errors"       flycheck-list-errors    flycheck-mode]
+    ["Restart lean process" lsp-workspace-restart   t]
+    ["Customize lean4-mode" (customize-group 'lean) t]))
 
 (defconst lean4-hooks-alist
   '(
@@ -203,12 +211,11 @@ of the parent project."
     (when root
       (lsp-workspace-folders-add root))))
 
-;; Automode List
 ;;;###autoload
 (define-derived-mode lean4-mode prog-mode "Lean 4"
-  "Major mode for Lean.
-\\{lean4-mode-map}
-Invokes `lean4-mode-hook'."
+  "Major mode for Lean language.
+
+\\{lean4-mode-map}"
   :syntax-table lean4-syntax-table
   :abbrev-table lean4-abbrev-table
   :group 'lean
@@ -256,11 +263,13 @@ Invokes `lean4-mode-hook'."
 
 ;; Automatically use lean4-mode for .lean files.
 ;;;###autoload
-(push '("\\.lean$" . lean4-select-mode) auto-mode-alist)
+(add-to-list 'auto-mode-alist
+             '("\\.lean\\'" . lean4-select-mode))
 
 ;;;###autoload
 (with-eval-after-load 'markdown-mode
-  (add-to-list 'markdown-code-lang-modes '("lean" . lean4-select-mode)))
+  (add-to-list 'markdown-code-lang-modes
+               '("lean" . lean4-select-mode)))
 
 ;; Use utf-8 encoding
 ;;;### autoload
@@ -287,8 +296,6 @@ otherwise return '/path/to/lean --server'."
                   :server-id 'lean4-lsp
                   :notification-handlers (ht ("$/lean/fileProgress" #'lean4-fringe-update))
                   :semantic-tokens-faces-overrides '(:types (("leanSorryLike" . font-lock-warning-face)))))
-
-(add-hook 'lean4-mode-hook #'lsp)
 
 (provide 'lean4-mode)
 ;;; lean4-mode.el ends here
