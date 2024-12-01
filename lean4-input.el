@@ -184,7 +184,7 @@ order for the change to take effect."
 
 (defcustom lean4-input-data-directory
   (expand-file-name "data/" (file-name-directory (or load-file-name (buffer-file-name))))
-  "Directory in which translations.json resides."
+  "Directory in which abbreviations.json resides."
   :group 'lean4-input
   :type 'directory)
 
