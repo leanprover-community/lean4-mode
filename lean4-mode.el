@@ -13,7 +13,7 @@
 ;; Package-Requires: ((emacs "27.1") (compat "28.1") (dash "2.18.0") (magit-section "2.90.1") (lsp-mode "8.0.0"))
 ;; URL: https://github.com/leanprover-community/lean4-mode
 ;; SPDX-License-Identifier: Apache-2.0
-;; Version: 1.1.0
+;; Version: 1.1.1
 
 ;; This file is not part of GNU Emacs.
 
