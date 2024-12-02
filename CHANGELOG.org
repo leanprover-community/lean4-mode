@@ -1,6 +1,15 @@
 #+title: Lean4-Mode - Changelog
 #+language: en
 
+* Development
+
+- Fix occasional error message "The connected server(s) does not
+  support method $/lean/plainGoal" and similar by not wrapping calls
+  to ~lsp-protocol~ macro into ~eval-when-compile~.  Thus, the methods
+  should now work, no matter whether Lean4-Mode was loaded by
+  interpreting =.el= Elisp code or by loading compiled =.elc= or
+  =.eln= files. ([[https://github.com/leanprover-community/lean4-mode/issues/54][Bug#54]])
+
 * Version 1.1.1
 
 - Assign all customizable user-options to the Lean4-Mode specific

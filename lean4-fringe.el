@@ -26,10 +26,9 @@
 (require 'lsp-mode)
 (require 'lsp-protocol)
 
-(eval-when-compile
-  (lsp-interface
-    (lean:LeanFileProgressProcessingInfo (:range :kind) nil)
-    (lean:LeanFileProgressParams (:textDocument :processing) nil)))
+(lsp-interface
+ (lean:LeanFileProgressProcessingInfo (:range :kind) nil)
+ (lean:LeanFileProgressParams (:textDocument :processing) nil))
 
 (defvar-local lean4-fringe-delay-timer nil)
 
