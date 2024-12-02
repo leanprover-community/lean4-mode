@@ -52,7 +52,7 @@
      :background "navajo white")
     (t :inverse-video t))
   "Face to highlight the fringe of Lean file processing progress."
-  :group 'lean)
+  :group 'lean4)
 
 (defface lean4-fringe-fringe-fatal-error-face
   '((((class color) (background light))
@@ -61,7 +61,7 @@
      :background "red")
     (t :inverse-video t))
   "Face to highlight the fringe of Lean file fatal errors."
-  :group 'lean)
+  :group 'lean4)
 
 (lsp-defun lean4-fringe-fringe-face ((&lean:LeanFileProgressProcessingInfo :kind))
   (cond

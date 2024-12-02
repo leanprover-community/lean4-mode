@@ -218,7 +218,7 @@ of the parent project."
 \\{lean4-mode-map}"
   :syntax-table lean4-syntax-table
   :abbrev-table lean4-abbrev-table
-  :group 'lean
+  :group 'lean4
   (set (make-local-variable 'comment-start) "--")
   (set (make-local-variable 'comment-start-skip) "[-/]-[ \t]*")
   (set (make-local-variable 'comment-end) "")

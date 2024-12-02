@@ -38,7 +38,7 @@
 (defgroup lean4-keybinding nil
   "Keybindings for lean4-mode."
   :prefix "lean4-"
-  :group 'lean)
+  :group 'lean4)
 
 (defconst lean4-default-executable-name
   (cl-case system-type
@@ -60,12 +60,12 @@
 
 (defcustom lean4-rootdir nil
   "Full pathname of lean root directory.  It should be defined by user."
-  :group 'lean
+  :group 'lean4
   :type 'string)
 
 (defcustom lean4-executable-name lean4-default-executable-name
   "Name of lean executable."
-  :group 'lean
+  :group 'lean4
   :type 'string)
 
 (defcustom lean4-lake-name lean4-default-lake-name
@@ -75,19 +75,19 @@
 
 (defcustom lean4-memory-limit 1024
   "Memory limit for lean process in megabytes."
-  :group 'lean
+  :group 'lean4
   :type 'number)
 
 (defcustom lean4-timeout-limit 100000
   "Deterministic timeout limit.
 
 It is approximately the maximum number of memory allocations in thousands."
-  :group 'lean
+  :group 'lean4
   :type 'number)
 
 (defcustom lean4-extra-arguments nil
   "Extra command-line arguments to the lean process."
-  :group 'lean
+  :group 'lean4
   :type '(list string))
 
 (defcustom lean4-delete-trailing-whitespace nil
@@ -95,19 +95,19 @@ It is approximately the maximum number of memory allocations in thousands."
 Set this variable to true to automatically delete trailing
 whitespace when a buffer is loaded from a file or when it is
 written."
-  :group 'lean
+  :group 'lean4
   :type 'boolean)
 
 (defcustom lean4-highlight-inaccessible-names t
   "Use font to highlight inaccessible names.
 Set this variable to t to highlight inaccessible names in the info display
 using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
-  :group 'lean
+  :group 'lean4
   :type 'boolean)
 
 (defcustom lean4-show-file-progress t
   "Highlight file progress in the current buffer."
-  :group 'lean
+  :group 'lean4
   :type 'boolean)
 
 
@@ -116,7 +116,7 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
 Use elan to check if current project uses Lean 3 or Lean 4 and initialize the
 right mode when visiting a file.  If elan has a default Lean version, Lean files
 outside a project will default to that mode."
-  :group 'lean
+  :group 'lean4
   :type 'boolean)
 
 (defcustom lean4-keybinding-std-exe1 (kbd "C-c C-x")

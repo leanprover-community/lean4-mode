@@ -148,7 +148,7 @@ This suffix is dropped."
   "The Lean input method.
 After tweaking these settings you may want to inspect the resulting
 translations using `lean4-input-show-translations'."
-  :group 'lean
+  :group 'lean4
   :group 'leim)
 
 (defcustom lean4-input-inherit

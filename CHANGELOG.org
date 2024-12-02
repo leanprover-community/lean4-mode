@@ -1,6 +1,12 @@
 #+title: Lean4-Mode - Changelog
 #+language: en
 
+* Development
+
+- Assign all customizable user-options to the Lean4-Mode specific
+  =lean4= group.  To customize Lean4-Mode, you now need to type =M-x
+  customize-group RET lean4 RET=.
+
 * Version 1.1.0
 
 - To =lean4= customization group, add link to local info manual and

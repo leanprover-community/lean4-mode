@@ -31,7 +31,7 @@
 
 (defgroup lean4-info nil
   "Lean4-Mode Info."
-  :group 'lean)
+  :group 'lean4)
 
 ;; Lean Info Mode (for "*lean4-info*" buffer)
 ;; Automode List
@@ -39,7 +39,7 @@
 (define-derived-mode lean4-info-mode prog-mode "Lean-Info"
   "Major mode for Lean4-Mode Info Buffer."
   :syntax-table lean4-syntax-table
-  :group 'lean
+  :group 'lean4
   (set (make-local-variable 'font-lock-defaults) lean4-info-font-lock-defaults)
   (set (make-local-variable 'indent-tabs-mode) nil)
   (set 'compilation-mode-font-lock-keywords '())
