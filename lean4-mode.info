@@ -9,8 +9,8 @@ END-INFO-DIR-ENTRY
 
 File: lean4-mode.info,  Node: Top,  Next: Installation,  Up: (dir)
 
-Lean4-Mode - Emacs major mode for Lean language
-***********************************************
+Emacs Lean4-Mode
+****************
 
 This package extends GNU Emacs (https://www.gnu.org/software/emacs/) by
 providing a major mode for editing code written in version 4 of the
@@ -32,6 +32,7 @@ Lean's Zulip chat.
 * Usage::
 * Configuration::
 * Common Pitfalls::
+* Changelog::
 
 -- The Detailed Node Listing --
 
@@ -56,6 +57,14 @@ Configuration
 
 * lsp-mode: lsp-mode (1).
 * Flycheck: Flycheck (1).
+
+Changelog
+
+* Version 1.1.2: Version 112.
+* Version 1.1.1: Version 111.
+* Version 1.1.0: Version 110.
+* Version 1.0.1: Version 101.
+* Version 1.0: Version 10.
 
 
 
@@ -300,7 +309,7 @@ installed, then customize the ‘lsp-diagnostics-provider’ user option
 accordingly.
 
 
-File: lean4-mode.info,  Node: Common Pitfalls,  Prev: Configuration,  Up: Top
+File: lean4-mode.info,  Node: Common Pitfalls,  Next: Changelog,  Prev: Configuration,  Up: Top
 
 4 Common Pitfalls
 *****************
@@ -313,24 +322,100 @@ note that Lean3-Mode uses the prefix ‘lean-’ for its symbols.  E.g.  you
 should not use ‘lean-’-prefixed commands in a buffer with Lean4-Mode as
 major mode.
 
+
+File: lean4-mode.info,  Node: Changelog,  Prev: Common Pitfalls,  Up: Top
+
+5 Changelog
+***********
+
+* Menu:
+
+* Version 1.1.2: Version 112.
+* Version 1.1.1: Version 111.
+* Version 1.1.0: Version 110.
+* Version 1.0.1: Version 101.
+* Version 1.0: Version 10.
+
+
+File: lean4-mode.info,  Node: Version 112,  Next: Version 111,  Up: Changelog
+
+5.1 Version 1.1.2
+=================
+
+   • Fix occasional errors like "The connected server(s) does not
+     support method ‘$/lean/plainGoal’" by not wrapping invocations of
+     ‘lsp-protocol’ macro into ‘eval-when-compile’ but rather into
+     ‘eval-and-compile’.  Thus, the methods should now work, no matter
+     whether Lean4-Mode was loaded by interpreting ‘.el’ Elisp code or
+     by loading compiled ‘.elc’ or ‘.eln’ files.  (Bug#54
+     (https://github.com/leanprover-community/lean4-mode/issues/54),
+     Zulip discussion
+     (https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs/topic/lsp-mode.20errors.20due.20to.20list.20!.3D.20hash-table))
+
+
+File: lean4-mode.info,  Node: Version 111,  Next: Version 110,  Prev: Version 112,  Up: Changelog
+
+5.2 Version 1.1.1
+=================
+
+   • Assign all customizable user-options to the Lean4-Mode specific
+     ‘lean4’ group.  To customize Lean4-Mode, you now need to type ‘M-x
+     customize-group RET lean4 RET’.
+
+
+File: lean4-mode.info,  Node: Version 110,  Next: Version 101,  Prev: Version 111,  Up: Changelog
+
+5.3 Version 1.1.0
+=================
+
+   • To ‘lean4’ customization group, add link to local info manual and
+     use Lean4-Mode Github URL as website.
+   • Introduce new dependency on Elpa package ‘compat’.
+   • Remove dependency on Elpa package Flycheck.  It is still supported
+     but not required.
+
+
+File: lean4-mode.info,  Node: Version 101,  Next: Version 10,  Prev: Version 110,  Up: Changelog
+
+5.4 Version 1.0.1
+=================
+
+   • Specify Yury G.  Kudryashov as maintainer.
+   • Rework README.  (Now in Org format).
+   • Provide README as Texi and Info manual too.
+
+
+File: lean4-mode.info,  Node: Version 10,  Prev: Version 101,  Up: Changelog
+
+5.5 Version 1.0
+===============
+
+   • Specify "Version" in Emacs-Lisp library header.
+
 
 
 Tag Table:
 Node: Top223
-Node: Installation1492
-Node: Brief and Generic Instructions1735
-Node: Detailed and Concrete Instructions2684
-Node: Instructions for Source-Based Use-Package4341
-Node: Native vc (Emacs 30 or later)5062
-Node: Doom-Emacs5970
-Node: Straight6396
-Node: Usage6896
-Node: lsp-mode8342
-Node: Flycheck8627
-Node: Configuration9237
-Node: lsp-mode (1)9427
-Node: Flycheck (1)9696
-Node: Common Pitfalls10181
+Node: Installation1603
+Node: Brief and Generic Instructions1846
+Node: Detailed and Concrete Instructions2795
+Node: Instructions for Source-Based Use-Package4452
+Node: Native vc (Emacs 30 or later)5173
+Node: Doom-Emacs6081
+Node: Straight6507
+Node: Usage7007
+Node: lsp-mode8453
+Node: Flycheck8738
+Node: Configuration9348
+Node: lsp-mode (1)9538
+Node: Flycheck (1)9807
+Node: Common Pitfalls10292
+Node: Changelog10884
+Node: Version 11211143
+Node: Version 11111919
+Node: Version 11012246
+Node: Version 10112664
+Node: Version 1012947
 
 End Tag Table
 
