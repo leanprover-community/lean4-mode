@@ -24,14 +24,14 @@ place in the #Emacs channel
 Lean's Zulip chat.
 
    For legacy version 3 of Lean, use the archived Lean3-Mode
-(https://github.com/leanprover/lean3-mode) (formerly known as
-_Lean-Mode_).
+(https://github.com/leanprover/lean3-mode) (also known as _Lean-Mode_).
 
 * Menu:
 
 * Installation::
 * Usage::
 * Configuration::
+* Common Pitfalls::
 
 -- The Detailed Node Listing --
 
@@ -266,7 +266,7 @@ Key         Description            Command
 ‘C-c ! p’   Go to previous error   ‘flycheck-previous-error’
 
 
-File: lean4-mode.info,  Node: Configuration,  Prev: Usage,  Up: Top
+File: lean4-mode.info,  Node: Configuration,  Next: Common Pitfalls,  Prev: Usage,  Up: Top
 
 3 Configuration
 ***************
@@ -299,23 +299,38 @@ Emacs' built-in Flymake package instead of Flycheck while keeping later
 installed, then customize the ‘lsp-diagnostics-provider’ user option
 accordingly.
 
+
+File: lean4-mode.info,  Node: Common Pitfalls,  Prev: Configuration,  Up: Top
+
+4 Common Pitfalls
+*****************
+
+Lean4-Mode only supports version 4 of Lean.  For editing Lean version 3,
+use Lean3-Mode (https://github.com/leanprover/lean3-mode), which is also
+known as Lean-Mode due to historical reasons.  In principle, it is fine
+to have both Lean3-Mode and Lean4-Mode installed at the same time.  But
+note that Lean3-Mode uses the prefix ‘lean-’ for its symbols.  E.g.  you
+should not use ‘lean-’-prefixed commands in a buffer with Lean4-Mode as
+major mode.
+
 
 
 Tag Table:
 Node: Top223
-Node: Installation1476
-Node: Brief and Generic Instructions1719
-Node: Detailed and Concrete Instructions2668
-Node: Instructions for Source-Based Use-Package4325
-Node: Native vc (Emacs 30 or later)5046
-Node: Doom-Emacs5954
-Node: Straight6380
-Node: Usage6880
-Node: lsp-mode8326
-Node: Flycheck8611
-Node: Configuration9221
-Node: lsp-mode (1)9387
-Node: Flycheck (1)9656
+Node: Installation1492
+Node: Brief and Generic Instructions1735
+Node: Detailed and Concrete Instructions2684
+Node: Instructions for Source-Based Use-Package4341
+Node: Native vc (Emacs 30 or later)5062
+Node: Doom-Emacs5970
+Node: Straight6396
+Node: Usage6896
+Node: lsp-mode8342
+Node: Flycheck8627
+Node: Configuration9237
+Node: lsp-mode (1)9427
+Node: Flycheck (1)9696
+Node: Common Pitfalls10181
 
 End Tag Table
 

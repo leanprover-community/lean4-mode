@@ -13,8 +13,8 @@ The Lean4-Mode source code is developed at [[https://github.com/leanprover-commu
 tracked there too.  Further discussions and question-answering takes
 place in the [[https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs][#Emacs channel]] of Lean's Zulip chat.
 
-For legacy version 3 of Lean, use the archived [[https://github.com/leanprover/lean3-mode][Lean3-Mode]] (formerly
-known as /Lean-Mode/).
+For legacy version 3 of Lean, use the archived [[https://github.com/leanprover/lean3-mode][Lean3-Mode]] (also known
+as /Lean-Mode/).
 
 * Installation
 
@@ -191,3 +191,12 @@ use it.  If you want to customize this behavior, e.g. if you'd like to
 use Emacs' built-in Flymake package instead of Flycheck while keeping
 later installed, then customize the ~lsp-diagnostics-provider~ user
 option accordingly.
+
+* Common Pitfalls
+
+Lean4-Mode only supports version 4 of Lean.  For editing Lean version
+3, use [[https://github.com/leanprover/lean3-mode][Lean3-Mode]], which is also known as Lean-Mode due to historical
+reasons.  In principle, it is fine to have both Lean3-Mode and
+Lean4-Mode installed at the same time.  But note that Lean3-Mode uses
+the prefix =lean-= for its symbols.  E.g. you should not use
+=lean-=-prefixed commands in a buffer with Lean4-Mode as major mode.
