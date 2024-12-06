@@ -34,14 +34,6 @@
   :link '(emacs-library-link :tag "Library Source" "lean4-mode.el")
   :prefix "lean4-")
 
-(defconst lean4-default-executable-name
-  (if (eq system-type 'windows-nt) "lean.exe" "lean")
-  "Default executable name of Lean.")
-
-(defconst lean4-default-lake-name
-  (if (eq system-type 'windows-nt) "lake.exe" "lake")
-  "Default executable name of Lake.")
-
 (defcustom lean4-mode-hook (list #'lsp)
   "Hook run after entering `lean4-mode'."
   :options '(flycheck-mode lsp)
@@ -53,12 +45,14 @@
   :group 'lean4
   :type 'string)
 
-(defcustom lean4-executable-name lean4-default-executable-name
+(defcustom lean4-executable-name
+  (if (eq system-type 'windows-nt) "lean.exe" "lean")
   "Name of lean executable."
   :group 'lean4
   :type 'string)
 
-(defcustom lean4-lake-name lean4-default-lake-name
+(defcustom lean4-lake-name
+  (if (eq system-type 'windows-nt) "lake.exe" "lake")
   "Name of lake executable."
   :group 'lake
   :type 'string)
