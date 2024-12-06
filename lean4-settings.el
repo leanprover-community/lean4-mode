@@ -22,7 +22,6 @@
 
 ;;; Code:
 
-(require 'cl-lib)
 (require 'lsp-mode)
 
 (defgroup lean4 nil
@@ -36,15 +35,11 @@
   :prefix "lean4-")
 
 (defconst lean4-default-executable-name
-  (cl-case system-type
-    (windows-nt "lean.exe")
-    (t          "lean"))
+  (if (eq system-type 'windows-nt) "lean.exe" "lean")
   "Default executable name of Lean.")
 
 (defconst lean4-default-lake-name
-  (cl-case system-type
-    (windows-nt "lake.exe")
-    (t          "lake"))
+  (if (eq system-type 'windows-nt) "lake.exe" "lake")
   "Default executable name of Lake.")
 
 (defcustom lean4-mode-hook (list #'lsp)
