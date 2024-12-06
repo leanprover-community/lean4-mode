@@ -5,16 +5,12 @@
 #+texinfo_dir_title: Lean4-Mode: (lean4-mode).
 #+texinfo_dir_desc: Emacs major mode for Lean language
 
-This package extends [[https://www.gnu.org/software/emacs/][GNU Emacs]] by providing a major mode for editing
-code written in version 4 of the programming language and theorem
-prover [[https://lean-lang.org][Lean]].
+This package extends [[https://www.gnu.org/software/emacs/][GNU Emacs]] by a major mode for [[https://lean-lang.org][Lean]] version 4, a
+programming language and theorem prover.
 
-The Lean4-Mode source code is developed at [[https://github.com/leanprover-community/lean4-mode][Github]] and its issues
-tracked there too.  Further discussions and question-answering takes
-place in the [[https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs][#Emacs channel]] of Lean's Zulip chat.
-
-For legacy version 3 of Lean, use the archived [[https://github.com/leanprover/lean3-mode][Lean3-Mode]] (also known
-as /Lean-Mode/).
+Lean4-Mode is developed on [[https://github.com/leanprover-community/lean4-mode][Github]].  Bugs and feature requests are also
+tracked there.  Further discussions take place in the [[https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs][#Emacs]] channel
+on the Lean Zulip chat platform.
 
 * Installation
 
@@ -194,12 +190,23 @@ option accordingly.
 
 * Common Pitfalls
 
-Lean4-Mode only supports version 4 of Lean.  For editing Lean version
-3, use [[https://github.com/leanprover/lean3-mode][Lean3-Mode]], which is also known as Lean-Mode due to historical
-reasons.  In principle, it is fine to have both Lean3-Mode and
-Lean4-Mode installed at the same time.  But note that Lean3-Mode uses
-the prefix =lean-= for its symbols.  E.g. you should not use
-=lean-=-prefixed commands in a buffer with Lean4-Mode as major mode.
+Lean4-Mode only supports version 4 of Lean.  For editing code written
+in deprecated version 3, use [[https://github.com/leanprover/lean3-mode][Lean3-Mode]], which is also known as
+/Lean-Mode/ due to historical reasons.  In principle, it is fine to
+have both Lean3-Mode and Lean4-Mode installed at the same time.  But
+note that Lean3-Mode uses the prefix =lean-= for its symbols.  Make
+sure to not use these =lean-=-prefixed commands in buffers where
+Lean4-Mode is the major mode.
+
+* Contributing
+
+When you contribute to Lean4-Mode, add a personal copyright like =;;
+Copyright (c) 2024 Firstname Lastname= to the header of respective
+files.
+
+You can use Emacs' built-in ~bug-reference-mode~ and
+~bug-reference-prog-mode~ in this repository to make mentions of
+issues like =#123= clickable.
 
 * Changelog
 

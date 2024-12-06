@@ -13,18 +13,14 @@ Emacs Lean4-Mode
 ****************
 
 This package extends GNU Emacs (https://www.gnu.org/software/emacs/) by
-providing a major mode for editing code written in version 4 of the
-programming language and theorem prover Lean (https://lean-lang.org).
+a major mode for Lean (https://lean-lang.org) version 4, a programming
+language and theorem prover.
 
-   The Lean4-Mode source code is developed at Github
-(https://github.com/leanprover-community/lean4-mode) and its issues
-tracked there too.  Further discussions and question-answering takes
-place in the #Emacs channel
-(https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs) of
-Lean's Zulip chat.
-
-   For legacy version 3 of Lean, use the archived Lean3-Mode
-(https://github.com/leanprover/lean3-mode) (also known as _Lean-Mode_).
+   Lean4-Mode is developed on Github
+(https://github.com/leanprover-community/lean4-mode).  Bugs and feature
+requests are also tracked there.  Further discussions take place in the
+#Emacs (https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs)
+channel on the Lean Zulip chat platform.
 
 * Menu:
 
@@ -32,6 +28,7 @@ Lean's Zulip chat.
 * Usage::
 * Configuration::
 * Common Pitfalls::
+* Contributing::
 * Changelog::
 
 -- The Detailed Node Listing --
@@ -309,23 +306,38 @@ installed, then customize the ‘lsp-diagnostics-provider’ user option
 accordingly.
 
 
-File: lean4-mode.info,  Node: Common Pitfalls,  Next: Changelog,  Prev: Configuration,  Up: Top
+File: lean4-mode.info,  Node: Common Pitfalls,  Next: Contributing,  Prev: Configuration,  Up: Top
 
 4 Common Pitfalls
 *****************
 
-Lean4-Mode only supports version 4 of Lean.  For editing Lean version 3,
-use Lean3-Mode (https://github.com/leanprover/lean3-mode), which is also
-known as Lean-Mode due to historical reasons.  In principle, it is fine
-to have both Lean3-Mode and Lean4-Mode installed at the same time.  But
-note that Lean3-Mode uses the prefix ‘lean-’ for its symbols.  E.g.  you
-should not use ‘lean-’-prefixed commands in a buffer with Lean4-Mode as
-major mode.
+Lean4-Mode only supports version 4 of Lean.  For editing code written in
+deprecated version 3, use Lean3-Mode
+(https://github.com/leanprover/lean3-mode), which is also known as
+_Lean-Mode_ due to historical reasons.  In principle, it is fine to have
+both Lean3-Mode and Lean4-Mode installed at the same time.  But note
+that Lean3-Mode uses the prefix ‘lean-’ for its symbols.  Make sure to
+not use these ‘lean-’-prefixed commands in buffers where Lean4-Mode is
+the major mode.
 
 
-File: lean4-mode.info,  Node: Changelog,  Prev: Common Pitfalls,  Up: Top
+File: lean4-mode.info,  Node: Contributing,  Next: Changelog,  Prev: Common Pitfalls,  Up: Top
 
-5 Changelog
+5 Contributing
+**************
+
+When you contribute to Lean4-Mode, add a personal copyright like ‘;;
+Copyright (c) 2024 Firstname Lastname’ to the header of respective
+files.
+
+   You can use Emacs' built-in ‘bug-reference-mode’ and
+‘bug-reference-prog-mode’ in this repository to make mentions of issues
+like ‘#123’ clickable.
+
+
+File: lean4-mode.info,  Node: Changelog,  Prev: Contributing,  Up: Top
+
+6 Changelog
 ***********
 
 * Menu:
@@ -339,7 +351,7 @@ File: lean4-mode.info,  Node: Changelog,  Prev: Common Pitfalls,  Up: Top
 
 File: lean4-mode.info,  Node: Development,  Next: Version 111,  Up: Changelog
 
-5.1 Development
+6.1 Development
 ===============
 
    • Fix occasional error message "The connected server(s) does not
@@ -353,7 +365,7 @@ File: lean4-mode.info,  Node: Development,  Next: Version 111,  Up: Changelog
 
 File: lean4-mode.info,  Node: Version 111,  Next: Version 110,  Prev: Development,  Up: Changelog
 
-5.2 Version 1.1.1
+6.2 Version 1.1.1
 =================
 
    • Assign all customizable user-options to the Lean4-Mode specific
@@ -363,7 +375,7 @@ File: lean4-mode.info,  Node: Version 111,  Next: Version 110,  Prev: Developmen
 
 File: lean4-mode.info,  Node: Version 110,  Next: Version 101,  Prev: Version 111,  Up: Changelog
 
-5.3 Version 1.1.0
+6.3 Version 1.1.0
 =================
 
    • To ‘lean4’ customization group, add link to local info manual and
@@ -375,7 +387,7 @@ File: lean4-mode.info,  Node: Version 110,  Next: Version 101,  Prev: Version 11
 
 File: lean4-mode.info,  Node: Version 101,  Next: Version 10,  Prev: Version 110,  Up: Changelog
 
-5.4 Version 1.0.1
+6.4 Version 1.0.1
 =================
 
    • Specify Yury G.  Kudryashov as maintainer.
@@ -385,7 +397,7 @@ File: lean4-mode.info,  Node: Version 101,  Next: Version 10,  Prev: Version 110
 
 File: lean4-mode.info,  Node: Version 10,  Prev: Version 101,  Up: Changelog
 
-5.5 Version 1.0
+6.5 Version 1.0
 ===============
 
    • Specify "Version" in Emacs-Lisp library header.
@@ -394,26 +406,27 @@ File: lean4-mode.info,  Node: Version 10,  Prev: Version 101,  Up: Changelog
 
 Tag Table:
 Node: Top223
-Node: Installation1589
-Node: Brief and Generic Instructions1832
-Node: Detailed and Concrete Instructions2781
-Node: Instructions for Source-Based Use-Package4438
-Node: Native vc (Emacs 30 or later)5159
-Node: Doom-Emacs6067
-Node: Straight6493
-Node: Usage6993
-Node: lsp-mode8439
-Node: Flycheck8724
-Node: Configuration9334
-Node: lsp-mode (1)9524
-Node: Flycheck (1)9793
-Node: Common Pitfalls10278
-Node: Changelog10870
-Node: Development11115
-Node: Version 11111696
-Node: Version 11012023
-Node: Version 10112441
-Node: Version 1012724
+Node: Installation1423
+Node: Brief and Generic Instructions1666
+Node: Detailed and Concrete Instructions2615
+Node: Instructions for Source-Based Use-Package4272
+Node: Native vc (Emacs 30 or later)4993
+Node: Doom-Emacs5901
+Node: Straight6327
+Node: Usage6827
+Node: lsp-mode8273
+Node: Flycheck8558
+Node: Configuration9168
+Node: lsp-mode (1)9358
+Node: Flycheck (1)9627
+Node: Common Pitfalls10112
+Node: Contributing10737
+Node: Changelog11178
+Node: Development11420
+Node: Version 11112001
+Node: Version 11012328
+Node: Version 10112746
+Node: Version 1013029
 
 End Tag Table
 
