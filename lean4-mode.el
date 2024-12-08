@@ -44,7 +44,6 @@
 (require 'cl-lib)
 (require 'pcase)
 
-(require 'lean4-dev)
 (require 'lean4-eri)
 (require 'lean4-fringe)
 (require 'lean4-info)
