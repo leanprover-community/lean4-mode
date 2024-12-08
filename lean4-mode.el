@@ -42,17 +42,19 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'dash)
 (require 'pcase)
-(require 'lsp-mode)
+
+(require 'lean4-dev)
 (require 'lean4-eri)
-(require 'lean4-util)
+(require 'lean4-fringe)
+(require 'lean4-info)
+(require 'lean4-lake)
 (require 'lean4-settings)
 (require 'lean4-syntax)
-(require 'lean4-info)
-(require 'lean4-dev)
-(require 'lean4-fringe)
-(require 'lean4-lake)
+(require 'lean4-util)
+
+(require 'dash)
+(require 'lsp-mode)
 
 ;; Declare symbols defined in external dependencies.  This silences
 ;; byte-compiler warnings:
@@ -155,33 +157,7 @@ file, recompiling, and reloading all imports."
     ["Restart lean process" lsp-workspace-restart   t]
     ["Customize lean4-mode" (customize-group 'lean) t]))
 
-(defconst lean4-hooks-alist
-  '(
-    ;; Handle events that may start automatic syntax checks
-    (before-save-hook . lean4-whitespace-cleanup)
-    ;; info view
-    ;; update errors immediately, but delay querying goal
-    (flycheck-after-syntax-check-hook . lean4-info-buffer-redisplay-debounced)
-    (post-command-hook . lean4-info-buffer-redisplay-debounced)
-    (lsp-on-idle-hook . lean4-info-buffer-refresh))
-  "Hooks which lean4-mode needs to hook in.
-
-The `car' of each pair is a hook variable, the `cdr' a function
-to be added or removed from the hook variable if Flycheck mode is
-enabled and disabled respectively.")
-
-(defun lean4-mode-setup ()
-  "Default lean4-mode setup."
-  ;; Right click menu sources
-  ;;(setq lean4-right-click-item-functions '(lean4-info-right-click-find-definition
-  ;;                                        lean4-hole-right-click))
-  ;; Flycheck
-  (setq-local flycheck-disabled-checkers '())
-  ;; Lean massively benefits from semantic tokens, so change default to enabled
-  (setq-local lsp-semantic-tokens-enable t)
-  (lean4-create-lsp-workspace))
-
-(defun lean4-create-lsp-workspace ()
+(defun lean4-lsp-create-workspace ()
   "Create an LSP workspace.
 
 Starting from `(buffer-file-name)`, repeatedly look up the
@@ -199,31 +175,85 @@ of the parent project."
     (when root
       (lsp-workspace-folders-add root))))
 
+(defun lean4-lsp-semantic-token-enable ()
+  "Buffer-locally enable `lsp-mode's support for semantic tokens."
+  (interactive)
+  (setq-local lsp-semantic-tokens-enable t))
+
+(defun lean4-set-input-method ()
+  "Setup the input method for `lean4-mode'."
+  (interactive)
+  (require 'lean4-input)
+  (set-input-method "Lean4"))
+
+(defcustom lean4-mode-hook
+  (list #'lean4-set-input-method
+        #'lean4-lsp-semantic-token-enable
+        #'lean4-lsp-create-workspace
+        #'flycheck-mode
+        #'lsp)
+  "Hook run after entering `lean4-mode'."
+  :options '(lean4-set-input-method
+             flycheck-mode
+             lean4-lsp-semantic-token-enable
+             lean4-lsp-create-workspace
+             lsp)
+  :type 'hook
+  :group 'lean4)
+
 ;;;###autoload
-(define-derived-mode lean4-mode prog-mode "Lean 4"
-  "Major mode for Lean language.
+(define-derived-mode lean4-mode prog-mode "Lean4"
+  "Major mode for Lean4 programming language and theorem prover.
 
 \\{lean4-mode-map}"
   :syntax-table lean4-syntax-table
   :group 'lean4
-  (set (make-local-variable 'comment-start) "--")
-  (set (make-local-variable 'comment-start-skip) "[-/]-[ \t]*")
-  (set (make-local-variable 'comment-end) "")
-  (set (make-local-variable 'comment-end-skip) "[ \t]*\\(-/\\|\\s>\\)")
-  (set (make-local-variable 'comment-padding) 1)
-  (set (make-local-variable 'comment-use-syntax) t)
-  (set (make-local-variable 'font-lock-defaults) lean4-font-lock-defaults)
-  (set (make-local-variable 'indent-tabs-mode) nil)
-  (set 'compilation-mode-font-lock-keywords '())
-  (require 'lean4-input)
-  (set-input-method "Lean")
-  (set (make-local-variable 'lisp-indent-function)
-       'common-lisp-indent-function)
+
+  (setq-local comment-end
+              "")
+  (setq-local comment-end-skip
+              "[ \t]*\\(-/\\|\\s>\\)")
+  (setq-local comment-padding
+              1)
+  (setq-local comment-start
+              "--")
+  (setq-local comment-start-skip
+              "[-/]-[ \t]*")
+  (setq-local comment-use-syntax
+              t)
+  (setq-local compilation-mode-font-lock-keywords
+              nil)
+  (setq-local font-lock-defaults
+              lean4-font-lock-defaults)
+  (setq-local lisp-indent-function
+              #'common-lisp-indent-function)
+
+  ;; Clean up whitespace before saving.
+  (add-hook 'before-save-hook
+            #'lean4-whitespace-cleanup
+            nil 'local)
+  (add-hook 'post-command-hook
+            #'lean4-info-buffer-redisplay-debounced
+            nil 'local)
+
+  ;; Turn off modes that may interfere with our indentation
+  ;; (`lean4-eri').
   (if (fboundp 'electric-indent-local-mode)
       (electric-indent-local-mode -1))
-  (pcase-dolist (`(,hook . ,fn) lean4-hooks-alist)
-    (add-hook hook fn nil 'local))
-  (lean4-mode-setup))
+  (indent-tabs-mode -1)
+
+  ;; Flycheck:
+  (setq-local flycheck-disabled-checkers
+              nil)
+  ;; In Info View, update errors immediately, but delay querying goal.
+  (add-hook 'flycheck-after-syntax-check-hook
+            #'lean4-info-buffer-redisplay-debounced
+            nil 'local)
+
+  ;; lsp-mode:
+  (add-hook 'lsp-on-idle-hook
+            #'lean4-info-buffer-refresh
+            nil 'local))
 
 (defun lean4--version ()
   "Return Lean version as a list `(MAJOR MINOR PATCH)'."
