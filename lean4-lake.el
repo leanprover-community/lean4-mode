@@ -22,7 +22,12 @@
 ;;; Code:
 
 (require 'lean4-util)
-(require 'lean4-settings)
+
+(defcustom lean4-lake-name
+  (if (eq system-type 'windows-nt) "lake.exe" "lake")
+  "Name of lake executable."
+  :group 'lake
+  :type 'string)
 
 (defun lean4-lake-find-dir-in (dir)
   "Find a parent directory of DIR with file \"lakefile.lean\"."
