@@ -34,12 +34,6 @@
   :link '(emacs-library-link :tag "Library Source" "lean4-mode.el")
   :prefix "lean4-")
 
-(defcustom lean4-mode-hook (list #'lsp)
-  "Hook run after entering `lean4-mode'."
-  :options '(flycheck-mode lsp)
-  :type 'hook
-  :group 'lean4)
-
 (defcustom lean4-rootdir nil
   "Full pathname of lean root directory.  It should be defined by user."
   :group 'lean4
