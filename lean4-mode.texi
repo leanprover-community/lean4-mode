@@ -1,7 +1,7 @@
 \input texinfo    @c -*- texinfo -*-
 @c %**start of header
 @setfilename lean4-mode.info
-@settitle Lean4-Mode - Emacs major mode for Lean language
+@settitle Emacs Lean4-Mode
 @documentencoding UTF-8
 @documentlanguage en
 @c %**end of header
@@ -13,25 +13,21 @@
 
 @finalout
 @titlepage
-@title Lean4-Mode - Emacs major mode for Lean language
+@title Emacs Lean4-Mode
 @end titlepage
 
 @contents
 
 @ifnottex
 @node Top
-@top Lean4-Mode - Emacs major mode for Lean language
+@top Emacs Lean4-Mode
 
-This package extends @uref{https://www.gnu.org/software/emacs/, GNU Emacs} by providing a major mode for editing
-code written in version 4 of the programming language and theorem
-prover @uref{https://lean-lang.org, Lean}.
+This package extends @uref{https://www.gnu.org/software/emacs/, GNU Emacs} by a major mode for @uref{https://lean-lang.org, Lean} version 4, a
+programming language and theorem prover.
 
-The Lean4-Mode source code is developed at @uref{https://github.com/leanprover-community/lean4-mode, Github} and its issues
-tracked there too.  Further discussions and question-answering takes
-place in the @uref{https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs, #Emacs channel} of Lean's Zulip chat.
-
-For legacy version 3 of Lean, use the archived @uref{https://github.com/leanprover/lean3-mode, Lean3-Mode} (also known
-as @emph{Lean-Mode}).
+Lean4-Mode is developed on @uref{https://github.com/leanprover-community/lean4-mode, Github}.  Bugs and feature requests are also
+tracked there.  Further discussions take place in the @uref{https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs, #Emacs} channel
+on the Lean Zulip chat platform.
 
 @end ifnottex
 
@@ -40,6 +36,8 @@ as @emph{Lean-Mode}).
 * Usage::
 * Configuration::
 * Common Pitfalls::
+* Contributing::
+* Changelog::
 
 @detailmenu
 --- The Detailed Node Listing ---
@@ -65,6 +63,14 @@ Configuration
 
 * lsp-mode: lsp-mode (1). 
 * Flycheck: Flycheck (1). 
+
+Changelog
+
+* Development::
+* Version 1.1.1: Version 111. 
+* Version 1.1.0: Version 110. 
+* Version 1.0.1: Version 101. 
+* Version 1.0: Version 10. 
 
 @end detailmenu
 @end menu
@@ -227,7 +233,7 @@ then type @samp{#check id}, the word @samp{#check} will be underlined, and
 hovering over it will show you the type of @code{id}.
 
 To view the proof state, run @code{lean4-toggle-info} (@samp{C-c C-i}).  This
-will display the @samp{*Lean Goals*} buffer (like the Lean Info-View pane
+will display the @samp{*Lean4 Info*} buffer (like the Lean Info-View pane
 in VS-Code) in a separate window.
 
 @multitable {aaaaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}
@@ -310,11 +316,91 @@ option accordingly.
 @node Common Pitfalls
 @chapter Common Pitfalls
 
-Lean4-Mode only supports version 4 of Lean.  For editing Lean version
-3, use @uref{https://github.com/leanprover/lean3-mode, Lean3-Mode}, which is also known as Lean-Mode due to historical
-reasons.  In principle, it is fine to have both Lean3-Mode and
-Lean4-Mode installed at the same time.  But note that Lean3-Mode uses
-the prefix @samp{lean-} for its symbols.  E.g. you should not use
-@samp{lean-}-prefixed commands in a buffer with Lean4-Mode as major mode.
+Lean4-Mode only supports version 4 of Lean.  For editing code written
+in deprecated version 3, use @uref{https://github.com/leanprover/lean3-mode, Lean3-Mode}, which is also known as
+@emph{Lean-Mode} due to historical reasons.  In principle, it is fine to
+have both Lean3-Mode and Lean4-Mode installed at the same time.  But
+note that Lean3-Mode uses the prefix @samp{lean-} for its symbols.  Make
+sure to not use these @samp{lean-}-prefixed commands in buffers where
+Lean4-Mode is the major mode.
+
+@node Contributing
+@chapter Contributing
+
+When you contribute to Lean4-Mode, add a personal copyright like @samp{;;
+Copyright (c) 2024 Firstname Lastname} to the header of respective
+files.
+
+You can use Emacs' built-in @code{bug-reference-mode} and
+@code{bug-reference-prog-mode} in this repository to make mentions of
+issues like @samp{#123} clickable.
+
+@node Changelog
+@chapter Changelog
+
+@menu
+* Development::
+* Version 1.1.1: Version 111. 
+* Version 1.1.0: Version 110. 
+* Version 1.0.1: Version 101. 
+* Version 1.0: Version 10. 
+@end menu
+
+@node Development
+@section Development
+
+@itemize
+@item
+Fix occasional error message "The connected server(s) does not
+support method $/lean/plainGoal" and similar by not wrapping calls
+to @code{lsp-protocol} macro into @code{eval-when-compile}.  Thus, the methods
+should now work, no matter whether Lean4-Mode was loaded by
+interpreting @samp{.el} Elisp code or by loading compiled @samp{.elc} or
+@samp{.eln} files. (@uref{https://github.com/leanprover-community/lean4-mode/issues/54, Bug#54})
+@end itemize
+
+@node Version 111
+@section Version 1.1.1
+
+@itemize
+@item
+Assign all customizable user-options to the Lean4-Mode specific
+@samp{lean4} group.  To customize Lean4-Mode, you now need to type @samp{M-x
+  customize-group RET lean4 RET}.
+@end itemize
+
+@node Version 110
+@section Version 1.1.0
+
+@itemize
+@item
+To @samp{lean4} customization group, add link to local info manual and
+use Lean4-Mode Github URL as website.
+@item
+Introduce new dependency on Elpa package @samp{compat}.
+@item
+Remove dependency on Elpa package Flycheck.  It is still supported
+but not required.
+@end itemize
+
+@node Version 101
+@section Version 1.0.1
+
+@itemize
+@item
+Specify Yury G@. Kudryashov as maintainer.
+@item
+Rework README@.  (Now in Org format).
+@item
+Provide README as Texi and Info manual too.
+@end itemize
+
+@node Version 10
+@section Version 1.0
+
+@itemize
+@item
+Specify "Version" in Emacs-Lisp library header.
+@end itemize
 
 @bye

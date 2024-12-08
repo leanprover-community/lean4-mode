@@ -22,7 +22,6 @@
 
 ;;; Code:
 
-(require 'lean4-settings)
 (require 'lsp-mode)
 (require 'lsp-protocol)
 
@@ -68,6 +67,11 @@
    (t 'lean4-fringe-fringe-fatal-error-face)))
 
 (defvar-local lean4-fringe-data nil)
+
+(defcustom lean4-show-file-progress t
+  "Highlight file progress in the current buffer."
+  :group 'lean4
+  :type 'boolean)
 
 (defun lean4-fringe-update-progress-overlays ()
   "Update processing bars in the current buffer."

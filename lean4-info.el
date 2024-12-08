@@ -24,7 +24,6 @@
 
 (require 'dash)
 (require 'lean4-syntax)
-(require 'lean4-settings)
 (require 'lsp-mode)
 (require 'lsp-protocol)
 (require 'magit-section)
@@ -33,10 +32,9 @@
   "Lean4-Mode Info."
   :group 'lean4)
 
-;; Lean Info Mode (for "*lean4-info*" buffer)
 ;; Automode List
 ;;;###autoload
-(define-derived-mode lean4-info-mode prog-mode "Lean-Info"
+(define-derived-mode lean4-info-mode prog-mode "Lean4-Info"
   "Major mode for Lean4-Mode Info Buffer."
   :syntax-table lean4-syntax-table
   :group 'lean4
@@ -48,7 +46,7 @@
 
 (defun lean4-ensure-info-buffer (buffer)
   "Create BUFFER if it does not exist.
-Also choose settings used for the *Lean Goal* buffer."
+Also choose settings used for the *Lean4 Info* buffer."
   (unless (get-buffer buffer)
     (with-current-buffer (get-buffer-create buffer)
       (buffer-disable-undo)
@@ -58,7 +56,7 @@ Also choose settings used for the *Lean Goal* buffer."
 
 (defun lean4-toggle-info-buffer (buffer)
   "Create or delete BUFFER.
-The buffer is supposed to be the *Lean Goal* buffer."
+The buffer is supposed to be the *Lean4 Info* buffer."
   (-if-let (window (get-buffer-window buffer))
       (quit-window nil window)
     (lean4-ensure-info-buffer buffer)
@@ -77,7 +75,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
  (lean:PlainTermGoal (:goal) nil)
  (lean:Diagnostic (:range :fullRange :message) (:code :relatedInformation :severity :source :tags)))
 
-(defconst lean4-info-buffer-name "*Lean Goal*")
+(defconst lean4-info-buffer-name "*Lean4 Info*")
 
 (defvar lean4-goals nil)
 (defvar lean4-term-goal nil)
@@ -96,6 +94,13 @@ The buffer is supposed to be the *Lean Goal* buffer."
       (goto-char (point-min))
       (forward-line (1- line))
       (forward-char column))))
+
+(defcustom lean4-highlight-inaccessible-names t
+  "Use font to highlight inaccessible names.
+Set this variable to t to highlight inaccessible names in the info display
+using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
+  :group 'lean4
+  :type 'boolean)
 
 (defun lean4-info--insert-highlight-inaccessible-names (&rest text)
   (let ((begin (point)))
@@ -224,7 +229,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
 
 
 (defcustom lean4-info-buffer-debounce-delay-sec 0.1
-  "Duration of time we wait before writing to *Lean Goal*."
+  "Duration of time we wait before writing to *Lean4 Info*."
   :group 'lean4-info
   :type 'number)
 
@@ -283,7 +288,7 @@ sections."
 
 
 (defun lean4-info-buffer-refresh ()
-  "Refresh the *Lean Goal* buffer."
+  "Refresh the *Lean4 Info* buffer."
   (when (lean4-info-buffer-active lean4-info-buffer-name)
     (lsp-request-async
      "$/lean/plainGoal"

@@ -36,23 +36,24 @@
 ;; Provides highlighting, diagnostics, goal visualization,
 ;; and many other useful features for Lean users.
 
-;; See the README.md for more advanced features and the
-;; associated keybindings.
+;; For more information, see the README.org which is also provided as
+;; Info manual.
 
 ;;; Code:
 
 (require 'cl-lib)
-(require 'dash)
 (require 'pcase)
-(require 'lsp-mode)
-(require 'lean4-eri)
-(require 'lean4-util)
-(require 'lean4-settings)
-(require 'lean4-syntax)
-(require 'lean4-info)
+
 (require 'lean4-dev)
+(require 'lean4-eri)
 (require 'lean4-fringe)
+(require 'lean4-info)
 (require 'lean4-lake)
+(require 'lean4-syntax)
+(require 'lean4-util)
+
+(require 'dash)
+(require 'lsp-mode)
 
 ;; Declare symbols defined in external dependencies.  This silences
 ;; byte-compiler warnings:
@@ -66,6 +67,16 @@
 (declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
 (declare-function lean-mode "ext:lean-mode")
 (declare-function quail-show-key "quail")
+
+(defgroup lean4 nil
+  "Major mode for Lean4 programming language and theorem prover."
+  :group 'languages
+  :link '(info-link :tag "Info Manual" "(lean4-mode)")
+  :link '(url-link
+          :tag "Website"
+          "https://github.com/leanprover-community/lean4-mode")
+  :link '(emacs-library-link :tag "Library Source" "lean4-mode.el")
+  :prefix "lean4-")
 
 (defun lean4-compile-string (lake-name exe-name args file-name)
   "Command to run EXE-NAME with extra ARGS and FILE-NAME.
@@ -132,27 +143,15 @@ file, recompiling, and reloading all imports."
          (lean4-eri-indent))
         (t (indent-for-tab-command))))
 
-(defun lean4-set-keys ()
-  "Setup Lean 4 keybindings."
-  (local-set-key lean4-keybinding-std-exe1                  #'lean4-std-exe)
-  (local-set-key lean4-keybinding-std-exe2                  #'lean4-std-exe)
-  (local-set-key lean4-keybinding-show-key                  #'quail-show-key)
-  (local-set-key lean4-keybinding-tab-indent                #'lean4-tab-indent)
-  ;; (local-set-key lean4-keybinding-hole                      #'lean4-hole)
-  (local-set-key lean4-keybinding-lean4-toggle-info         #'lean4-toggle-info)
-  ;; (local-set-key lean4-keybinding-lean4-message-boxes-toggle #'lean4-message-boxes-toggle)
-  (local-set-key lean4-keybinding-lake-build                #'lean4-lake-build)
-  (local-set-key lean4-keybinding-refresh-file-dependencies #'lean4-refresh-file-dependencies)
-  ;; This only works as a mouse binding due to the event, so it is not abstracted
-  ;; to avoid user confusion.
-  ;; (local-set-key (kbd "<mouse-3>")                         #'lean4-right-click-show-menu)
-  )
-
-(define-abbrev-table 'lean4-abbrev-table
-  '())
-
-(defvar lean4-mode-map (make-sparse-keymap)
-  "Keymap used in Lean mode.")
+(defvar-keymap lean4-mode-map
+  :doc "Keymap for `lean4-mode'."
+  "C-c C-x"     #'lean4-std-exe
+  "C-c C-l"     #'lean4-std-exe
+  "C-c C-k"     #'quail-show-key
+  "TAB"         #'lean4-tab-indent
+  "C-c C-i"     #'lean4-toggle-info
+  "C-c C-p C-l" #'lean4-lake-build
+  "C-c C-d"     #'lean4-refresh-file-dependencies)
 
 (easy-menu-define lean4-mode-menu lean4-mode-map
   "Menu for the Lean major mode."
@@ -167,33 +166,7 @@ file, recompiling, and reloading all imports."
     ["Restart lean process" lsp-workspace-restart   t]
     ["Customize lean4-mode" (customize-group 'lean) t]))
 
-(defconst lean4-hooks-alist
-  '(
-    ;; Handle events that may start automatic syntax checks
-    (before-save-hook . lean4-whitespace-cleanup)
-    ;; info view
-    ;; update errors immediately, but delay querying goal
-    (flycheck-after-syntax-check-hook . lean4-info-buffer-redisplay-debounced)
-    (post-command-hook . lean4-info-buffer-redisplay-debounced)
-    (lsp-on-idle-hook . lean4-info-buffer-refresh))
-  "Hooks which lean4-mode needs to hook in.
-
-The `car' of each pair is a hook variable, the `cdr' a function
-to be added or removed from the hook variable if Flycheck mode is
-enabled and disabled respectively.")
-
-(defun lean4-mode-setup ()
-  "Default lean4-mode setup."
-  ;; Right click menu sources
-  ;;(setq lean4-right-click-item-functions '(lean4-info-right-click-find-definition
-  ;;                                        lean4-hole-right-click))
-  ;; Flycheck
-  (setq-local flycheck-disabled-checkers '())
-  ;; Lean massively benefits from semantic tokens, so change default to enabled
-  (setq-local lsp-semantic-tokens-enable t)
-  (lean4-create-lsp-workspace))
-
-(defun lean4-create-lsp-workspace ()
+(defun lean4-lsp-create-workspace ()
   "Create an LSP workspace.
 
 Starting from `(buffer-file-name)`, repeatedly look up the
@@ -211,34 +184,85 @@ of the parent project."
     (when root
       (lsp-workspace-folders-add root))))
 
+(defun lean4-lsp-semantic-token-enable ()
+  "Buffer-locally enable `lsp-mode's support for semantic tokens."
+  (interactive)
+  (setq-local lsp-semantic-tokens-enable t))
+
+(defun lean4-set-input-method ()
+  "Setup the input method for `lean4-mode'."
+  (interactive)
+  (require 'lean4-input)
+  (set-input-method "Lean4"))
+
+(defcustom lean4-mode-hook
+  (list #'lean4-set-input-method
+        #'lean4-lsp-semantic-token-enable
+        #'lean4-lsp-create-workspace
+        #'flycheck-mode
+        #'lsp)
+  "Hook run after entering `lean4-mode'."
+  :options '(lean4-set-input-method
+             flycheck-mode
+             lean4-lsp-semantic-token-enable
+             lean4-lsp-create-workspace
+             lsp)
+  :type 'hook
+  :group 'lean4)
+
 ;;;###autoload
-(define-derived-mode lean4-mode prog-mode "Lean 4"
-  "Major mode for Lean language.
+(define-derived-mode lean4-mode prog-mode "Lean4"
+  "Major mode for Lean4 programming language and theorem prover.
 
 \\{lean4-mode-map}"
   :syntax-table lean4-syntax-table
-  :abbrev-table lean4-abbrev-table
   :group 'lean4
-  (set (make-local-variable 'comment-start) "--")
-  (set (make-local-variable 'comment-start-skip) "[-/]-[ \t]*")
-  (set (make-local-variable 'comment-end) "")
-  (set (make-local-variable 'comment-end-skip) "[ \t]*\\(-/\\|\\s>\\)")
-  (set (make-local-variable 'comment-padding) 1)
-  (set (make-local-variable 'comment-use-syntax) t)
-  (set (make-local-variable 'font-lock-defaults) lean4-font-lock-defaults)
-  (set (make-local-variable 'indent-tabs-mode) nil)
-  (set 'compilation-mode-font-lock-keywords '())
-  (require 'lean4-input)
-  (set-input-method "Lean")
-  (set (make-local-variable 'lisp-indent-function)
-       'common-lisp-indent-function)
-  (lean4-set-keys)
+
+  (setq-local comment-end
+              "")
+  (setq-local comment-end-skip
+              "[ \t]*\\(-/\\|\\s>\\)")
+  (setq-local comment-padding
+              1)
+  (setq-local comment-start
+              "--")
+  (setq-local comment-start-skip
+              "[-/]-[ \t]*")
+  (setq-local comment-use-syntax
+              t)
+  (setq-local compilation-mode-font-lock-keywords
+              nil)
+  (setq-local font-lock-defaults
+              lean4-font-lock-defaults)
+  (setq-local lisp-indent-function
+              #'common-lisp-indent-function)
+
+  ;; Clean up whitespace before saving.
+  (add-hook 'before-save-hook
+            #'lean4-whitespace-cleanup
+            nil 'local)
+  (add-hook 'post-command-hook
+            #'lean4-info-buffer-redisplay-debounced
+            nil 'local)
+
+  ;; Turn off modes that may interfere with our indentation
+  ;; (`lean4-eri').
   (if (fboundp 'electric-indent-local-mode)
       (electric-indent-local-mode -1))
-  ;; (abbrev-mode 1)
-  (pcase-dolist (`(,hook . ,fn) lean4-hooks-alist)
-    (add-hook hook fn nil 'local))
-  (lean4-mode-setup))
+  (indent-tabs-mode -1)
+
+  ;; Flycheck:
+  (setq-local flycheck-disabled-checkers
+              nil)
+  ;; In Info View, update errors immediately, but delay querying goal.
+  (add-hook 'flycheck-after-syntax-check-hook
+            #'lean4-info-buffer-redisplay-debounced
+            nil 'local)
+
+  ;; lsp-mode:
+  (add-hook 'lsp-on-idle-hook
+            #'lean4-info-buffer-refresh
+            nil 'local))
 
 (defun lean4--version ()
   "Return Lean version as a list `(MAJOR MINOR PATCH)'."
@@ -252,6 +276,14 @@ of the parent project."
   "Print Lean 4 version."
   (interactive)
   (message "Lean %s" (mapconcat #'number-to-string (lean4--version) ".")))
+
+(defcustom lean4-autodetect-lean3 nil
+  "Autodetect Lean version.
+Use elan to check if current project uses Lean 3 or Lean 4 and initialize the
+right mode when visiting a file.  If elan has a default Lean version, Lean files
+outside a project will default to that mode."
+  :group 'lean4
+  :type 'boolean)
 
 ;;;###autoload
 (defun lean4-select-mode ()
