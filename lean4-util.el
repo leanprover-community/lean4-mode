@@ -23,7 +23,17 @@
 ;;; Code:
 
 (require 'compat)
-(require 'lean4-settings)
+
+(defcustom lean4-executable-name
+  (if (eq system-type 'windows-nt) "lean.exe" "lean")
+  "Name of lean executable."
+  :group 'lean4
+  :type 'string)
+
+(defcustom lean4-rootdir nil
+  "Full pathname of lean root directory.  It should be defined by user."
+  :group 'lean4
+  :type 'string)
 
 (defun lean4-setup-rootdir ()
   "Search for lean executable in variable `exec-path'.
@@ -54,6 +64,14 @@ First try to find an executable named `lean4-executable-name' in
 (defun lean4-get-executable (exe-name)
   "Return fullpath of lean executable EXE-NAME."
   (file-name-concat (lean4-get-rootdir) "bin" exe-name))
+
+(defcustom lean4-delete-trailing-whitespace nil
+  "Automatically delete trailing shitespace.
+Set this variable to true to automatically delete trailing
+whitespace when a buffer is loaded from a file or when it is
+written."
+  :group 'lean4
+  :type 'boolean)
 
 (defun lean4-whitespace-cleanup ()
   "Delete trailing whitespace if `lean4-delete-trailing-whitespace' is t."
