@@ -49,7 +49,6 @@
 (require 'lean4-fringe)
 (require 'lean4-info)
 (require 'lean4-lake)
-(require 'lean4-settings)
 (require 'lean4-syntax)
 (require 'lean4-util)
 
@@ -68,6 +67,16 @@
 (declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
 (declare-function lean-mode "ext:lean-mode")
 (declare-function quail-show-key "quail")
+
+(defgroup lean4 nil
+  "Major mode for Lean4 programming language and theorem prover."
+  :group 'languages
+  :link '(info-link :tag "Info Manual" "(lean4-mode)")
+  :link '(url-link
+          :tag "Website"
+          "https://github.com/leanprover-community/lean4-mode")
+  :link '(emacs-library-link :tag "Library Source" "lean4-mode.el")
+  :prefix "lean4-")
 
 (defun lean4-compile-string (lake-name exe-name args file-name)
   "Command to run EXE-NAME with extra ARGS and FILE-NAME.
@@ -267,6 +276,14 @@ of the parent project."
   "Print Lean 4 version."
   (interactive)
   (message "Lean %s" (mapconcat #'number-to-string (lean4--version) ".")))
+
+(defcustom lean4-autodetect-lean3 nil
+  "Autodetect Lean version.
+Use elan to check if current project uses Lean 3 or Lean 4 and initialize the
+right mode when visiting a file.  If elan has a default Lean version, Lean files
+outside a project will default to that mode."
+  :group 'lean4
+  :type 'boolean)
 
 ;;;###autoload
 (defun lean4-select-mode ()

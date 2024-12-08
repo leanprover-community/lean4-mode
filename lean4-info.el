@@ -24,7 +24,6 @@
 
 (require 'dash)
 (require 'lean4-syntax)
-(require 'lean4-settings)
 (require 'lsp-mode)
 (require 'lsp-protocol)
 (require 'magit-section)
@@ -96,6 +95,13 @@ The buffer is supposed to be the *Lean Goal* buffer."
       (goto-char (point-min))
       (forward-line (1- line))
       (forward-char column))))
+
+(defcustom lean4-highlight-inaccessible-names t
+  "Use font to highlight inaccessible names.
+Set this variable to t to highlight inaccessible names in the info display
+using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
+  :group 'lean4
+  :type 'boolean)
 
 (defun lean4-info--insert-highlight-inaccessible-names (&rest text)
   (let ((begin (point)))
