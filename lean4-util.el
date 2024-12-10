@@ -81,7 +81,7 @@ written."
 (defcustom lean4-lake-name
   (if (eq system-type 'windows-nt) "lake.exe" "lake")
   "Name of lake executable."
-  :group 'lake
+  :group 'lean4
   :type 'string)
 
 (defun lean4-lake-find-dir-in (dir)
