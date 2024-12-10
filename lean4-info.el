@@ -72,10 +72,13 @@ The buffer is supposed to be the *Lean Goal* buffer."
    ;; current window of current buffer is selected (i.e., in focus)
    (eq (current-buffer) (window-buffer))))
 
-(lsp-interface
- (lean:PlainGoal (:goals) nil)
- (lean:PlainTermGoal (:goal) nil)
- (lean:Diagnostic (:range :fullRange :message) (:code :relatedInformation :severity :source :tags)))
+(eval-and-compile
+  (lsp-interface
+   (lean:PlainGoal (:goals) nil)
+   (lean:PlainTermGoal (:goal) nil)
+   (lean:Diagnostic
+    (:range :fullRange :message)
+    (:code :relatedInformation :severity :source :tags))))
 
 (defconst lean4-info-buffer-name "*Lean Goal*")
 
