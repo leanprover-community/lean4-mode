@@ -3,12 +3,12 @@
 
 * Development
 
-- Fix occasional error message "The connected server(s) does not
-  support method $/lean/plainGoal" and similar by not wrapping calls
-  to ~lsp-protocol~ macro into ~eval-when-compile~.  Thus, the methods
-  should now work, no matter whether Lean4-Mode was loaded by
-  interpreting =.el= Elisp code or by loading compiled =.elc= or
-  =.eln= files. ([[https://github.com/leanprover-community/lean4-mode/issues/54][Bug#54]])
+- Fix occasional errors like "The connected server(s) does not support
+  method =$/lean/plainGoal=" by not wrapping invocations of
+  ~lsp-protocol~ macro into ~eval-when-compile~ but rather into
+  ~eval-and-compile~.  Thus, the methods should now work, no matter
+  whether Lean4-Mode was loaded by interpreting =.el= Elisp code or by
+  loading compiled =.elc= or =.eln= files.  ([[https://github.com/leanprover-community/lean4-mode/issues/54][Bug#54]], [[https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs/topic/lsp-mode.20errors.20due.20to.20list.20!.3D.20hash-table][Zulip discussion]])
 
 * Version 1.1.1
 
