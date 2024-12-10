@@ -1,7 +1,7 @@
 #+title: Lean4-Mode - Changelog
 #+language: en
 
-* Development
+* Version 1.1.2
 
 - Fix occasional errors like "The connected server(s) does not support
   method =$/lean/plainGoal=" by not wrapping invocations of
