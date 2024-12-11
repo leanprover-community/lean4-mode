@@ -112,11 +112,6 @@ FILE-NAME."
     (setq compile-command cc)
     (setq default-directory dd)))
 
-(defun lean4-std-exe ()
-  "Execute Lean in the current buffer."
-  (interactive)
-  (lean4-execute))
-
 (defun lean4-refresh-file-dependencies ()
   "Refresh the file dependencies.
 
@@ -143,8 +138,8 @@ file, recompiling, and reloading all imports."
 
 (defvar-keymap lean4-mode-map
   :doc "Keymap for `lean4-mode'."
-  "C-c C-x"     #'lean4-std-exe
-  "C-c C-l"     #'lean4-std-exe
+  "C-c C-x"     #'lean4-execute
+  "C-c C-l"     #'lean4-execute
   "C-c C-k"     #'quail-show-key
   "TAB"         #'lean4-tab-indent
   "C-c C-i"     #'lean4-toggle-info
