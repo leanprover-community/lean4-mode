@@ -88,7 +88,7 @@ written."
   "Find a parent directory of DIR with file \"lakefile.lean\"."
   (when dir
     (or (when (file-exists-p (expand-file-name "lakefile.lean" dir)) dir)
-	(lean4-lake-find-dir-in (file-name-directory (directory-file-name dir))))))
+    (lean4-lake-find-dir-in (file-name-directory (directory-file-name dir))))))
 
 (defun lean4-lake-find-dir ()
   "Find a parent directory of the current file with file \"lakefile.lean\"."

@@ -96,15 +96,15 @@ FILE-NAME."
   (when (called-interactively-p 'any)
     (setq arg (read-string "arg: " arg)))
   (let* ((cc compile-command)
-	 (dd default-directory)
-	 (use-lake (lean4-lake-find-dir))
-	 (default-directory (if use-lake (lean4-lake-find-dir) dd))
+         (dd default-directory)
+         (use-lake (lean4-lake-find-dir))
+         (default-directory (if use-lake (lean4-lake-find-dir) dd))
          (target-file-name
           (or
            (buffer-file-name)
            (flymake-proc-init-create-temp-buffer-copy 'lean4-create-temp-in-system-tempdir))))
     (compile (lean4-compile-string
-	      (if use-lake (shell-quote-argument (expand-file-name (lean4-get-executable lean4-lake-name))) nil)
+              (if use-lake (shell-quote-argument (expand-file-name (lean4-get-executable lean4-lake-name))) nil)
               (shell-quote-argument (expand-file-name (lean4-get-executable lean4-executable-name)))
               (or arg "")
               (shell-quote-argument (expand-file-name target-file-name))))

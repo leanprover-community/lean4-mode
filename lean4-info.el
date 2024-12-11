@@ -265,29 +265,29 @@ the request."
 This version ensures that info buffer is not repeatedly written to.
 This is to prevent lag, because magit is quite slow at building
 sections."
-  ;;  if we have not begun debouncing, setup debouncing begin time.
+  ;; if we have not begun debouncing, setup debouncing begin time.
   (if (not lean4-info-buffer-debounce-begin-time)
       (setq lean4-info-buffer-debounce-begin-time (current-time)))
   ;; if time since we began debouncing is too long...
   (if (>= (time-to-seconds
-	   (time-subtract (current-time)
-			  lean4-info-buffer-debounce-begin-time))
-	  lean4-info-buffer-debounce-upper-bound-sec)
-      ;;  then redisplay immediately.
+           (time-subtract (current-time)
+                          lean4-info-buffer-debounce-begin-time))
+          lean4-info-buffer-debounce-upper-bound-sec)
+      ;; then redisplay immediately.
       (progn
-	;;  We have stopped debouncing.
-	(setq lean4-info-buffer-debounce-begin-time nil)
-	(lean4-info-buffer-redisplay))
+        ;; We have stopped debouncing.
+        (setq lean4-info-buffer-debounce-begin-time nil)
+        (lean4-info-buffer-redisplay))
     ;; else cancel current timer, create new debounced timer.
     (-some-> lean4-info-buffer-debounce-timer cancel-timer)
     (setq lean4-info-buffer-debounce-timer ; set new timer
-	  (run-with-timer
-	   lean4-info-buffer-debounce-delay-sec
-	   nil				; don't repeat timer
-	   (lambda ()
-	     ;; We have stopped debouncing.
-	     (setq lean4-info-buffer-debounce-begin-time nil)
-	     (lean4-info-buffer-redisplay))))))
+          (run-with-timer
+           lean4-info-buffer-debounce-delay-sec
+           nil ;; don't repeat timer
+           (lambda ()
+             ;; We have stopped debouncing.
+             (setq lean4-info-buffer-debounce-begin-time nil)
+             (lean4-info-buffer-redisplay))))))
 
 
 (defun lean4-info-buffer-refresh ()
