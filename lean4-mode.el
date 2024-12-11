@@ -95,10 +95,9 @@ FILE-NAME."
   (interactive)
   (when (called-interactively-p 'any)
     (setq arg (read-string "arg: " arg)))
-  (let* ((cc compile-command)
-         (dd default-directory)
-         (use-lake (lean4-lake-find-dir))
-         (default-directory (if use-lake (lean4-lake-find-dir) dd))
+  (let* ((use-lake (lean4-lake-find-dir))
+         (default-directory (if use-lake (lean4-lake-find-dir)
+                              default-directory))
          (target-file-name
           (or
            (buffer-file-name)
@@ -107,10 +106,7 @@ FILE-NAME."
               (if use-lake (shell-quote-argument (expand-file-name (lean4-get-executable lean4-lake-name))) nil)
               (shell-quote-argument (expand-file-name (lean4-get-executable lean4-executable-name)))
               (or arg "")
-              (shell-quote-argument (expand-file-name target-file-name))))
-    ;; restore old value
-    (setq compile-command cc)
-    (setq default-directory dd)))
+              (shell-quote-argument (expand-file-name target-file-name))))))
 
 (defun lean4-refresh-file-dependencies ()
   "Refresh the file dependencies.
