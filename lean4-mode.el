@@ -92,9 +92,7 @@ FILE-NAME."
 
 (defun lean4-execute (&optional arg)
   "Execute Lean in the current buffer with an optional argument ARG."
-  (interactive)
-  (when (called-interactively-p 'any)
-    (setq arg (read-string "arg: " arg)))
+  (interactive "sArgument to Lean4 executable: ")
   (let* ((use-lake (lean4-lake-find-dir))
          (default-directory (if use-lake (lean4-lake-find-dir)
                               default-directory))
