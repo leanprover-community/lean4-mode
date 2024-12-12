@@ -23,7 +23,17 @@
 ;;; Code:
 
 (require 'compat)
-(require 'lean4-settings)
+
+(defcustom lean4-executable-name
+  (if (eq system-type 'windows-nt) "lean.exe" "lean")
+  "Name of lean executable."
+  :group 'lean4
+  :type 'string)
+
+(defcustom lean4-rootdir nil
+  "Full pathname of lean root directory.  It should be defined by user."
+  :group 'lean4
+  :type 'string)
 
 (defun lean4-setup-rootdir ()
   "Search for lean executable in variable `exec-path'.
@@ -55,10 +65,46 @@ First try to find an executable named `lean4-executable-name' in
   "Return fullpath of lean executable EXE-NAME."
   (file-name-concat (lean4-get-rootdir) "bin" exe-name))
 
+(defcustom lean4-delete-trailing-whitespace nil
+  "Automatically delete trailing shitespace.
+Set this variable to true to automatically delete trailing
+whitespace when a buffer is loaded from a file or when it is
+written."
+  :group 'lean4
+  :type 'boolean)
+
 (defun lean4-whitespace-cleanup ()
   "Delete trailing whitespace if `lean4-delete-trailing-whitespace' is t."
   (when lean4-delete-trailing-whitespace
       (delete-trailing-whitespace)))
+
+(defcustom lean4-lake-name
+  (if (eq system-type 'windows-nt) "lake.exe" "lake")
+  "Name of lake executable."
+  :group 'lean4
+  :type 'string)
+
+(defun lean4-lake-find-dir-in (dir)
+  "Find a parent directory of DIR with file \"lakefile.lean\"."
+  (when dir
+    (or (when (file-exists-p (expand-file-name "lakefile.lean" dir)) dir)
+    (lean4-lake-find-dir-in (file-name-directory (directory-file-name dir))))))
+
+(defun lean4-lake-find-dir ()
+  "Find a parent directory of the current file with file \"lakefile.lean\"."
+  (and (buffer-file-name)
+       (lean4-lake-find-dir-in (directory-file-name (buffer-file-name)))))
+
+(defun lean4-lake-find-dir-safe ()
+  "Call `lean4-lake-find-dir', error on failure."
+  (or (lean4-lake-find-dir)
+      (error "Cannot find lakefile.lean for %s" (buffer-file-name))))
+
+(defun lean4-lake-build ()
+  "Call lake build."
+  (interactive)
+  (let ((default-directory (file-name-as-directory (lean4-lake-find-dir-safe))))
+    (compile (concat (lean4-get-executable lean4-lake-name) " build"))))
 
 (provide 'lean4-util)
 ;;; lean4-util.el ends here
