@@ -24,15 +24,11 @@
 (require 'lean4-util)
 (require 'lean4-settings)
 
-(defun lean4-lake-find-dir-in (dir)
-  "Find a parent directory of DIR with file \"lakefile.lean\" or
-  \"lakefile.toml\"."
-  (locate-dominating-file dir "lakefile.lean"))
 
 (defun lean4-lake-find-dir ()
   "Find a parent directory of the current file with file \"lakefile.lean\"."
   (and (buffer-file-name)
-       (lean4-lake-find-dir-in (directory-file-name (buffer-file-name)))))
+       (locate-dominating-file (buffer-file-name) "lakefile.lean")))
 
 (defun lean4-lake-find-dir-safe ()
   "Call `lean4-lake-find-dir', error on failure."
