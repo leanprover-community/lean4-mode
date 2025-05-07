@@ -13,18 +13,14 @@ Emacs Lean4-Mode
 ****************
 
 This package extends GNU Emacs (https://www.gnu.org/software/emacs/) by
-providing a major mode for editing code written in version 4 of the
-programming language and theorem prover Lean (https://lean-lang.org).
+a major mode for Lean (https://lean-lang.org) version 4, a programming
+language and theorem prover.
 
-   The Lean4-Mode source code is developed at Github
-(https://github.com/leanprover-community/lean4-mode) and its issues
-tracked there too.  Further discussions and question-answering takes
-place in the #Emacs channel
-(https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs) of
-Lean's Zulip chat.
-
-   For legacy version 3 of Lean, use the archived Lean3-Mode
-(https://github.com/leanprover/lean3-mode) (also known as _Lean-Mode_).
+   Lean4-Mode is developed on Github
+(https://github.com/leanprover-community/lean4-mode).  Bugs and feature
+requests are also tracked there.  Further discussions take place in the
+#Emacs (https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs)
+channel on the Lean Zulip chat platform.
 
 * Menu:
 
@@ -317,20 +313,20 @@ major mode.
 
 Tag Table:
 Node: Top224
-Node: Installation1431
-Node: Brief and Generic Instructions1674
-Node: Detailed and Concrete Instructions2623
-Node: Instructions for Source-Based Use-Package4280
-Node: Native vc (Emacs 30 or later)5001
-Node: Doom-Emacs5909
-Node: Straight6335
-Node: Usage6835
-Node: lsp-mode8258
-Node: Flycheck8543
-Node: Configuration9153
-Node: lsp-mode (1)9343
-Node: Flycheck (1)9612
-Node: Common Pitfalls10097
+Node: Installation1248
+Node: Brief and Generic Instructions1491
+Node: Detailed and Concrete Instructions2440
+Node: Instructions for Source-Based Use-Package4097
+Node: Native vc (Emacs 30 or later)4818
+Node: Doom-Emacs5726
+Node: Straight6152
+Node: Usage6652
+Node: lsp-mode8074
+Node: Flycheck8359
+Node: Configuration8969
+Node: lsp-mode (1)9159
+Node: Flycheck (1)9428
+Node: Common Pitfalls9913
 
 End Tag Table
 

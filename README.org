@@ -5,16 +5,12 @@
 #+texinfo_dir_title: Lean4-Mode: (lean4-mode).
 #+texinfo_dir_desc: Emacs major mode for Lean4 language
 
-This package extends [[https://www.gnu.org/software/emacs/][GNU Emacs]] by providing a major mode for editing
-code written in version 4 of the programming language and theorem
-prover [[https://lean-lang.org][Lean]].
+This package extends [[https://www.gnu.org/software/emacs/][GNU Emacs]] by a major mode for [[https://lean-lang.org][Lean]] version 4, a
+programming language and theorem prover.
 
-The Lean4-Mode source code is developed at [[https://github.com/leanprover-community/lean4-mode][Github]] and its issues
-tracked there too.  Further discussions and question-answering takes
-place in the [[https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs][#Emacs channel]] of Lean's Zulip chat.
-
-For legacy version 3 of Lean, use the archived [[https://github.com/leanprover/lean3-mode][Lean3-Mode]] (also known
-as /Lean-Mode/).
+Lean4-Mode is developed on [[https://github.com/leanprover-community/lean4-mode][Github]].  Bugs and feature requests are also
+tracked there.  Further discussions take place in the [[https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs][#Emacs]] channel
+on the Lean Zulip chat platform.
 
 * Installation
 
