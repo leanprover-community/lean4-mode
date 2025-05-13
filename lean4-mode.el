@@ -50,6 +50,7 @@
 (require 'lean4-info)
 (require 'lean4-fringe)
 (require 'lean4-input)
+(require 'lean4-markdown)
 
 ;; Declare symbols defined in external dependencies.  This silences
 ;; byte-compiler warnings:
@@ -58,7 +59,6 @@
 (defvar flycheck-disabled-checkers)
 (defvar flycheck-mode)
 (defvar lsp--cur-version)
-(defvar markdown-code-lang-modes)
 (declare-function flycheck-list-errors "ext:flycheck")
 (declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
 (declare-function quail-show-key "quail")
@@ -205,11 +205,6 @@ of the parent project."
 ;;;###autoload
 (add-to-list 'auto-mode-alist
              '("\\.lean\\'" . lean4-mode))
-
-;;;###autoload
-(with-eval-after-load 'markdown-mode
-  (add-to-list 'markdown-code-lang-modes
-               '("lean" . lean4-mode)))
 
 ;; Use utf-8 encoding
 ;;;### autoload
