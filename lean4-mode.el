@@ -51,6 +51,7 @@
 (require 'lean4-fringe)
 (require 'lean4-input)
 (require 'lean4-markdown)
+(require 'lean4-lsp)
 
 ;; Declare symbols defined in external dependencies.  This silences
 ;; byte-compiler warnings:
@@ -58,7 +59,6 @@
 (defvar flycheck-after-syntax-check-hook)
 (defvar flycheck-disabled-checkers)
 (defvar flycheck-mode)
-(defvar lsp--cur-version)
 (declare-function flycheck-list-errors "ext:flycheck")
 (declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
 (declare-function quail-show-key "quail")
@@ -99,23 +99,6 @@
   (let* ((default-directory
           (or lean4-location-root default-directory)))
     (compile "lake build ")))
-
-(defun lean4-refresh-file-dependencies ()
-  "Refresh the file dependencies.
-
-This function restarts the server subprocess for the current
-file, recompiling, and reloading all imports."
-  (interactive)
-  (lsp-notify
-   "textDocument/didClose"
-   `(:textDocument ,(lsp--text-document-identifier)))
-  (lsp-notify
-   "textDocument/didOpen"
-   (list :textDocument
-         (list :uri (lsp--buffer-uri)
-               :languageId (lsp-buffer-language)
-               :version lsp--cur-version
-               :text (lsp--buffer-content)))))
 
 (defvar-keymap lean4-mode-map
   :doc "Keymap for `lean4-mode'."
@@ -158,24 +141,6 @@ enabled and disabled respectively.")
   (setq-local lsp-semantic-tokens-enable t)
   (lean4-create-lsp-workspace))
 
-(defun lean4-create-lsp-workspace ()
-  "Create an LSP workspace.
-
-Starting from `(buffer-file-name)`, repeatedly look up the
-directory hierarchy for a directory containing a file
-\"lean-toolchain\", and use the last such directory found, if any.
-This allows us to edit files in child packages using the settings
-of the parent project."
-  (let (root)
-    (when-let ((file-name (buffer-file-name)))
-      (while-let ((dir (locate-dominating-file file-name "lean-toolchain")))
-        ;; We found a toolchain file, but maybe it belongs to a package.
-        ;; Continue looking until there are no more toolchain files.
-        (setq root dir
-              file-name (file-name-directory (directory-file-name dir)))))
-    (when root
-      (lsp-workspace-folders-add root))))
-
 ;;;###autoload
 (define-derived-mode lean4-mode prog-mode "Lean 4"
   "Major mode for Lean language.
@@ -209,18 +174,6 @@ of the parent project."
 ;; Use utf-8 encoding
 ;;;### autoload
 (modify-coding-system-alist 'file "\\.lean\\'" 'utf-8)
-
-;; LSP init
-;; Ref: https://emacs-lsp.github.io/lsp-mode/page/adding-new-language/
-(add-to-list 'lsp-language-id-configuration
-             '(lean4-mode . "lean"))
-
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection '("lake" "serve"))
-                  :major-modes '(lean4-mode)
-                  :server-id 'lean4-lsp
-                  :notification-handlers (ht ("$/lean/fileProgress" #'lean4-fringe-update))
-                  :semantic-tokens-faces-overrides '(:types (("leanSorryLike" . font-lock-warning-face)))))
 
 (provide 'lean4-mode)
 ;;; lean4-mode.el ends here
