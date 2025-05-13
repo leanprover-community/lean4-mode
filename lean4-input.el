@@ -310,5 +310,10 @@ Suitable for use in the :set field of `defcustom'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Administrative details
 
+(defun lean4-input-set ()
+  (interactive)
+  "Select and activate the `Lean' input method."
+  (set-input-method "Lean"))
+
 (provide 'lean4-input)
 ;;; lean4-input.el ends here

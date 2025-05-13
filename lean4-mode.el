@@ -49,6 +49,7 @@
 (require 'lean4-syntax)
 (require 'lean4-info)
 (require 'lean4-fringe)
+(require 'lean4-input)
 
 ;; Declare symbols defined in external dependencies.  This silences
 ;; byte-compiler warnings:
@@ -191,8 +192,7 @@ of the parent project."
   (set (make-local-variable 'font-lock-defaults) lean4-font-lock-defaults)
   (set (make-local-variable 'indent-tabs-mode) nil)
   (set 'compilation-mode-font-lock-keywords '())
-  (require 'lean4-input)
-  (set-input-method "Lean")
+  (lean4-input-set)
   (set (make-local-variable 'lisp-indent-function)
        'common-lisp-indent-function)
   (if (fboundp 'electric-indent-local-mode)
