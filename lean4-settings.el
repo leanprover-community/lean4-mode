@@ -22,21 +22,5 @@
 
 ;;; Code:
 
-(defgroup lean4 nil
-  "Major mode for Lean4 programming language and theorem prover."
-  :group 'languages
-  :link '(info-link :tag "Info Manual" "(lean4-mode)")
-  :link '(url-link
-          :tag "Website"
-          "https://github.com/leanprover-community/lean4-mode")
-  :link '(emacs-library-link :tag "Library Source" "lean4-mode.el")
-  :prefix "lean4-")
-
-(defcustom lean4-mode-hook (list #'lsp)
-  "Hook run after entering `lean4-mode'."
-  :options '(flycheck-mode lsp)
-  :type 'hook
-  :group 'lean4)
-
 (provide 'lean4-settings)
 ;;; lean4-settings.el ends here
