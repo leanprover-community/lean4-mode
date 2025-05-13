@@ -63,7 +63,6 @@
 (defvar markdown-code-lang-modes)
 (declare-function flycheck-list-errors "ext:flycheck")
 (declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
-(declare-function lean-mode "ext:lean-mode")
 (declare-function quail-show-key "quail")
 
 (defun lean4-compile-string (lake-name exe-name args file-name)
@@ -239,23 +238,15 @@ of the parent project."
   (interactive)
   (message "Lean %s" (mapconcat #'number-to-string (lean4--version) ".")))
 
-;;;###autoload
-(defun lean4-select-mode ()
-  "Automatically select mode (Lean 3 vs Lean 4)."
-  (if (and lean4-autodetect-lean3
-           (eq 3 (car (lean4--version))))
-      (lean-mode)
-    (lean4-mode)))
-
 ;; Automatically use lean4-mode for .lean files.
 ;;;###autoload
 (add-to-list 'auto-mode-alist
-             '("\\.lean\\'" . lean4-select-mode))
+             '("\\.lean\\'" . lean4-mode))
 
 ;;;###autoload
 (with-eval-after-load 'markdown-mode
   (add-to-list 'markdown-code-lang-modes
-               '("lean" . lean4-select-mode)))
+               '("lean" . lean4-mode)))
 
 ;; Use utf-8 encoding
 ;;;### autoload

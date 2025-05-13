@@ -102,15 +102,6 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   :group 'lean4
   :type 'boolean)
 
-
-(defcustom lean4-autodetect-lean3 nil
-  "Autodetect Lean version.
-Use elan to check if current project uses Lean 3 or Lean 4 and initialize the
-right mode when visiting a file.  If elan has a default Lean version, Lean files
-outside a project will default to that mode."
-  :group 'lean4
-  :type 'boolean)
-
 (defcustom lean4-keybinding-std-exe1 (kbd "C-c C-x")
   "Main Keybinding for `lean4-std-exe'."
   :group 'lean4-keybinding :type 'key-sequence)
