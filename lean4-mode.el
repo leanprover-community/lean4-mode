@@ -225,19 +225,6 @@ of the parent project."
     (add-hook hook fn nil 'local))
   (lean4-mode-setup))
 
-(defun lean4--version ()
-  "Return Lean version as a list `(MAJOR MINOR PATCH)'."
-  (with-temp-buffer
-    (call-process (lean4-get-executable "lean") nil (list t nil) nil "-v")
-    (goto-char (point-min))
-    (re-search-forward (rx bol "Lean (version " (group (+ digit) (+ "." (+ digit)))))
-    (version-to-list (match-string 1))))
-
-(defun lean4-show-version ()
-  "Print Lean 4 version."
-  (interactive)
-  (message "Lean %s" (mapconcat #'number-to-string (lean4--version) ".")))
-
 ;; Automatically use lean4-mode for .lean files.
 ;;;###autoload
 (add-to-list 'auto-mode-alist
