@@ -32,11 +32,6 @@
   :link '(emacs-library-link :tag "Library Source" "lean4-mode.el")
   :prefix "lean4-")
 
-(defgroup lean4-keybinding nil
-  "Keybindings for lean4-mode."
-  :prefix "lean4-"
-  :group 'lean4)
-
 (defcustom lean4-mode-hook (list #'lsp)
   "Hook run after entering `lean4-mode'."
   :options '(flycheck-mode lsp)
@@ -54,34 +49,6 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   "Highlight file progress in the current buffer."
   :group 'lean4
   :type 'boolean)
-
-(defcustom lean4-keybinding-std-exe1 (kbd "C-c C-x")
-  "Main Keybinding for `lean4-execute'."
-  :group 'lean4-keybinding :type 'key-sequence)
-(defcustom lean4-keybinding-std-exe2 (kbd "C-c C-l")
-  "Alternative Keybinding for `lean4-execute'."
-  :group 'lean4-keybinding  :type 'key-sequence)
-(defcustom lean4-keybinding-show-key (kbd "C-c C-k")
-  "Lean Keybinding for `quail-show-key'."
-  :group 'lean4-keybinding  :type 'key-sequence)
-(defcustom lean4-keybinding-server-restart (kbd "C-c C-r")
-  "Lean Keybinding for server-restart."
-  :group 'lean4-keybinding  :type 'key-sequence)
-(defcustom lean4-keybinding-tab-indent (kbd "TAB")
-  "Lean Keybinding for `lean4-tab-indent'."
-  :group 'lean4-keybinding  :type 'key-sequence)
-(defcustom lean4-keybinding-auto-complete (kbd "S-SPC")
-  "Lean Keybinding for auto completion."
-  :group 'lean4-keybinding  :type 'key-sequence)
-(defcustom lean4-keybinding-lean4-toggle-info (kbd "C-c C-i")
-  "Lean Keybinding for `lean4-toggle-info'."
-  :group 'lean4-keybinding  :type 'key-sequence)
-(defcustom lean4-keybinding-lake-build (kbd "C-c C-p C-l")
-  "Lean Keybinding for `lean4-lake-build'."
-  :group 'lean4-keybinding :type 'key-sequence)
-(defcustom lean4-keybinding-refresh-file-dependencies (kbd "C-c C-d")
-  "Lean Keybinding for `lean4-refresh-file-dependencies'."
-  :group 'lean4-keybinding :type 'key-sequence)
 
 (provide 'lean4-settings)
 ;;; lean4-settings.el ends here

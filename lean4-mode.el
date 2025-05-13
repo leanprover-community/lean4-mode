@@ -107,24 +107,15 @@ file, recompiling, and reloading all imports."
          (lean4-eri-indent))
         (t (indent-for-tab-command))))
 
-(defun lean4-set-keys ()
-  "Setup Lean4 keybindings."
-  (local-set-key lean4-keybinding-std-exe1                  #'lean4-execute)
-  (local-set-key lean4-keybinding-std-exe2                  #'lean4-execute)
-  (local-set-key lean4-keybinding-show-key                  #'quail-show-key)
-  (local-set-key lean4-keybinding-tab-indent                #'lean4-tab-indent)
-  ;; (local-set-key lean4-keybinding-hole                      #'lean4-hole)
-  (local-set-key lean4-keybinding-lean4-toggle-info         #'lean4-toggle-info)
-  ;; (local-set-key lean4-keybinding-lean4-message-boxes-toggle #'lean4-message-boxes-toggle)
-  (local-set-key lean4-keybinding-lake-build                #'lean4-lake-build)
-  (local-set-key lean4-keybinding-refresh-file-dependencies #'lean4-refresh-file-dependencies)
-  ;; This only works as a mouse binding due to the event, so it is not abstracted
-  ;; to avoid user confusion.
-  ;; (local-set-key (kbd "<mouse-3>")                         #'lean4-right-click-show-menu)
-  )
-
-(defvar lean4-mode-map (make-sparse-keymap)
-  "Keymap used in Lean mode.")
+(defvar-keymap lean4-mode-map
+  :doc "Keymap for `lean4-mode'."
+  "C-c C-x"     #'lean4-execute
+  "C-c C-l"     #'lean4-execute
+  "C-c C-k"     #'quail-show-key
+  "TAB"         #'lean4-tab-indent
+  "C-c C-i"     #'lean4-toggle-info
+  "C-c C-p C-l" #'lean4-lake-build
+  "C-c C-d"     #'lean4-refresh-file-dependencies)
 
 (easy-menu-define lean4-mode-menu lean4-mode-map
   "Menu for the Lean major mode."
@@ -195,7 +186,6 @@ of the parent project."
   (set-input-method "Lean")
   (set (make-local-variable 'lisp-indent-function)
        'common-lisp-indent-function)
-  (lean4-set-keys)
   (if (fboundp 'electric-indent-local-mode)
       (electric-indent-local-mode -1))
   (pcase-dolist (`(,hook . ,fn) lean4-hooks-alist)
