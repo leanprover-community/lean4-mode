@@ -116,13 +116,6 @@ file, recompiling, and reloading all imports."
                :version lsp--cur-version
                :text (lsp--buffer-content)))))
 
-(defun lean4-tab-indent ()
-  "Lean 4 function for TAB indent."
-  (interactive)
-  (cond ((looking-back (rx line-start (* white)) nil)
-         (lean4-eri-indent))
-        (t (indent-for-tab-command))))
-
 (defvar-keymap lean4-mode-map
   :doc "Keymap for `lean4-mode'."
   "C-c C-x"     #'lean4-execute

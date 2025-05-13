@@ -223,5 +223,12 @@ are calculated."
   (interactive)
   (lean4-eri-indent t))
 
+(defun lean4-tab-indent ()
+  "Lean 4 function for TAB indent."
+  (interactive)
+  (cond ((looking-back (rx line-start (* white)) nil)
+         (lean4-eri-indent))
+        (t (indent-for-tab-command))))
+
 (provide 'lean4-eri)
 ;;; lean4-eri.el ends here
