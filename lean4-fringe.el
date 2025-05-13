@@ -22,7 +22,6 @@
 
 ;;; Code:
 
-(require 'lean4-settings)
 (require 'lsp-mode)
 (require 'lsp-protocol)
 

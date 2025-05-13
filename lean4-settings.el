@@ -22,9 +22,6 @@
 
 ;;; Code:
 
-(require 'cl-lib)
-(require 'lsp-mode)
-
 (defgroup lean4 nil
   "Major mode for Lean4 programming language and theorem prover."
   :group 'languages
@@ -40,55 +37,11 @@
   :prefix "lean4-"
   :group 'lean4)
 
-(defconst lean4-default-executable-name
-  (cl-case system-type
-    (windows-nt "lean.exe")
-    (t          "lean"))
-  "Default executable name of Lean.")
-
-(defconst lean4-default-lake-name
-  (cl-case system-type
-    (windows-nt "lake.exe")
-    (t          "lake"))
-  "Default executable name of Lake.")
-
 (defcustom lean4-mode-hook (list #'lsp)
   "Hook run after entering `lean4-mode'."
   :options '(flycheck-mode lsp)
   :type 'hook
   :group 'lean4)
-
-(defcustom lean4-rootdir nil
-  "Full pathname of lean root directory.  It should be defined by user."
-  :group 'lean4
-  :type 'string)
-
-(defcustom lean4-executable-name lean4-default-executable-name
-  "Name of lean executable."
-  :group 'lean4
-  :type 'string)
-
-(defcustom lean4-lake-name lean4-default-lake-name
-  "Name of lake executable."
-  :group 'lake
-  :type 'string)
-
-(defcustom lean4-memory-limit 1024
-  "Memory limit for lean process in megabytes."
-  :group 'lean4
-  :type 'number)
-
-(defcustom lean4-timeout-limit 100000
-  "Deterministic timeout limit.
-
-It is approximately the maximum number of memory allocations in thousands."
-  :group 'lean4
-  :type 'number)
-
-(defcustom lean4-extra-arguments nil
-  "Extra command-line arguments to the lean process."
-  :group 'lean4
-  :type '(list string))
 
 (defcustom lean4-highlight-inaccessible-names t
   "Use font to highlight inaccessible names.

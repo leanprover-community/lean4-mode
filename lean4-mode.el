@@ -46,12 +46,9 @@
 (require 'pcase)
 (require 'lsp-mode)
 (require 'lean4-eri)
-(require 'lean4-util)
-(require 'lean4-settings)
 (require 'lean4-syntax)
 (require 'lean4-info)
 (require 'lean4-fringe)
-(require 'lean4-lake)
 
 ;; Declare symbols defined in external dependencies.  This silences
 ;; byte-compiler warnings:
@@ -65,41 +62,26 @@
 (declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
 (declare-function quail-show-key "quail")
 
-(defun lean4-compile-string (lake-name exe-name args file-name)
-  "Command to run EXE-NAME with extra ARGS and FILE-NAME.
-If LAKE-NAME is nonempty, then prepend \"LAKE-NAME env\" to the command
-\"EXE-NAME ARGS FILE-NAME\"."
-  (if lake-name
-      (format "%s env %s %s %s" lake-name exe-name args file-name)
-      (format "%s %s %s" exe-name args file-name)))
+(defcustom lean4-location-root nil
+  "Lean4 project root, used as `default-directory'."
+  :type 'directory
+  :group 'lean4)
 
-(defun lean4-create-temp-in-system-tempdir (file-name prefix)
-  "Create a temp lean file and return its name.
-The new file has prefix PREFIX (defaults to `flymake') and the same extension as
-FILE-NAME."
-  (make-temp-file (or prefix "flymake") nil (file-name-extension file-name)))
-
-(defun lean4-execute (&optional arg)
-  "Execute Lean in the current buffer with an optional argument ARG."
+(defun lean4-execute ()
+  "Execute Lean in the current buffer."
   (interactive)
-  (when (called-interactively-p 'any)
-    (setq arg (read-string "arg: " arg)))
-  (let* ((cc compile-command)
-	 (dd default-directory)
-	 (use-lake (lean4-lake-find-dir))
-	 (default-directory (if use-lake (lean4-lake-find-dir) dd))
-         (target-file-name
-          (or
-           (buffer-file-name)
-           (flymake-proc-init-create-temp-buffer-copy 'lean4-create-temp-in-system-tempdir))))
-    (compile (lean4-compile-string
-	      (if use-lake (shell-quote-argument (expand-file-name (lean4-get-executable lean4-lake-name))) nil)
-              (shell-quote-argument (expand-file-name (lean4-get-executable lean4-executable-name)))
-              (or arg "")
-              (shell-quote-argument (expand-file-name target-file-name))))
-    ;; restore old value
-    (setq compile-command cc)
-    (setq default-directory dd)))
+  (let* ((default-directory
+          (or lean4-location-root default-directory)))
+    (compile (if-let* ((file (buffer-file-name)))
+                 (concat "lean " file " ")
+               "lean "))))
+
+(defun lean4-lake-build ()
+  "Build Lean4 project with Lake."
+  (interactive)
+  (let* ((default-directory
+          (or lean4-location-root default-directory)))
+    (compile "lake build ")))
 
 (defun lean4-refresh-file-dependencies ()
   "Refresh the file dependencies.
@@ -239,18 +221,8 @@ of the parent project."
 (add-to-list 'lsp-language-id-configuration
              '(lean4-mode . "lean"))
 
-(defun lean4--server-cmd ()
-  "Return Lean server command.
-If found lake version at least 3.1.0, then return '/path/to/lake serve',
-otherwise return '/path/to/lean --server'."
-  (condition-case nil
-      (if (string-version-lessp (car (process-lines (lean4-get-executable "lake") "--version")) "3.1.0")
-          `(,(lean4-get-executable lean4-executable-name) "--server")
-        `(,(lean4-get-executable "lake") "serve"))
-    (error `(,(lean4-get-executable lean4-executable-name) "--server"))))
-
 (lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection #'lean4--server-cmd)
+ (make-lsp-client :new-connection (lsp-stdio-connection '("lake" "serve"))
                   :major-modes '(lean4-mode)
                   :server-id 'lean4-lsp
                   :notification-handlers (ht ("$/lean/fileProgress" #'lean4-fringe-update))

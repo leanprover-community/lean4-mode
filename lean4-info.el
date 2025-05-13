@@ -24,7 +24,6 @@
 
 (require 'dash)
 (require 'lean4-syntax)
-(require 'lean4-settings)
 (require 'lsp-mode)
 (require 'lsp-protocol)
 (require 'magit-section)
