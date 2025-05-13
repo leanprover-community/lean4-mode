@@ -103,10 +103,10 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   :type 'boolean)
 
 (defcustom lean4-keybinding-std-exe1 (kbd "C-c C-x")
-  "Main Keybinding for `lean4-std-exe'."
+  "Main Keybinding for `lean4-execute'."
   :group 'lean4-keybinding :type 'key-sequence)
 (defcustom lean4-keybinding-std-exe2 (kbd "C-c C-l")
-  "Alternative Keybinding for `lean4-std-exe'."
+  "Alternative Keybinding for `lean4-execute'."
   :group 'lean4-keybinding  :type 'key-sequence)
 (defcustom lean4-keybinding-show-key (kbd "C-c C-k")
   "Lean Keybinding for `quail-show-key'."

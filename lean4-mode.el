@@ -101,11 +101,6 @@ FILE-NAME."
     (setq compile-command cc)
     (setq default-directory dd)))
 
-(defun lean4-std-exe ()
-  "Execute Lean in the current buffer."
-  (interactive)
-  (lean4-execute))
-
 (defun lean4-refresh-file-dependencies ()
   "Refresh the file dependencies.
 
@@ -131,9 +126,9 @@ file, recompiling, and reloading all imports."
         (t (indent-for-tab-command))))
 
 (defun lean4-set-keys ()
-  "Setup Lean 4 keybindings."
-  (local-set-key lean4-keybinding-std-exe1                  #'lean4-std-exe)
-  (local-set-key lean4-keybinding-std-exe2                  #'lean4-std-exe)
+  "Setup Lean4 keybindings."
+  (local-set-key lean4-keybinding-std-exe1                  #'lean4-execute)
+  (local-set-key lean4-keybinding-std-exe2                  #'lean4-execute)
   (local-set-key lean4-keybinding-show-key                  #'quail-show-key)
   (local-set-key lean4-keybinding-tab-indent                #'lean4-tab-indent)
   ;; (local-set-key lean4-keybinding-hole                      #'lean4-hole)
