@@ -25,6 +25,11 @@
 (require 'lsp-mode)
 (require 'lsp-protocol)
 
+(defcustom lean4-show-file-progress t
+  "Highlight file progress in the current buffer."
+  :group 'lean4
+  :type 'boolean)
+
 (eval-and-compile
   (lsp-interface
    (lean:LeanFileProgressProcessingInfo (:range :kind) nil)

@@ -45,10 +45,5 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   :group 'lean4
   :type 'boolean)
 
-(defcustom lean4-show-file-progress t
-  "Highlight file progress in the current buffer."
-  :group 'lean4
-  :type 'boolean)
-
 (provide 'lean4-settings)
 ;;; lean4-settings.el ends here
