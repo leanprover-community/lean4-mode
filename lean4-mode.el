@@ -159,10 +159,7 @@ file, recompiling, and reloading all imports."
     ["Customize lean4-mode" (customize-group 'lean) t]))
 
 (defconst lean4-hooks-alist
-  '(
-    ;; Handle events that may start automatic syntax checks
-    (before-save-hook . lean4-whitespace-cleanup)
-    ;; info view
+  '(;; info view
     ;; update errors immediately, but delay querying goal
     (flycheck-after-syntax-check-hook . lean4-info-buffer-redisplay-debounced)
     (post-command-hook . lean4-info-buffer-redisplay-debounced)

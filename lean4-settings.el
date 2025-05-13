@@ -90,14 +90,6 @@ It is approximately the maximum number of memory allocations in thousands."
   :group 'lean4
   :type '(list string))
 
-(defcustom lean4-delete-trailing-whitespace nil
-  "Automatically delete trailing shitespace.
-Set this variable to true to automatically delete trailing
-whitespace when a buffer is loaded from a file or when it is
-written."
-  :group 'lean4
-  :type 'boolean)
-
 (defcustom lean4-highlight-inaccessible-names t
   "Use font to highlight inaccessible names.
 Set this variable to t to highlight inaccessible names in the info display

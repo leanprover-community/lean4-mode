@@ -55,10 +55,5 @@ First try to find an executable named `lean4-executable-name' in
   "Return fullpath of lean executable EXE-NAME."
   (file-name-concat (lean4-get-rootdir) "bin" exe-name))
 
-(defun lean4-whitespace-cleanup ()
-  "Delete trailing whitespace if `lean4-delete-trailing-whitespace' is t."
-  (when lean4-delete-trailing-whitespace
-      (delete-trailing-whitespace)))
-
 (provide 'lean4-util)
 ;;; lean4-util.el ends here
