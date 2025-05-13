@@ -155,11 +155,6 @@ file, recompiling, and reloading all imports."
   `("Lean 4"
     ["Execute lean"         lean4-execute           t]
     ["Toggle info display"  lean4-toggle-info       t]
-    ;; TODO: Bug#91: We offers a Flycheck-based menu-item when
-    ;; Flycheck is in use.  Users who use built-in Flymake should also
-    ;; be offered a working menu-item.  Alternatively, the menu-item
-    ;; could also be dropped for both cases.
-    ["List of errors"       flycheck-list-errors    flycheck-mode]
     ["Restart lean process" lsp-workspace-restart   t]
     ["Customize lean4-mode" (customize-group 'lean) t]))
 
