@@ -32,6 +32,13 @@
   "Lean4-Mode Info."
   :group 'lean4)
 
+(defcustom lean4-highlight-inaccessible-names t
+  "Use font to highlight inaccessible names.
+Set this variable to t to highlight inaccessible names in the info display
+using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
+  :group 'lean4-info
+  :type 'boolean)
+
 ;; Lean Info Mode (for "*lean4-info*" buffer)
 ;; Automode List
 ;;;###autoload

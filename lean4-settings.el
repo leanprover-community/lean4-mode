@@ -38,12 +38,5 @@
   :type 'hook
   :group 'lean4)
 
-(defcustom lean4-highlight-inaccessible-names t
-  "Use font to highlight inaccessible names.
-Set this variable to t to highlight inaccessible names in the info display
-using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
-  :group 'lean4
-  :type 'boolean)
-
 (provide 'lean4-settings)
 ;;; lean4-settings.el ends here
