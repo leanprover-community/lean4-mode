@@ -147,9 +147,6 @@ file, recompiling, and reloading all imports."
   ;; (local-set-key (kbd "<mouse-3>")                         #'lean4-right-click-show-menu)
   )
 
-(define-abbrev-table 'lean4-abbrev-table
-  '())
-
 (defvar lean4-mode-map (make-sparse-keymap)
   "Keymap used in Lean mode.")
 
@@ -216,7 +213,6 @@ of the parent project."
 
 \\{lean4-mode-map}"
   :syntax-table lean4-syntax-table
-  :abbrev-table lean4-abbrev-table
   :group 'lean4
   (set (make-local-variable 'comment-start) "--")
   (set (make-local-variable 'comment-start-skip) "[-/]-[ \t]*")
@@ -234,7 +230,6 @@ of the parent project."
   (lean4-set-keys)
   (if (fboundp 'electric-indent-local-mode)
       (electric-indent-local-mode -1))
-  ;; (abbrev-mode 1)
   (pcase-dolist (`(,hook . ,fn) lean4-hooks-alist)
     (add-hook hook fn nil 'local))
   (lean4-mode-setup))
