@@ -24,7 +24,7 @@
 
 (require 'lsp-mode)
 
-(defun lean4-refresh-file-dependencies ()
+(defun lean4-lsp-document-reopen ()
   "Refresh the file dependencies.
 
 This function restarts the server subprocess for the current
@@ -41,7 +41,7 @@ file, recompiling, and reloading all imports."
                :version lsp--cur-version
                :text (lsp--buffer-content)))))
 
-(defun lean4-create-lsp-workspace ()
+(defun lean4-lsp-workspace-add ()
   "Create an LSP workspace.
 
 Starting from `(buffer-file-name)`, repeatedly look up the

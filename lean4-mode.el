@@ -108,7 +108,7 @@
   "TAB"         #'lean4-tab-indent
   "C-c C-i"     #'lean4-toggle-info
   "C-c C-p C-l" #'lean4-lake-build
-  "C-c C-d"     #'lean4-refresh-file-dependencies)
+  "C-c C-d"     #'lean4-lsp-document-reopen)
 
 (easy-menu-define lean4-mode-menu lean4-mode-map
   "Menu for the Lean major mode."
@@ -139,7 +139,7 @@ enabled and disabled respectively.")
   (setq-local flycheck-disabled-checkers '())
   ;; Lean massively benefits from semantic tokens, so change default to enabled
   (setq-local lsp-semantic-tokens-enable t)
-  (lean4-create-lsp-workspace))
+  (lean4-lsp-workspace-add))
 
 ;;;###autoload
 (define-derived-mode lean4-mode prog-mode "Lean 4"

@@ -230,7 +230,7 @@ To view the proof state, run @code{lean4-toggle-info} (@samp{C-c C-i}).  This
 will display the @samp{*Lean Goals*} buffer (like the Lean Info-View pane
 in VS-Code) in a separate window.
 
-@multitable {aaaaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}
+@multitable {aaaaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaaaa}
 @headitem Key
 @tab Description
 @tab Command
@@ -239,7 +239,7 @@ in VS-Code) in a separate window.
 @tab @code{quail-show-key}
 @item @samp{C-c C-d}
 @tab Recompile and reload imports
-@tab @code{lean4-refresh-file-dependencies}
+@tab @code{lean4-lsp-document-reopen}
 @item @samp{C-c C-x} or @samp{C-c C-l}
 @tab Execute Lean in stand-alone mode
 @tab @code{lean4-std-exe}
