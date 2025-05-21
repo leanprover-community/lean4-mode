@@ -105,7 +105,7 @@
   "C-c C-x"     #'lean4-execute
   "C-c C-l"     #'lean4-execute
   "C-c C-k"     #'quail-show-key
-  "TAB"         #'lean4-tab-indent
+  "TAB"         #'lean4-eri-tab
   "C-c C-i"     #'lean4-toggle-info
   "C-c C-p C-l" #'lean4-lake-build
   "C-c C-d"     #'lean4-lsp-document-reopen)
