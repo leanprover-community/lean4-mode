@@ -146,17 +146,17 @@ will ask you to identify the /project/ this file belongs to.  If you
 then type =#check id=, the word =#check= will be underlined, and
 hovering over it will show you the type of ~id~.
 
-To view the proof state, run ~lean4-info-toggle~ (=C-c C-i=).  This
+To view the proof state, run ~lean4-info-mode~ (=C-c C-i=).  This
 will display the =*Lean Goals*= buffer (like the Lean Info-View pane
 in VS-Code) in a separate window.
 
-| Key                    | Description                                            | Command                           |
-|------------------------+--------------------------------------------------------+-----------------------------------|
-| =C-c C-k=              | Echo the keystroke needed to input the symbol at point | ~quail-show-key~                  |
+| Key                    | Description                                            | Command                     |
+|------------------------+--------------------------------------------------------+-----------------------------|
+| =C-c C-k=              | Echo the keystroke needed to input the symbol at point | ~quail-show-key~            |
 | =C-c C-d=              | Recompile and reload imports                           | ~lean4-lsp-document-reopen~ |
-| =C-c C-x= or =C-c C-l= | Execute Lean in stand-alone mode                       | ~lean4-std-exe~                   |
-| =C-c C-p C-l=          | Builds package with lake                               | ~lean4-lake-build~                |
-| =C-c C-i=              | Toggle Info-View which shows goals and errors at point | ~lean4-info-toggle-buffer~        |
+| =C-c C-x= or =C-c C-l= | Execute Lean in stand-alone mode                       | ~lean4-std-exe~             |
+| =C-c C-p C-l=          | Builds package with lake                               | ~lean4-lake-build~          |
+| =C-c C-i=              | Toggle Info-View which shows goals and errors at point | ~lean4-info-mode~           |
 
 ** lsp-mode
 

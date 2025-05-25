@@ -56,11 +56,6 @@
 ;; Declare symbols defined in external dependencies.  This silences
 ;; byte-compiler warnings:
 (defvar compilation-mode-font-lock-keywords)
-(defvar flycheck-after-syntax-check-hook)
-(defvar flycheck-disabled-checkers)
-(defvar flycheck-mode)
-(declare-function flycheck-list-errors "ext:flycheck")
-(declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
 (declare-function quail-show-key "quail")
 
 (defgroup lean4 nil
@@ -106,7 +101,7 @@
   "C-c C-l"     #'lean4-execute
   "C-c C-k"     #'quail-show-key
   "TAB"         #'lean4-eri-tab
-  "C-c C-i"     #'lean4-info-toggle
+  "C-c C-i"     #'lean4-info-mode
   "C-c C-p C-l" #'lean4-lake-build
   "C-c C-d"     #'lean4-lsp-document-reopen)
 
@@ -114,21 +109,9 @@
   "Menu for the Lean major mode."
   `("Lean 4"
     ["Execute lean"         lean4-execute           t]
-    ["Toggle info display"  lean4-info-toggle       t]
+    ["Toggle info display"  lean4-info-mode         t]
     ["Restart lean process" lsp-workspace-restart   t]
     ["Customize lean4-mode" (customize-group 'lean) t]))
-
-(defconst lean4-hooks-alist
-  '(;; info view
-    ;; update errors immediately, but delay querying goal
-    (flycheck-after-syntax-check-hook . lean4-info-buffer-redisplay-debounced)
-    (post-command-hook . lean4-info-buffer-redisplay-debounced)
-    (lsp-on-idle-hook . lean4-info-buffer-refresh))
-  "Hooks which lean4-mode needs to hook in.
-
-The `car' of each pair is a hook variable, the `cdr' a function
-to be added or removed from the hook variable if Flycheck mode is
-enabled and disabled respectively.")
 
 (defun lean4-mode-setup ()
   "Default lean4-mode setup."
@@ -162,8 +145,6 @@ enabled and disabled respectively.")
        'common-lisp-indent-function)
   (if (fboundp 'electric-indent-local-mode)
       (electric-indent-local-mode -1))
-  (pcase-dolist (`(,hook . ,fn) lean4-hooks-alist)
-    (add-hook hook fn nil 'local))
   (lean4-mode-setup))
 
 ;; Automatically use lean4-mode for .lean files.

@@ -222,7 +222,7 @@ ask you to identify the _project_ this file belongs to.  If you then
 type ‘#check id’, the word ‘#check’ will be underlined, and hovering
 over it will show you the type of ‘id’.
 
-   To view the proof state, run ‘lean4-info-toggle’ (‘C-c C-i’).  This
+   To view the proof state, run ‘lean4-info-mode’ (‘C-c C-i’).  This
 will display the ‘*Lean Goals*’ buffer (like the Lean Info-View pane in
 VS-Code) in a separate window.
 
@@ -232,7 +232,7 @@ Key                      Description                                            
 ‘C-c C-d’                Recompile and reload imports                             ‘lean4-lsp-document-reopen’
 ‘C-c C-x’ or ‘C-c C-l’   Execute Lean in stand-alone mode                         ‘lean4-std-exe’
 ‘C-c C-p C-l’            Builds package with lake                                 ‘lean4-lake-build’
-‘C-c C-i’                Toggle Info-View which shows goals and errors at point   ‘lean4-info-toggle-buffer’
+‘C-c C-i’                Toggle Info-View which shows goals and errors at point   ‘lean4-info-mode’
 
 * Menu:
 
@@ -325,12 +325,12 @@ Node: Native vc (Emacs 30 or later)5062
 Node: Doom-Emacs5970
 Node: Straight6396
 Node: Usage6896
-Node: lsp-mode8330
-Node: Flycheck8615
-Node: Configuration9225
-Node: lsp-mode (1)9415
-Node: Flycheck (1)9684
-Node: Common Pitfalls10169
+Node: lsp-mode8319
+Node: Flycheck8604
+Node: Configuration9214
+Node: lsp-mode (1)9404
+Node: Flycheck (1)9673
+Node: Common Pitfalls10158
 
 End Tag Table
 

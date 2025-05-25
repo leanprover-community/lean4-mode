@@ -60,14 +60,6 @@ Also choose settings used for the *Lean Goal* buffer."
       (set-syntax-table lean4-syntax-table)
       (setq buffer-read-only t))))
 
-(defun lean4-info-toggle-buffer (buffer)
-  "Create or delete BUFFER.
-The buffer is supposed to be the *Lean Goal* buffer."
-  (-if-let (window (get-buffer-window buffer))
-      (quit-window nil window)
-    (lean4-info-ensure-buffer buffer)
-    (display-buffer buffer)))
-
 (defun lean4-info-buffer-active (buffer)
   "Check whether given info BUFFER should show info for current buffer."
   (and
@@ -314,11 +306,41 @@ sections."
     ;(lean4-info-buffer-redisplay)
     ))
 
-(defun lean4-info-toggle ()
-  "Show infos at the current point."
-  (interactive)
-  (lean4-info-toggle-buffer lean4-info-buffer-name)
-  (lean4-info-buffer-refresh))
+(defcustom lean4-info-hookings
+  (list
+   (cons 'flycheck-after-syntax-check-hook
+		 #'lean4-info-buffer-redisplay-debounced)
+   (cons 'post-command-hook
+		 #'lean4-info-buffer-redisplay-debounced)
+   (cons 'lsp-on-idle-hook
+		 #'lean4-info-buffer-refresh))
+  "Pairs of hooks and functions to be toggled by `lean4-info-mode'.
+
+The value should be an alist associating hook variables with functions.
+When `lean4-info-mode' is turned on, the function will be added
+buffer-locally to the hook.  When turned off, it'll be removed
+buffer-locally."
+  :type '(repeat (cons variable function))
+  :group 'lean4-info)
+
+(define-minor-mode lean4-info-mode
+  "Minor mode for `lean4-mode' to keep Lean4 Info buffer updated."
+  :lighter "ⓘ"
+  (if lean4-info-mode
+	  (progn
+		(lean4-info-ensure-buffer lean4-info-buffer-name)
+		(display-buffer lean4-info-buffer-name)
+		(lean4-info-buffer-refresh)
+		(mapc (lambda (hooking)
+				(when (boundp (car hooking))
+                  (add-hook (car hooking) (cdr hooking) nil 'local)))
+			  lean4-info-hookings))
+	(when-let* ((window (get-buffer-window lean4-info-buffer-name)))
+      (quit-window nil window)
+	  (mapc (lambda (hooking)
+			  (when (boundp (car hooking))
+                (remove-hook (car hooking) (cdr hooking) 'local)))
+			lean4-info-hookings))))
 
 (provide 'lean4-info)
 ;;; lean4-info.el ends here

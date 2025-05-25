@@ -226,7 +226,7 @@ will ask you to identify the @emph{project} this file belongs to.  If you
 then type @samp{#check id}, the word @samp{#check} will be underlined, and
 hovering over it will show you the type of @code{id}.
 
-To view the proof state, run @code{lean4-info-toggle} (@samp{C-c C-i}).  This
+To view the proof state, run @code{lean4-info-mode} (@samp{C-c C-i}).  This
 will display the @samp{*Lean Goals*} buffer (like the Lean Info-View pane
 in VS-Code) in a separate window.
 
@@ -248,7 +248,7 @@ in VS-Code) in a separate window.
 @tab @code{lean4-lake-build}
 @item @samp{C-c C-i}
 @tab Toggle Info-View which shows goals and errors at point
-@tab @code{lean4-info-toggle-buffer}
+@tab @code{lean4-info-mode}
 @end multitable
 
 @menu
