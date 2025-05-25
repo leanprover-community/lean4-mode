@@ -39,11 +39,9 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   :group 'lean4-info
   :type 'boolean)
 
-;; Lean Info Mode (for "*lean4-info*" buffer)
-;; Automode List
 ;;;###autoload
-(define-derived-mode lean4-info-mode prog-mode "Lean-Info"
-  "Major mode for Lean4-Mode Info Buffer."
+(define-derived-mode lean4-info-mockup-mode prog-mode "Lean-Info"
+  "Major mode used internally to syntax highlight Lean4."
   :syntax-table lean4-syntax-table
   :group 'lean4
   (set (make-local-variable 'font-lock-defaults) lean4-info-font-lock-defaults)
@@ -122,7 +120,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
 
 (defun lean4-info--insert-goal-text (text delimiter)
   (lean4-info--insert-highlight-inaccessible-names
-   (lsp--fontlock-with-mode text 'lean4-info-mode)
+   (lsp--fontlock-with-mode text 'lean4-info-mockup-mode)
    delimiter))
 
 (defun lean4-info--mk-message-section (value caption messages buffer)
