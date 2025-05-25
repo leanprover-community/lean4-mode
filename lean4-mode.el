@@ -117,18 +117,17 @@
 \\{lean4-mode-map}"
   :syntax-table lean4-syntax-table
   :group 'lean4
-  (set (make-local-variable 'comment-start) "--")
-  (set (make-local-variable 'comment-start-skip) "[-/]-[ \t]*")
-  (set (make-local-variable 'comment-end) "")
-  (set (make-local-variable 'comment-end-skip) "[ \t]*\\(-/\\|\\s>\\)")
-  (set (make-local-variable 'comment-padding) 1)
-  (set (make-local-variable 'comment-use-syntax) t)
-  (set (make-local-variable 'font-lock-defaults) lean4-font-lock-defaults)
-  (set (make-local-variable 'indent-tabs-mode) nil)
-  (set 'compilation-mode-font-lock-keywords '())
+  (setq-local comment-end "")
+  (setq-local comment-end-skip "[ \t]*\\(-/\\|\\s>\\)")
+  (setq-local comment-padding 1)
+  (setq-local comment-start "--")
+  (setq-local comment-start-skip "[-/]-[ \t]*")
+  (setq-local comment-use-syntax t)
+  (setq-local font-lock-defaults lean4-font-lock-defaults)
+  (setq-local indent-tabs-mode nil)
+  (setq-local lisp-indent-function 'common-lisp-indent-function)
+  (set 'compilation-mode-font-lock-keywords nil)
   (lean4-input-set)
-  (set (make-local-variable 'lisp-indent-function)
-       'common-lisp-indent-function)
   (if (fboundp 'electric-indent-local-mode)
       (electric-indent-local-mode -1)))
 
