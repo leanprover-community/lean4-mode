@@ -25,7 +25,7 @@
 (require 'lsp-mode)
 (require 'lsp-protocol)
 
-(defcustom lean4-show-file-progress t
+(defcustom lean4-fringe-show-file-progress t
   "Highlight file progress in the current buffer."
   :group 'lean4
   :type 'boolean)
@@ -79,7 +79,7 @@
   (dolist (ov (flatten-tree (overlay-lists)))
     (when (eq (overlay-get ov 'face) 'lean4-fringe-face)
       (delete-overlay ov)))
-  (when lean4-show-file-progress
+  (when lean4-fringe-show-file-progress
     (seq-doseq (item lean4-fringe-data)
       (let* ((reg (lean4-fringe-region item))
              (ov (make-overlay (car reg) (cdr reg))))
