@@ -32,7 +32,7 @@
   "Lean4-Mode Info."
   :group 'lean4)
 
-(defcustom lean4-highlight-inaccessible-names t
+(defcustom lean4-info-highlight-inaccessibles t
   "Use font to highlight inaccessible names.
 Set this variable to t to highlight inaccessible names in the info display
 using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
@@ -52,7 +52,7 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   (set (make-local-variable 'lisp-indent-function)
        'common-lisp-indent-function))
 
-(defun lean4-ensure-info-buffer (buffer)
+(defun lean4-info-ensure-buffer (buffer)
   "Create BUFFER if it does not exist.
 Also choose settings used for the *Lean Goal* buffer."
   (unless (get-buffer buffer)
@@ -62,12 +62,12 @@ Also choose settings used for the *Lean Goal* buffer."
       (set-syntax-table lean4-syntax-table)
       (setq buffer-read-only t))))
 
-(defun lean4-toggle-info-buffer (buffer)
+(defun lean4-info-toggle-buffer (buffer)
   "Create or delete BUFFER.
 The buffer is supposed to be the *Lean Goal* buffer."
   (-if-let (window (get-buffer-window buffer))
       (quit-window nil window)
-    (lean4-ensure-info-buffer buffer)
+    (lean4-info-ensure-buffer buffer)
     (display-buffer buffer)))
 
 (defun lean4-info-buffer-active (buffer)
@@ -88,8 +88,8 @@ The buffer is supposed to be the *Lean Goal* buffer."
 
 (defconst lean4-info-buffer-name "*Lean Goal*")
 
-(defvar lean4-goals nil)
-(defvar lean4-term-goal nil)
+(defvar lean4-info-goals nil)
+(defvar lean4-info-term-goal nil)
 
 (lsp-defun lean4-diagnostic-full-start-line ((&lean:Diagnostic :full-range (&Range :start (&Position :line))))
   line)
@@ -109,7 +109,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
 (defun lean4-info--insert-highlight-inaccessible-names (&rest text)
   (let ((begin (point)))
     (apply #'insert text)
-    (when lean4-highlight-inaccessible-names
+    (when lean4-info-highlight-inaccessibles
       (let ((end (point-marker)))
         (goto-char begin)
         (while (re-search-forward "\\(\\sw+\\)✝\\([¹²³⁴-⁹⁰]*\\)" end t)
@@ -120,7 +120,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
            'fixedcase 'literal))
         (goto-char end)))))
 
-(defun lean4--insert-goal-text (text delimiter)
+(defun lean4-info--insert-goal-text (text delimiter)
   (lean4-info--insert-highlight-inaccessible-names
    (lsp--fontlock-with-mode text 'lean4-info-mode)
    delimiter))
@@ -158,20 +158,20 @@ The buffer is supposed to be the *Lean Goal* buffer."
         (progn
           (erase-buffer)
           (magit-insert-section (magit-section 'root)
-            (when-let ((goals lean4-goals)) ;; capture for deferred rendering
+            (when-let ((goals lean4-info-goals)) ;; capture for deferred rendering
               (magit-insert-section (magit-section 'goals)
                 (magit-insert-heading "Goals:")
                 (magit-insert-section-body
                 (if (> (length goals) 0)
                     (seq-doseq (g goals)
                       (magit-insert-section (magit-section)
-                        (lean4--insert-goal-text g "\n\n")))
+                        (lean4-info--insert-goal-text g "\n\n")))
                   (insert "goals accomplished\n\n")))))
-            (when-let ((term-goal lean4-term-goal)) ;; capture for deferred rendering
+            (when-let ((term-goal lean4-info-term-goal)) ;; capture for deferred rendering
               (magit-insert-section (magit-section 'term-goal)
                 (magit-insert-heading "Expected type:")
                 (magit-insert-section-body
-                  (lean4--insert-goal-text term-goal "\n"))))
+                  (lean4-info--insert-goal-text term-goal "\n"))))
             (lean4-info--mk-message-section 'errors-here "Messages here:" errors-here buffer)
             (lean4-info--mk-message-section 'errors-below "Messages below:" errors-below buffer)
             (lean4-info--mk-message-section 'errors-above "Messages above:" errors-above buffer)))))))
@@ -298,7 +298,7 @@ sections."
      "$/lean/plainGoal"
      (lsp--text-document-position-params)
      (-lambda ((ignored &as &lean:PlainGoal? :goals))
-       (setq lean4-goals goals)
+       (setq lean4-info-goals goals)
        (lean4-info-buffer-redisplay-debounced))
      :error-handler #'ignore
      :mode 'tick
@@ -307,7 +307,7 @@ sections."
      "$/lean/plainTermGoal"
      (lsp--text-document-position-params)
      (-lambda ((ignored &as &lean:PlainTermGoal? :goal))
-       (setq lean4-term-goal goal)
+       (setq lean4-info-term-goal goal)
        (lean4-info-buffer-redisplay-debounced))
      :error-handler #'ignore
      :mode 'tick
@@ -316,10 +316,10 @@ sections."
     ;(lean4-info-buffer-redisplay)
     ))
 
-(defun lean4-toggle-info ()
+(defun lean4-info-toggle ()
   "Show infos at the current point."
   (interactive)
-  (lean4-toggle-info-buffer lean4-info-buffer-name)
+  (lean4-info-toggle-buffer lean4-info-buffer-name)
   (lean4-info-buffer-refresh))
 
 (provide 'lean4-info)

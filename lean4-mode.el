@@ -106,7 +106,7 @@
   "C-c C-l"     #'lean4-execute
   "C-c C-k"     #'quail-show-key
   "TAB"         #'lean4-eri-tab
-  "C-c C-i"     #'lean4-toggle-info
+  "C-c C-i"     #'lean4-info-toggle
   "C-c C-p C-l" #'lean4-lake-build
   "C-c C-d"     #'lean4-lsp-document-reopen)
 
@@ -114,7 +114,7 @@
   "Menu for the Lean major mode."
   `("Lean 4"
     ["Execute lean"         lean4-execute           t]
-    ["Toggle info display"  lean4-toggle-info       t]
+    ["Toggle info display"  lean4-info-toggle       t]
     ["Restart lean process" lsp-workspace-restart   t]
     ["Customize lean4-mode" (customize-group 'lean) t]))
 
