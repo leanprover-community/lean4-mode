@@ -110,14 +110,6 @@
     ["Toggle info display"  lean4-info-mode         t]
     ["Customize lean4-mode" (customize-group 'lean) t]))
 
-(defun lean4-mode-setup ()
-  "Default lean4-mode setup."
-  ;; Right click menu sources
-  ;;(setq lean4-right-click-item-functions '(lean4-info-right-click-find-definition
-  ;;                                        lean4-hole-right-click))
-  ;; Flycheck
-  (setq-local flycheck-disabled-checkers '()))
-
 ;;;###autoload
 (define-derived-mode lean4-mode prog-mode "Lean 4"
   "Major mode for Lean language.
@@ -138,8 +130,7 @@
   (set (make-local-variable 'lisp-indent-function)
        'common-lisp-indent-function)
   (if (fboundp 'electric-indent-local-mode)
-      (electric-indent-local-mode -1))
-  (lean4-mode-setup))
+      (electric-indent-local-mode -1)))
 
 ;; Automatically use lean4-mode for .lean files.
 ;;;###autoload
