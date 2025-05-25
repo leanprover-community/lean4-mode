@@ -22,6 +22,8 @@
 
 ;;; Code:
 
+(require 'compat) ;; for `defvar-keymap'
+
 (require 'lsp-mode)
 
 (defun lean4-lsp-document-reopen ()
@@ -58,6 +60,28 @@ of the parent project."
               file-name (file-name-directory (directory-file-name dir)))))
     (when root
       (lsp-workspace-folders-add root))))
+
+(defun lean4-lsp-semantic-tokens-enable ()
+  "Buffer-locally set `lsp-semantic-tokens-enable' to t."
+  (interactive)
+  (setq-local lsp-semantic-tokens-enable t))
+
+(defcustom lean4-lsp-mode-hook
+  (list #'lsp
+		#'lean4-lsp-semantic-tokens-enable
+		#'lean4-lsp-workspace-add)
+  "Hook run by `lean4-lsp-mode'."
+  :options '( lsp
+			  lean4-lsp-semantic-tokens-enable
+			  lean4-lsp-workspace-add)
+  :type 'hook
+  :group 'lean4-lsp)
+
+(defvar-keymap lean4-lsp-mode-map
+  "C-c C-d" #'lean4-lsp-document-reopen)
+
+(define-minor-mode lean4-lsp-mode
+  "Minor mode for `lean4-mode' for using `lsp-mode' as LSP client.")
 
 ;;;; Registration
 

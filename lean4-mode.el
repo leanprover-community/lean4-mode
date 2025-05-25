@@ -44,7 +44,6 @@
 (require 'cl-lib)
 (require 'dash)
 (require 'pcase)
-(require 'lsp-mode)
 (require 'lean4-eri)
 (require 'lean4-syntax)
 (require 'lean4-info)
@@ -68,9 +67,9 @@
   :link '(emacs-library-link :tag "Library Source" "lean4-mode.el")
   :prefix "lean4-")
 
-(defcustom lean4-mode-hook (list #'lsp)
+(defcustom lean4-mode-hook (list #'lean4-lsp-mode)
   "Hook run after entering `lean4-mode'."
-  :options '(flycheck-mode lsp)
+  :options '(flycheck-mode lean4-lsp-mode)
   :type 'hook
   :group 'lean4)
 
@@ -102,15 +101,13 @@
   "C-c C-k"     #'quail-show-key
   "TAB"         #'lean4-eri-tab
   "C-c C-i"     #'lean4-info-mode
-  "C-c C-p C-l" #'lean4-lake-build
-  "C-c C-d"     #'lean4-lsp-document-reopen)
+  "C-c C-p C-l" #'lean4-lake-build)
 
 (easy-menu-define lean4-mode-menu lean4-mode-map
   "Menu for the Lean major mode."
   `("Lean 4"
     ["Execute lean"         lean4-execute           t]
     ["Toggle info display"  lean4-info-mode         t]
-    ["Restart lean process" lsp-workspace-restart   t]
     ["Customize lean4-mode" (customize-group 'lean) t]))
 
 (defun lean4-mode-setup ()
@@ -119,10 +116,7 @@
   ;;(setq lean4-right-click-item-functions '(lean4-info-right-click-find-definition
   ;;                                        lean4-hole-right-click))
   ;; Flycheck
-  (setq-local flycheck-disabled-checkers '())
-  ;; Lean massively benefits from semantic tokens, so change default to enabled
-  (setq-local lsp-semantic-tokens-enable t)
-  (lean4-lsp-workspace-add))
+  (setq-local flycheck-disabled-checkers '()))
 
 ;;;###autoload
 (define-derived-mode lean4-mode prog-mode "Lean 4"
