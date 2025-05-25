@@ -67,9 +67,9 @@
   :link '(emacs-library-link :tag "Library Source" "lean4-mode.el")
   :prefix "lean4-")
 
-(defcustom lean4-mode-hook (list #'lean4-lsp-mode)
+(defcustom lean4-mode-hook (list #'lean4-input-set #'lean4-lsp-mode)
   "Hook run after entering `lean4-mode'."
-  :options '(flycheck-mode lean4-lsp-mode)
+  :options '(flycheck-mode lean4-input-set lean4-lsp-mode)
   :type 'hook
   :group 'lean4)
 
