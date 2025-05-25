@@ -44,11 +44,7 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   "Major mode used internally to syntax highlight Lean4."
   :syntax-table lean4-syntax-table
   :group 'lean4
-  (set (make-local-variable 'font-lock-defaults) lean4-info-font-lock-defaults)
-  (set (make-local-variable 'indent-tabs-mode) nil)
-  (set 'compilation-mode-font-lock-keywords '())
-  (set (make-local-variable 'lisp-indent-function)
-       'common-lisp-indent-function))
+  (setq-local font-lock-defaults lean4-info-font-lock-defaults))
 
 (defun lean4-info-ensure-buffer (buffer)
   "Create BUFFER if it does not exist.
