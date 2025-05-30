@@ -1,4 +1,4 @@
-;;; lean4-input.el --- Lean4-Mode Input Method  -*- lexical-binding: t; -*-
+;;; lean4-input.el --- Lean4 input  -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2005-2012 Ulf Norell, Nils Anders Danielsson,
 ;; Catarina Coquand, Makoto Takeyama, Andreas Abel, Karl Mehltretter,

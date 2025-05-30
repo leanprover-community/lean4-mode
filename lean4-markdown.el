@@ -1,4 +1,4 @@
-;;; lean4-markdown.el --- Lean4 Markdown Integration  -*- lexical-binding: t; -*-
+;;; lean4-markdown.el --- Lean4 markdown  -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2025 Mekeor Melire
 

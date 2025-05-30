@@ -1,4 +1,4 @@
-;;; lean4-info.el --- Lean4-Mode Info View  -*- lexical-binding: t; -*-
+;;; lean4-info.el --- Lean4 info  -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2016 Gabriel Ebner. All rights reserved.
 

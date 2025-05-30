@@ -1,4 +1,4 @@
-;;; lean4-syntax.el --- Lean4-Mode Syntax Definitions  -*- lexical-binding: t; -*-
+;;; lean4-syntax.el --- Lean4 syntax  -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2013, 2014 Microsoft Corporation. All rights reserved.
 

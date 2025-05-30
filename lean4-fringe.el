@@ -1,4 +1,4 @@
-;;; lean4-fringe.el --- Lean4-Mode Processing Progress in Fringe  -*- lexical-binding: t; -*-
+;;; lean4-fringe.el --- Lean4 fringe progress  -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2016 Microsoft Corporation. All rights reserved.
 

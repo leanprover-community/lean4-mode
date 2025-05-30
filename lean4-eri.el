@@ -1,4 +1,4 @@
-;;; lean4-eri.el --- Lean4-Mode Indentation  -*- lexical-binding: t; -*-
+;;; lean4-eri.el --- Lean4 indentation  -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2005-2010 Ulf Norell, Nils Anders Danielsson,
 ;; Catarina Coquand, Makoto Takeyama, Andreas Abel, Karl Mehltretter,
