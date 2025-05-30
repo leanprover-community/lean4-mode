@@ -3,14 +3,14 @@ lean4-mode.texi.
 
 INFO-DIR-SECTION Emacs misc features
 START-INFO-DIR-ENTRY
-* Lean4-Mode: (lean4-mode). Emacs major mode for Lean language.
+* Lean4-Mode: (lean4-mode). Emacs major mode for Lean4 language.
 END-INFO-DIR-ENTRY
 
 
 File: lean4-mode.info,  Node: Top,  Next: Installation,  Up: (dir)
 
-Lean4-Mode - Emacs major mode for Lean language
-***********************************************
+Emacs Lean4-Mode
+****************
 
 This package extends GNU Emacs (https://www.gnu.org/software/emacs/) by
 providing a major mode for editing code written in version 4 of the
@@ -216,21 +216,21 @@ File: lean4-mode.info,  Node: Usage,  Next: Configuration,  Prev: Installation, 
 2 Usage
 *******
 
-If things are working correctly, you should see the word "Lean 4" in
+If things are working correctly, you should see the word "Lean4" in
 Emacs mode-line when you open a file with ‘.lean’ extension.  Emacs will
 ask you to identify the _project_ this file belongs to.  If you then
 type ‘#check id’, the word ‘#check’ will be underlined, and hovering
 over it will show you the type of ‘id’.
 
    To view the proof state, run ‘lean4-info-mode’ (‘C-c C-i’).  This
-will display the ‘*Lean Goals*’ buffer (like the Lean Info-View pane in
+will display the ‘*Lean4 Goals*’ buffer (like the Lean Info-View pane in
 VS-Code) in a separate window.
 
 Key                      Description                                              Command
 ----------------------------------------------------------------------------------------------------------------
 ‘C-c C-k’                Echo the keystroke needed to input the symbol at point   ‘quail-show-key’
 ‘C-c C-d’                Recompile and reload imports                             ‘lean4-lsp-document-reopen’
-‘C-c C-x’ or ‘C-c C-l’   Execute Lean in stand-alone mode                         ‘lean4-std-exe’
+‘C-c C-x’ or ‘C-c C-l’   Execute Lean4 in stand-alone mode                        ‘lean4-std-exe’
 ‘C-c C-p C-l’            Builds package with lake                                 ‘lean4-lake-build’
 ‘C-c C-i’                Toggle Info-View which shows goals and errors at point   ‘lean4-info-mode’
 
@@ -316,21 +316,21 @@ major mode.
 
 
 Tag Table:
-Node: Top223
-Node: Installation1492
-Node: Brief and Generic Instructions1735
-Node: Detailed and Concrete Instructions2684
-Node: Instructions for Source-Based Use-Package4341
-Node: Native vc (Emacs 30 or later)5062
-Node: Doom-Emacs5970
-Node: Straight6396
-Node: Usage6896
-Node: lsp-mode8319
-Node: Flycheck8604
-Node: Configuration9214
-Node: lsp-mode (1)9404
-Node: Flycheck (1)9673
-Node: Common Pitfalls10158
+Node: Top224
+Node: Installation1431
+Node: Brief and Generic Instructions1674
+Node: Detailed and Concrete Instructions2623
+Node: Instructions for Source-Based Use-Package4280
+Node: Native vc (Emacs 30 or later)5001
+Node: Doom-Emacs5909
+Node: Straight6335
+Node: Usage6835
+Node: lsp-mode8258
+Node: Flycheck8543
+Node: Configuration9153
+Node: lsp-mode (1)9343
+Node: Flycheck (1)9612
+Node: Common Pitfalls10097
 
 End Tag Table
 

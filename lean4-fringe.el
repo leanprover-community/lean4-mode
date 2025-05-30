@@ -18,7 +18,7 @@
 
 ;;; Commentary:
 
-;; Show Lean processing progress in the editor fringe
+;; Show Lean4 processing progress in the editor fringe
 
 ;;; Code:
 
@@ -42,7 +42,7 @@
 
 (defface lean4-fringe-face
   nil
-  "Face to highlight Lean file progress."
+  "Face to highlight Lean4 file progress."
   :group 'lean4)
 
 (if (fboundp 'define-fringe-bitmap)
@@ -55,7 +55,7 @@
     (((class color) (background dark))
      :background "navajo white")
     (t :inverse-video t))
-  "Face to highlight the fringe of Lean file processing progress."
+  "Face to highlight the fringe of Lean4 file processing progress."
   :group 'lean4)
 
 (defface lean4-fringe-fringe-fatal-error-face
@@ -64,7 +64,7 @@
     (((class color) (background dark))
      :background "red")
     (t :inverse-video t))
-  "Face to highlight the fringe of Lean file fatal errors."
+  "Face to highlight the fringe of Lean4 file fatal errors."
   :group 'lean4)
 
 (lsp-defun lean4-fringe-fringe-face ((&lean:LeanFileProgressProcessingInfo :kind))

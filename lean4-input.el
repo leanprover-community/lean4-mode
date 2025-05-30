@@ -22,7 +22,7 @@
 
 ;; A highly customisable input method which can inherit from other
 ;; Quail input methods.  By default the input method is geared towards
-;; the input of mathematical and other symbols in Lean programs.
+;; the input of mathematical and other symbols in Lean4 programs.
 
 ;; Use M-x customize-group lean4-input to customise this input method.
 ;; Note that the functions defined under "Functions used to tweak
@@ -145,7 +145,7 @@ This suffix is dropped."
 ;; until lean4-input-setup is called at the end of this file.
 
 (defgroup lean4-input nil
-  "The Lean input method.
+  "The Lean4 input method.
 After tweaking these settings you may want to inspect the resulting
 translations using `lean4-input-show-translations'."
   :group 'lean4
@@ -162,7 +162,7 @@ translations using `lean4-input-show-translations'."
                  (lean4-input-prefix "^"))
                 (lean4-input-prefix "_"))))))
   "List of parent Quail input methods.
-Translations from these methods will be inherited by the Lean
+Translations from these methods will be inherited by the Lean4
 input method (with the exception of translations corresponding to
 ASCII characters).
 
@@ -189,7 +189,7 @@ order for the change to take effect."
   :type 'directory)
 
 (defcustom lean4-input-user-translations nil
-  "A list of translations specific to the Lean input method.
+  "A list of translations specific to the Lean4 input method.
 Each element is a pair (KEY-SEQUENCE-STRING . LIST-OF-TRANSLATION-STRINGS).
 All the translation strings are possible translations
 of the given key sequence; if there is more than one you can choose
@@ -230,7 +230,7 @@ that contains all translations from QP Except for those corresponding to ASCII."
          (cons 'decode-map (lean4-input-get-translations qp)))))))
 
 (defun lean4-input-add-translations (trans)
-  "Add the given translations TRANS to the Lean input method.
+  "Add the given translations TRANS to the Lean4 input method.
 TRANS is a list of pairs (KEY-SEQUENCE . TRANSLATION).  The
 translations are appended to the current translations."
   (with-temp-buffer
@@ -244,7 +244,7 @@ translations are appended to the current translations."
 (defun lean4-input-inherit-package (qp &optional fun)
   "Inherit translations from the Quail package QP.
 Add all translations from the Quail package QP (except for those
-corresponding to ASCII) to the list of Lean Quail rules.
+corresponding to ASCII) to the list of Lean4 Quail rules.
 
 The optional function FUN can be used to modify the translations.
 It is given a pair (KEY-SEQUENCE . TRANSLATION) and should return
@@ -261,14 +261,15 @@ a list of such pairs."
 (declare-function json-read "json")
 
 (defun lean4-input-setup ()
-  "Set up the Lean input method.
-Use customisable variables and parent input methods to setup Lean input method."
+  "Set up the Lean4 input method.
+Use customisable variables and parent input methods to setup Lean4 input
+method."
 
   ;; Create (or reset) the input method.
   (with-temp-buffer
     (quail-define-package "Lean" "UTF-8" "∏" t ; guidance
-     "Lean input method.
-The purpose of this input method is to edit Lean programs, but
+     "Lean4 input method.
+The purpose of this input method is to edit Lean4 programs, but
 since it is highly customisable it can be made useful for other
 tasks as well."
      nil nil nil nil nil nil t ; maximum-shortest
@@ -296,7 +297,7 @@ tasks as well."
                                 (eval (cdr def)))))
 
 (defun lean4-input-incorporate-changed-setting (sym val)
-  "Update the Lean input method.
+  "Update the Lean4 input method.
 Set SYM default value to VAL, then call `lean4-input-setup'.
 Suitable for use in the :set field of `defcustom'."
   (set-default sym val)

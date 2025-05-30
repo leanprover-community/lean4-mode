@@ -35,12 +35,12 @@
 (defcustom lean4-info-highlight-inaccessibles t
   "Use font to highlight inaccessible names.
 Set this variable to t to highlight inaccessible names in the info display
-using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
+using `font-lock-comment-face' instead of the `✝` suffix used by Lean4."
   :group 'lean4-info
   :type 'boolean)
 
 ;;;###autoload
-(define-derived-mode lean4-info-mockup-mode prog-mode "Lean-Info"
+(define-derived-mode lean4-info-mockup-mode prog-mode "Lean4-Info"
   "Major mode used internally to syntax highlight Lean4."
   :syntax-table lean4-syntax-table
   :group 'lean4
@@ -48,7 +48,7 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
 
 (defun lean4-info-ensure-buffer (buffer)
   "Create BUFFER if it does not exist.
-Also choose settings used for the *Lean Goal* buffer."
+Also choose settings used for the *Lean4 Goal* buffer."
   (unless (get-buffer buffer)
     (with-current-buffer (get-buffer-create buffer)
       (buffer-disable-undo)
@@ -72,7 +72,7 @@ Also choose settings used for the *Lean Goal* buffer."
     (:range :fullRange :message)
     (:code :relatedInformation :severity :source :tags))))
 
-(defconst lean4-info-buffer-name "*Lean Goal*")
+(defconst lean4-info-buffer-name "*Lean4 Goal*")
 
 (defvar lean4-info-goals nil)
 (defvar lean4-info-term-goal nil)
@@ -219,7 +219,7 @@ Also choose settings used for the *Lean Goal* buffer."
 
 
 (defcustom lean4-info-buffer-debounce-delay-sec 0.1
-  "Duration of time we wait before writing to *Lean Goal*."
+  "Duration of time we wait before writing to *Lean4 Goal*."
   :group 'lean4-info
   :type 'number)
 
@@ -278,7 +278,7 @@ sections."
 
 
 (defun lean4-info-buffer-refresh ()
-  "Refresh the *Lean Goal* buffer."
+  "Refresh the *Lean4 Goal* buffer."
   (when (lean4-info-buffer-active lean4-info-buffer-name)
     (lsp-request-async
      "$/lean/plainGoal"

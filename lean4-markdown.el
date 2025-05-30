@@ -25,7 +25,7 @@
 (require 'markdown-mode)
 
 (add-to-list 'markdown-code-lang-modes
-             '("lean" . lean4-mode))
+             '("lean4" . lean4-mode))
 
 (provide 'lean4-markdown)
 ;;; lean4-markdown.el ends here

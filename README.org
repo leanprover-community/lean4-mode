@@ -1,9 +1,9 @@
-#+title: Lean4-Mode - Emacs major mode for Lean language
+#+title: Emacs Lean4-Mode
 #+language: en
 #+export_file_name: lean4-mode.texi
 #+texinfo_dir_category: Emacs misc features
 #+texinfo_dir_title: Lean4-Mode: (lean4-mode).
-#+texinfo_dir_desc: Emacs major mode for Lean language
+#+texinfo_dir_desc: Emacs major mode for Lean4 language
 
 This package extends [[https://www.gnu.org/software/emacs/][GNU Emacs]] by providing a major mode for editing
 code written in version 4 of the programming language and theorem
@@ -140,21 +140,21 @@ place the following code in your Emacs initialization file:
 
 * Usage
 
-If things are working correctly, you should see the word "Lean 4" in
+If things are working correctly, you should see the word "Lean4" in
 Emacs mode-line when you open a file with =.lean= extension.  Emacs
 will ask you to identify the /project/ this file belongs to.  If you
 then type =#check id=, the word =#check= will be underlined, and
 hovering over it will show you the type of ~id~.
 
 To view the proof state, run ~lean4-info-mode~ (=C-c C-i=).  This
-will display the =*Lean Goals*= buffer (like the Lean Info-View pane
+will display the =*Lean4 Goals*= buffer (like the Lean Info-View pane
 in VS-Code) in a separate window.
 
 | Key                    | Description                                            | Command                     |
 |------------------------+--------------------------------------------------------+-----------------------------|
 | =C-c C-k=              | Echo the keystroke needed to input the symbol at point | ~quail-show-key~            |
 | =C-c C-d=              | Recompile and reload imports                           | ~lean4-lsp-document-reopen~ |
-| =C-c C-x= or =C-c C-l= | Execute Lean in stand-alone mode                       | ~lean4-std-exe~             |
+| =C-c C-x= or =C-c C-l= | Execute Lean4 in stand-alone mode                      | ~lean4-std-exe~             |
 | =C-c C-p C-l=          | Builds package with lake                               | ~lean4-lake-build~          |
 | =C-c C-i=              | Toggle Info-View which shows goals and errors at point | ~lean4-info-mode~           |
 

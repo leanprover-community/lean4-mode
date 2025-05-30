@@ -86,11 +86,12 @@ of the parent project."
 ;;;; Registration
 
 (add-to-list 'lsp-language-id-configuration
-             '(lean4-mode . "lean"))
+             '(lean4-mode . "lean4"))
 
 (lsp-register-client
  (make-lsp-client :new-connection (lsp-stdio-connection '("lake" "serve"))
                   :major-modes '(lean4-mode)
+                  :language-id "lean4"
                   :server-id 'lean4-lsp
                   :notification-handlers (ht ("$/lean/fileProgress" #'lean4-fringe-update))
                   :semantic-tokens-faces-overrides '(:types (("leanSorryLike" . font-lock-warning-face)))))

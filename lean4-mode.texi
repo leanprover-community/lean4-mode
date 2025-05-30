@@ -1,26 +1,26 @@
 \input texinfo    @c -*- texinfo -*-
 @c %**start of header
 @setfilename lean4-mode.info
-@settitle Lean4-Mode - Emacs major mode for Lean language
+@settitle Emacs Lean4-Mode
 @documentencoding UTF-8
 @documentlanguage en
 @c %**end of header
 
 @dircategory Emacs misc features
 @direntry
-* Lean4-Mode: (lean4-mode). Emacs major mode for Lean language.
+* Lean4-Mode: (lean4-mode). Emacs major mode for Lean4 language.
 @end direntry
 
 @finalout
 @titlepage
-@title Lean4-Mode - Emacs major mode for Lean language
+@title Emacs Lean4-Mode
 @end titlepage
 
 @contents
 
 @ifnottex
 @node Top
-@top Lean4-Mode - Emacs major mode for Lean language
+@top Emacs Lean4-Mode
 
 This package extends @uref{https://www.gnu.org/software/emacs/, GNU Emacs} by providing a major mode for editing
 code written in version 4 of the programming language and theorem
@@ -220,14 +220,14 @@ place the following code in your Emacs initialization file:
 @node Usage
 @chapter Usage
 
-If things are working correctly, you should see the word "Lean 4" in
+If things are working correctly, you should see the word "Lean4" in
 Emacs mode-line when you open a file with @samp{.lean} extension.  Emacs
 will ask you to identify the @emph{project} this file belongs to.  If you
 then type @samp{#check id}, the word @samp{#check} will be underlined, and
 hovering over it will show you the type of @code{id}.
 
 To view the proof state, run @code{lean4-info-mode} (@samp{C-c C-i}).  This
-will display the @samp{*Lean Goals*} buffer (like the Lean Info-View pane
+will display the @samp{*Lean4 Goals*} buffer (like the Lean Info-View pane
 in VS-Code) in a separate window.
 
 @multitable {aaaaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaaaa}
@@ -241,7 +241,7 @@ in VS-Code) in a separate window.
 @tab Recompile and reload imports
 @tab @code{lean4-lsp-document-reopen}
 @item @samp{C-c C-x} or @samp{C-c C-l}
-@tab Execute Lean in stand-alone mode
+@tab Execute Lean4 in stand-alone mode
 @tab @code{lean4-std-exe}
 @item @samp{C-c C-p C-l}
 @tab Builds package with lake

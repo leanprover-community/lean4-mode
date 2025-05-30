@@ -31,10 +31,10 @@
 
 ;;; Commentary:
 
-;; Provides a major mode for the Lean programming language.
+;; Provides a major mode for the Lean4 programming language.
 
 ;; Provides highlighting, diagnostics, goal visualization,
-;; and many other useful features for Lean users.
+;; and many other useful features for Lean4 users.
 
 ;; See the README.md for more advanced features and the
 ;; associated keybindings.
@@ -79,7 +79,7 @@
   :group 'lean4)
 
 (defun lean4-execute ()
-  "Execute Lean in the current buffer."
+  "Execute Lean4 in the current buffer."
   (interactive)
   (let* ((default-directory
           (or lean4-location-root default-directory)))
@@ -104,15 +104,15 @@
   "C-c C-p C-l" #'lean4-lake-build)
 
 (easy-menu-define lean4-mode-menu lean4-mode-map
-  "Menu for the Lean major mode."
-  `("Lean 4"
-    ["Execute lean"         lean4-execute           t]
-    ["Toggle info display"  lean4-info-mode         t]
-    ["Customize lean4-mode" (customize-group 'lean) t]))
+  "Menu for the Lean4 major mode."
+  `("Lean4"
+    ["Execute Lean4" lean4-execute           t]
+    ["Toggle Info"   lean4-info-mode         t]
+    ["Customize"     (customize-group 'lean) t]))
 
 ;;;###autoload
-(define-derived-mode lean4-mode prog-mode "Lean 4"
-  "Major mode for Lean language.
+(define-derived-mode lean4-mode prog-mode "Lean4"
+  "Major mode for Lean4 language.
 
 \\{lean4-mode-map}"
   :syntax-table lean4-syntax-table
@@ -130,7 +130,6 @@
   (if (fboundp 'electric-indent-local-mode)
       (electric-indent-local-mode -1)))
 
-;; Automatically use lean4-mode for .lean files.
 ;;;###autoload
 (add-to-list 'auto-mode-alist
              '("\\.lean\\'" . lean4-mode))

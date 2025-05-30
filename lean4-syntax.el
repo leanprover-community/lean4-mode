@@ -39,7 +39,7 @@
     "exists" "if" "then" "else" "from" "init_quot" "return"
     "mutual" "def" "run_cmd" "declare_syntax_cat" "syntax" "macro_rules" "macro" "scoped" "elab"
     "initialize" "builtin_initialize" "register_builtin_option" "induction" "cases" "generalizing" "unif_hint" "deriving")
-  "Lean keywords ending with `word' (not symbol).")
+  "Lean4 keywords ending with `word' (not symbol).")
 (defconst lean4-keywords1-regexp
   (eval `(rx word-start (or ,@lean4-keywords1) word-end)))
 (defconst lean4-constants
@@ -50,17 +50,19 @@
     "⬝e" "⬝i" "⬝o" "⬝op" "⬝po" "⬝h" "⬝v" "⬝hp" "⬝vp" "⬝ph" "⬝pv" "⬝r" "◾" "◾o"
     "∘n" "∘f" "∘fi" "∘nf" "∘fn" "∘n1f" "∘1nf" "∘f1n" "∘fn1"
     "^c" "≃c" "≅c" "×c" "×f" "×n" "+c" "+f" "+n" "ℕ₋₂")
-  "Lean constants.")
+  "Lean4 constants.")
 (defconst lean4-constants-regexp (regexp-opt lean4-constants))
 (defconst lean4-numerals-regexp
   (eval `(rx word-start
              (one-or-more digit) (optional (and "." (zero-or-more digit)))
              word-end)))
 
-(defconst lean4-warnings '("sorry") "Lean warnings.")
+(defconst lean4-warnings '("sorry") "Lean4 warnings.")
 (defconst lean4-warnings-regexp
   (eval `(rx word-start (or ,@lean4-warnings) word-end)))
-(defconst lean4-debugging '("unreachable!" "panic!" "assert!" "dbg_trace") "Lean debugging.")
+(defconst lean4-debugging
+  '("unreachable!" "panic!" "assert!" "dbg_trace")
+  "Lean4 debugging.")
 (defconst lean4-debugging-regexp
   (eval `(rx word-start (or ,@lean4-debugging) word-end)))
 
@@ -130,7 +132,7 @@
                   ?' ?_ ?! ??)
       (modify-syntax-entry it "w" st))
 
-    ;; Lean operator chars
+    ;; Operator chars
     (--each (string-to-list "#$%&*+<=>@^|~:")
       (modify-syntax-entry it "." st))
 
@@ -197,7 +199,7 @@
       (2 nil t)
       (3 font-lock-comment-face t)))))
 
-;; Syntax Highlighting for Lean Info Mode
+;; Syntax Highlighting for Lean4 Info
 (defconst lean4-info-font-lock-defaults
   (let ((new-entries
          `(;; Please add more after this:
