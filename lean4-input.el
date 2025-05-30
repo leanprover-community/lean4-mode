@@ -222,7 +222,7 @@ that contains all translations from QP Except for those corresponding to ASCII."
   "Display all translations used by the Quail package QP (a string).
 \(Except for those corresponding to ASCII)."
   (interactive (list (read-input-method-name
-                      "Quail input method (default %s): " "Lean")))
+                      "Quail input method (default %s): " "Lean4")))
   (let ((buf (concat "*" qp " input method translations*")))
     (with-output-to-temp-buffer buf
       (with-current-buffer buf
@@ -238,7 +238,7 @@ translations are appended to the current translations."
               (when key
                 (quail-defrule (concat "\\" key)
                                tr
-                               "Lean" t)))
+                               "Lean4" t)))
             trans)))
 
 (defun lean4-input-inherit-package (qp &optional fun)
@@ -267,7 +267,7 @@ method."
 
   ;; Create (or reset) the input method.
   (with-temp-buffer
-    (quail-define-package "Lean" "UTF-8" "∏" t ; guidance
+    (quail-define-package "Lean4" "UTF-8" "∏" t ; guidance
      "Lean4 input method.
 The purpose of this input method is to edit Lean4 programs, but
 since it is highly customisable it can be made useful for other
@@ -313,8 +313,8 @@ Suitable for use in the :set field of `defcustom'."
 
 (defun lean4-input-set ()
   (interactive)
-  "Select and activate the `Lean' input method."
-  (set-input-method "Lean"))
+  "Select and activate the `Lean4' input method."
+  (set-input-method "Lean4"))
 
 (provide 'lean4-input)
 ;;; lean4-input.el ends here
