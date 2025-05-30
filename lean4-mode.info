@@ -223,7 +223,7 @@ type ‘#check id’, the word ‘#check’ will be underlined, and hovering
 over it will show you the type of ‘id’.
 
    To view the proof state, run ‘lean4-info-mode’ (‘C-c C-i’).  This
-will display the ‘*Lean4 Goals*’ buffer (like the Lean Info-View pane in
+will display the ‘*Lean4 Info*’ buffer (like the Lean Info-View pane in
 VS-Code) in a separate window.
 
 Key                      Description                                              Command

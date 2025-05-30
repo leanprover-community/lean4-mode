@@ -48,7 +48,7 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean4."
 
 (defun lean4-info-ensure-buffer (buffer)
   "Create BUFFER if it does not exist.
-Also choose settings used for the *Lean4 Goal* buffer."
+Also choose settings used for the *Lean4 Info* buffer."
   (unless (get-buffer buffer)
     (with-current-buffer (get-buffer-create buffer)
       (buffer-disable-undo)
@@ -72,7 +72,7 @@ Also choose settings used for the *Lean4 Goal* buffer."
     (:range :fullRange :message)
     (:code :relatedInformation :severity :source :tags))))
 
-(defconst lean4-info-buffer-name "*Lean4 Goal*")
+(defconst lean4-info-buffer-name "*Lean4 Info*")
 
 (defvar lean4-info-goals nil)
 (defvar lean4-info-term-goal nil)
@@ -219,7 +219,7 @@ Also choose settings used for the *Lean4 Goal* buffer."
 
 
 (defcustom lean4-info-buffer-debounce-delay-sec 0.1
-  "Duration of time we wait before writing to *Lean4 Goal*."
+  "Duration of time we wait before writing to *Lean4 Info*."
   :group 'lean4-info
   :type 'number)
 
@@ -278,7 +278,7 @@ sections."
 
 
 (defun lean4-info-buffer-refresh ()
-  "Refresh the *Lean4 Goal* buffer."
+  "Refresh the *Lean4 Info* buffer."
   (when (lean4-info-buffer-active lean4-info-buffer-name)
     (lsp-request-async
      "$/lean/plainGoal"

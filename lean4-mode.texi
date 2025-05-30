@@ -227,7 +227,7 @@ then type @samp{#check id}, the word @samp{#check} will be underlined, and
 hovering over it will show you the type of @code{id}.
 
 To view the proof state, run @code{lean4-info-mode} (@samp{C-c C-i}).  This
-will display the @samp{*Lean4 Goals*} buffer (like the Lean Info-View pane
+will display the @samp{*Lean4 Info*} buffer (like the Lean Info-View pane
 in VS-Code) in a separate window.
 
 @multitable {aaaaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa} {aaaaaaaaaaaaaaaaaaaaaaaaaaa}
