@@ -31,8 +31,9 @@
    (file-exists-p (expand-file-name "lakefile.toml" dir))))
 
 (defun lean4-lake-find-dir ()
-  "Find a parent directory of the current file with a \"lakefile.lean\"
-  or \"lakefile.toml\" file."
+  "Find a parent directory of the current file with a Lake file.
+
+  It looks for files named \"lakefile.lean\" or \"lakefile.toml\" file."
   (and (buffer-file-name)
        (locate-dominating-file (buffer-file-name) #'lean4-root-dir-p)))
 
