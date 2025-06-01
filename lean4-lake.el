@@ -25,6 +25,7 @@
 (require 'lean4-settings)
 
 (defun lean4-root-dir-p (dir)
+  "Check if directory DIR contains \"lakefile.lean\" or \"lakefile.toml\"."
   (or
    (file-exists-p (expand-file-name "lakefile.lean" dir))
    (file-exists-p (expand-file-name "lakefile.toml" dir))))
