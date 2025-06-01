@@ -24,21 +24,23 @@
 (require 'lean4-util)
 (require 'lean4-settings)
 
-(defun lean4-lake-find-dir-in (dir)
-  "Find a parent directory of DIR with file \"lakefile.lean\"."
-  (when dir
-    (or (when (file-exists-p (expand-file-name "lakefile.lean" dir)) dir)
-	(lean4-lake-find-dir-in (file-name-directory (directory-file-name dir))))))
+(defun lean4-root-dir-p (dir)
+  "Check if directory DIR contains \"lakefile.lean\" or \"lakefile.toml\"."
+  (or
+   (file-exists-p (expand-file-name "lakefile.lean" dir))
+   (file-exists-p (expand-file-name "lakefile.toml" dir))))
 
 (defun lean4-lake-find-dir ()
-  "Find a parent directory of the current file with file \"lakefile.lean\"."
+  "Find a parent directory of the current file with a Lake file.
+
+  It looks for files named \"lakefile.lean\" or \"lakefile.toml\" file."
   (and (buffer-file-name)
-       (lean4-lake-find-dir-in (directory-file-name (buffer-file-name)))))
+       (locate-dominating-file (buffer-file-name) #'lean4-root-dir-p)))
 
 (defun lean4-lake-find-dir-safe ()
   "Call `lean4-lake-find-dir', error on failure."
   (or (lean4-lake-find-dir)
-      (error "Cannot find lakefile.lean for %s" (buffer-file-name))))
+      (error "Cannot find lakefile in any directory above %s" (buffer-file-name))))
 
 (defun lean4-lake-build ()
   "Call lake build."
