@@ -25,9 +25,13 @@
 (require 'lsp-mode)
 (require 'lsp-protocol)
 
+(defgroup lean4-fringe nil
+  "Lean4 lsp-mode processing progress in fringes."
+  :group 'lean4)
+
 (defcustom lean4-fringe-show-file-progress t
   "Highlight file progress in the current buffer."
-  :group 'lean4
+  :group 'lean4-fringe
   :type 'boolean)
 
 (eval-and-compile
@@ -43,7 +47,7 @@
 (defface lean4-fringe-face
   nil
   "Face to highlight Lean4 file progress."
-  :group 'lean4)
+  :group 'lean4-fringe)
 
 (if (fboundp 'define-fringe-bitmap)
   (define-fringe-bitmap 'lean4-fringe-fringe-bitmap
@@ -56,7 +60,7 @@
      :background "navajo white")
     (t :inverse-video t))
   "Face to highlight the fringe of Lean4 file processing progress."
-  :group 'lean4)
+  :group 'lean4-fringe)
 
 (defface lean4-fringe-fringe-fatal-error-face
   '((((class color) (background light))
@@ -65,7 +69,7 @@
      :background "red")
     (t :inverse-video t))
   "Face to highlight the fringe of Lean4 file fatal errors."
-  :group 'lean4)
+  :group 'lean4-fringe)
 
 (lsp-defun lean4-fringe-fringe-face ((&lean:LeanFileProgressProcessingInfo :kind))
   (cond

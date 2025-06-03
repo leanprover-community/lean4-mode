@@ -26,6 +26,10 @@
 
 (require 'lsp-mode)
 
+(defgroup lean4-lsp nil
+  "`lsp-mode' for Lean4."
+  :group 'lean4)
+
 (defun lean4-lsp-document-reopen ()
   "Refresh the file dependencies.
 

@@ -43,7 +43,7 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean4."
 (define-derived-mode lean4-info-mockup-mode prog-mode "Lean4-Info"
   "Major mode used internally to syntax highlight Lean4."
   :syntax-table lean4-syntax-table
-  :group 'lean4
+  :group 'lean4-info
   (setq-local font-lock-defaults lean4-info-font-lock-defaults))
 
 (defun lean4-info-ensure-buffer (buffer)
