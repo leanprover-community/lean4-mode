@@ -244,7 +244,7 @@ the request."
   :group 'lean4-info
   :type 'number)
 
-;;  Debounce implementation modifed from lsp-lens
+;; This is based on lsp-lens.el from lsp-mode:
 ;; https://github.com/emacs-lsp/lsp-mode/blob/2f0ea2e396ec9a570f2a2aeb097c304ddc61ebee/lsp-lens.el#L140
 (defun lean4-info-buffer-redisplay-debounced ()
   "Debounced version of `lean4-info-buffer-redisplay'.
