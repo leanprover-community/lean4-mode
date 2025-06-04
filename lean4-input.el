@@ -39,11 +39,12 @@
 
 ;;; Code:
 
-(require 'quail)
 (require 'cl-lib)
-(require 'subr-x)
-(require 'dash)
 (require 'map)
+(require 'quail)
+(require 'subr-x)
+
+(require 'dash)
 
 ;; Quail is quite stateful, so be careful when editing this code.  Note
 ;; that with-temp-buffer is used below whenever buffer-local state is

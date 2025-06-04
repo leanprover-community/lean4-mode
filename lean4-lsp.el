@@ -23,7 +23,6 @@
 ;;; Code:
 
 (require 'compat) ;; for `defvar-keymap'
-
 (require 'lsp-mode)
 
 (defgroup lean4-lsp nil

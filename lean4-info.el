@@ -23,10 +23,11 @@
 ;;; Code:
 
 (require 'dash)
-(require 'lean4-syntax)
 (require 'lsp-mode)
 (require 'lsp-protocol)
 (require 'magit-section)
+
+(require 'lean4-syntax)
 
 (defgroup lean4-info nil
   "Lean4-Mode Info."

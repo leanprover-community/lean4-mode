@@ -22,8 +22,9 @@
 
 ;;; Code:
 
-(require 'dash)
 (require 'rx)
+
+(require 'dash)
 
 (defconst lean4-keywords1
   '("import" "prelude" "protected" "private" "noncomputable"

@@ -42,15 +42,17 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'dash)
 (require 'pcase)
+
+(require 'dash)
+
 (require 'lean4-eri)
-(require 'lean4-syntax)
-(require 'lean4-info)
 (require 'lean4-fringe)
+(require 'lean4-info)
 (require 'lean4-input)
-(require 'lean4-markdown)
 (require 'lean4-lsp)
+(require 'lean4-markdown)
+(require 'lean4-syntax)
 
 ;; Declare symbols defined in external dependencies.  This silences
 ;; byte-compiler warnings:
