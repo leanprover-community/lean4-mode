@@ -126,7 +126,6 @@
   (setq-local font-lock-defaults lean4-font-lock-defaults)
   (setq-local indent-tabs-mode nil)
   (setq-local lisp-indent-function 'common-lisp-indent-function)
-  (set 'compilation-mode-font-lock-keywords nil)
   (lean4-input-set)
   (if (fboundp 'electric-indent-local-mode)
       (electric-indent-local-mode -1)))
