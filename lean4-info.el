@@ -218,16 +218,13 @@ Also choose settings used for the *Lean4 Info* buffer."
 ;;                   >longer than `debounce-upper-bound-sec'<
 ;;            -------------------------r4.render(FORCED)
 
-
 (defcustom lean4-info-buffer-debounce-delay-sec 0.1
   "Duration of time we wait before writing to *Lean4 Info*."
   :group 'lean4-info
   :type 'number)
 
-
 (defvar lean4-info-buffer-debounce-timer nil
   "Timer that is used to debounce Lean4 info view refresh.")
-
 
 (defvar lean4-info-buffer-debounce-begin-time nil
   "Return the time we have begun debouncing.
@@ -253,20 +250,20 @@ the request."
 This version ensures that info buffer is not repeatedly written to.
 This is to prevent lag, because magit is quite slow at building
 sections."
-  ;;  if we have not begun debouncing, setup debouncing begin time.
+  ;; If we have not begun debouncing, setup debouncing begin time.
   (if (not lean4-info-buffer-debounce-begin-time)
       (setq lean4-info-buffer-debounce-begin-time (current-time)))
-  ;; if time since we began debouncing is too long...
+  ;; If time since we began debouncing is too long...
   (if (>= (time-to-seconds
 	   (time-subtract (current-time)
 			  lean4-info-buffer-debounce-begin-time))
 	  lean4-info-buffer-debounce-upper-bound-sec)
-      ;;  then redisplay immediately.
+      ;; then redisplay immediately.
       (progn
-	;;  We have stopped debouncing.
+	;; We have stopped debouncing.
 	(setq lean4-info-buffer-debounce-begin-time nil)
 	(lean4-info-buffer-redisplay))
-    ;; else cancel current timer, create new debounced timer.
+    ;; Else, cancel current timer and create new debounced timer.
     (-some-> lean4-info-buffer-debounce-timer cancel-timer)
     (setq lean4-info-buffer-debounce-timer ; set new timer
 	  (run-with-timer
@@ -298,10 +295,7 @@ sections."
        (lean4-info-buffer-redisplay-debounced))
      :error-handler #'ignore
      :mode 'tick
-     :cancel-token :plain-term-goal)
-    ;; may lead to flickering
-    ;(lean4-info-buffer-redisplay)
-    ))
+     :cancel-token :plain-term-goal)))
 
 (defcustom lean4-info-hookings
   (list
