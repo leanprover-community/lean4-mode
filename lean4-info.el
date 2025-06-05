@@ -2,7 +2,7 @@
 
 ;; Copyright (c) 2016 Gabriel Ebner
 
-;; This file is not part of GNU Emacs.
+;; This file is NOT part of GNU Emacs.
 
 ;; Licensed under the Apache License, Version 2.0 (the "License"); you
 ;; may not use this file except in compliance with the License.  You
