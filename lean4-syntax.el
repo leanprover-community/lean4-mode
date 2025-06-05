@@ -1,6 +1,6 @@
 ;;; lean4-syntax.el --- Lean4 syntax  -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2013, 2014 Microsoft Corporation. All rights reserved.
+;; Copyright (c) 2013, 2014 Microsoft Corporation
 
 ;; This file is not part of GNU Emacs.
 

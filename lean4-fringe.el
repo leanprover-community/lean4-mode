@@ -1,6 +1,6 @@
 ;;; lean4-fringe.el --- Lean4 fringe progress  -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2016 Microsoft Corporation. All rights reserved.
+;; Copyright (c) 2016 Microsoft Corporation
 
 ;; This file is not part of GNU Emacs.
 

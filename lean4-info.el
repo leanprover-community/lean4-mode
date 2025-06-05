@@ -1,6 +1,6 @@
 ;;; lean4-info.el --- Lean4 info  -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2016 Gabriel Ebner. All rights reserved.
+;; Copyright (c) 2016 Gabriel Ebner
 
 ;; This file is not part of GNU Emacs.
 

@@ -1,7 +1,7 @@
 ;;; lean4-mode.el --- Lean4 major mode  -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2013, 2014 Microsoft Corporation. All rights reserved.
-;; Copyright (c) 2014, 2015 Soonho Kong. All rights reserved.
+;; Copyright (c) 2013, 2014 Microsoft Corporation
+;; Copyright (c) 2014, 2015 Soonho Kong
 
 ;; Author: Leonardo de Moura <leonardo@microsoft.com>
 ;;         Soonho Kong       <soonhok@cs.cmu.edu>
