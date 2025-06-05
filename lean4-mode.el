@@ -54,8 +54,7 @@
 (require 'lean4-markdown)
 (require 'lean4-syntax)
 
-;; Declare symbols defined in external dependencies.  This silences
-;; byte-compiler warnings:
+;; Suppress byte-compiler warnings:
 (defvar compilation-mode-font-lock-keywords)
 (declare-function quail-show-key "quail")
 
@@ -136,7 +135,6 @@
 (add-to-list 'auto-mode-alist
              '("\\.lean\\'" . lean4-mode))
 
-;; Use utf-8 encoding
 ;;;###autoload
 (modify-coding-system-alist 'file "\\.lean\\'" 'utf-8)
 

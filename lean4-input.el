@@ -46,12 +46,12 @@
 
 (require 'dash)
 
-;; Quail is quite stateful, so be careful when editing this code.  Note
-;; that with-temp-buffer is used below whenever buffer-local state is
-;; modified.
+;; Quail is quite stateful, so be careful when editing this code.
+;; Note that `with-temp-buffer' is used below whenever buffer-local
+;; state is modified.
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Utility functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Utility functions
 
 (defun lean4-input-concat-map (f xs)
   "Concat (map F XS)."
@@ -73,8 +73,8 @@ First remove all space and newline characters."
       (setq seq (cons (+ from i) seq)))
     (concat (nreverse seq))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Functions used to tweak translation pairs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Functions used to tweak translation pairs
 
 (defun lean4-input-compose (f g)
   "\\x -> concatMap F (G x)."
@@ -135,15 +135,17 @@ This suffix is dropped."
    (lean4-input-drop-end (length suffix))
    (lean4-input-suffix suffix)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Customization
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Customization
 
-;; The :set keyword is set to 'lean4-input-incorporate-changed-setting
-;; so that the input method gets updated immediately when users
-;; customize it. However, the setup functions cannot be run before all
-;; variables have been defined. Hence the :initialize keyword is set to
-;; 'custom-initialize-default to ensure that the setup is not performed
-;; until lean4-input-setup is called at the end of this file.
+;; The `:set' keyword is set to
+;; `lean4-input-incorporate-changed-setting' so that the input method
+;; gets updated immediately when users customize it. However, the
+;; setup functions cannot be run before all variables have been
+;; defined. Hence the `:initialize' keyword is set to
+;; `custom-initialize-default' to ensure that the setup is not
+;; performed until `lean4-input-setup' is called at the end of this
+;; file.
 
 (defgroup lean4-input nil
   "The Lean4 input method.
@@ -212,7 +214,7 @@ from other input methods."
 Result is a list of pairs (KEY-SEQUENCE . TRANSLATION)
 that contains all translations from QP Except for those corresponding to ASCII."
   (with-temp-buffer
-    (activate-input-method qp) ; To make sure that the package is loaded.
+    (activate-input-method qp) ;; Ensure that package is loaded.
     (unless (quail-package qp)
       (error "%s is not a Quail package" qp))
     (let ((decode-map (list 'decode-map)))
@@ -255,8 +257,8 @@ a list of such pairs."
      (if fun (lean4-input-concat-map fun trans)
        trans))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Setting up the input method
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Setting up the input method
 
 (defvar json-key-type)
 (declare-function json-read "json")
@@ -265,7 +267,6 @@ a list of such pairs."
   "Set up the Lean4 input method.
 Use customisable variables and parent input methods to setup Lean4 input
 method."
-
   ;; Create (or reset) the input method.
   (with-temp-buffer
     (quail-define-package "Lean4" "UTF-8" "∏" t ; guidance
@@ -283,9 +284,10 @@ tasks as well."
                            "abbreviations.json"
                            lean4-input-data-directory))
     (thread-last
-      (let ((json-key-type 'string)) ;; make sure json key is a string.
-        ;; Prefer emacs native support implemented in C (since 27.1).
-        ;; Back-up is still useful in case Emacs in not compiled `--with-json`.
+      (let ((json-key-type 'string)) ;; Make sure json key is string.
+        ;; Prefer Emacs native support implemented in C (since 27.1).
+        ;; Back-up is still useful in case Emacs in not compiled
+        ;; `--with-json'.
         (if (fboundp 'json-parse-buffer)
             (json-parse-buffer)
           (require 'json)
@@ -305,7 +307,6 @@ Suitable for use in the :set field of `defcustom'."
   (lean4-input-setup))
 
 ;; Set up the input method.
-
 (cl-eval-when (load eval)
   (lean4-input-setup))
 
