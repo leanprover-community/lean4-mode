@@ -24,11 +24,11 @@
 ;; Quail input methods.  By default the input method is geared towards
 ;; the input of mathematical and other symbols in Lean4 programs.
 
-;; Use M-x customize-group lean4-input to customise this input method.
-;; Note that the functions defined under "Functions used to tweak
-;; translation pairs" below can be used to tweak both the key
-;; translations inherited from other input methods as well as the
-;; ones added specifically for this one.
+;; Use M-x customize-group lean4-input RET to customize this input
+;; method.  Note that the functions defined under "Functions used to
+;; tweak translation pairs" below can be used to tweak both the key
+;; translations inherited from other input methods as well as the ones
+;; added specifically for this one.
 
 ;; Use lean4-input-show-translations to see all the characters which
 ;; can be typed using this input method (except for those

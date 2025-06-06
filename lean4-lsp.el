@@ -18,7 +18,8 @@
 
 ;;; Commentary:
 
-;; This file connects `lean4-mode' and `lsp-mode' packages.
+;; This file defines the `lean4-lsp-mode', a minor mode for
+;; `lean4-mode' that appropriately sets up `lsp-mode'.
 
 ;;; Code:
 

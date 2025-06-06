@@ -18,7 +18,72 @@
 
 ;;; Commentary:
 
-;; This library provides an advanced LSP feature for `lean4-mode'.
+;; This file defines `lean4-info-mode', a minor mode for `lean4-mode'
+;; that keeps a buffer updated with an appealing display of LSP backed
+;; information relevant at point, such as proof goals, type signatures
+;; and error messages.
+
+;;;; Details on Debouncing
+
+;; We want to update the Lean4 info buffer as seldom as possible,
+;; since magit-section is slow at rendering. We wait a small duration
+;; (`debounce-delay-sec') when we get a redisplay request, to see if
+;; there is a redisplay request in the future that invalidates the
+;; current request (debouncing).  Pictorially:
+
+;; (a) One request:
+;;     --r1
+;;     --r1.wait
+;;     ----------r1.render
+
+;; (b) Two requests in quick succession:
+;;
+;;     --r1
+;;     --r1.wait
+;;     --------r2(cancel r1.wait)
+;;     --------r2.wait
+;;     ---------------r2.render
+
+;; (c) Two requests, not in succession:
+;;
+;;     --r1
+;;     --r1.wait
+;;     ---------r1.render
+;;     ------------------r2
+;;     ------------------r2.wait
+;;     -------------------------r2.render
+
+;; This delaying can lead to a pathological case where we continually
+;; stagger, while not rendering anything:
+;;
+;;     --r1
+;;     --r1.wait
+;;     --------r2(cancel r1.wait)
+;;     --------r2.wait
+;;     --------------r3(cancel r2.wait)
+;;     ---------------r3.wait
+;;     ---------------------r4(cancel r3.wait)
+;;     ---------------------...
+
+;; We prevent this pathological case by keeping track of when when we
+;; began debouncing in `lean4-info-buffer-debounce-begin-time'.  If we
+;; have been debouncing for longer than
+;; `lean4-info-buffer-debounce-upper-bound-sec', then we immediately
+;; write instead of debouncing; `max-debounces' times. Upon trying to
+;; stagger the `max-debounces'th request, we immediately render:
+;;
+;;     begin-time:nil----t0----------------nil-------
+;;                -------r1                |
+;;                -------r1.wait           |
+;;                -------|-----r2(cancel r1.wait)
+;;                -------|-----r2.wait     |
+;;                -------|-----------r3(cancel r2.wait)
+;;                -------|-----------r3.wait
+;;                -------|-----------------r4(cancel r3.wait)
+;;                -------|-----------------|
+;;                       >-----------------<
+;;                       >longer than `debounce-upper-bound-sec'<
+;;                -------------------------r4.render(FORCED)
 
 ;;; Code:
 
@@ -162,61 +227,6 @@ Also choose settings used for the *Lean4 Info* buffer."
             (lean4-info--mk-message-section 'errors-here "Messages here:" errors-here buffer)
             (lean4-info--mk-message-section 'errors-below "Messages below:" errors-below buffer)
             (lean4-info--mk-message-section 'errors-above "Messages above:" errors-above buffer)))))))
-
-;; Debouncing
-;; ~~~~~~~~~~~
-;; We want to update the Lean4 info buffer as seldom as possible,
-;; since magit-section is slow at rendering. We
-;; wait a small duration (`debounce-delay-sec') when we get a
-;; redisplay request, to see if there is a redisplay request in the
-;; future that invalidates the current request (debouncing).
-;; Pictorially,
-;; (a) One request:
-;; --r1
-;; --r1.wait
-;; ----------r1.render
-;; (b) Two requests in quick succession:
-;; --r1
-;; --r1.wait
-;; --------r2(cancel r1.wait)
-;; --------r2.wait
-;; ---------------r2.render
-;; (c) Two requests, not in succession:
-;; --r1
-;; --r1.wait
-;; ---------r1.render
-;; ------------------r2
-;; ------------------r2.wait
-;; -------------------------r2.render
-;; This delaying can lead to a pathological case where we continually
-;; stagger, while not rendering anything:
-;; --r1
-;; --r1.wait
-;; --------r2(cancel r1.wait)
-;; --------r2.wait
-;; --------------r3(cancel r2.wait)
-;; ---------------r3.wait
-;; ---------------------r4(cancel r3.wait)
-;; ---------------------...
-;; We prevent this pathological case by keeping track of when
-;; when we began debouncing in `lean4-info-buffer-debounce-begin-time'.
-;; If we have been debouncing for longer than
-;; `lean4-info-buffer-debounce-upper-bound-sec', then we
-;; immediately write instead of debouncing;
-;; `max-debounces' times. Upon trying to stagger the
-;; `max-debounces'th request, we immediately render:
-;; begin-time:nil----t0----------------nil-------
-;;            -------r1                |
-;;            -------r1.wait           |
-;;            -------|-----r2(cancel r1.wait)
-;;            -------|-----r2.wait     |
-;;            -------|-----------r3(cancel r2.wait)
-;;            -------|-----------r3.wait
-;;            -------|-----------------r4(cancel r3.wait)
-;;            -------|-----------------|
-;;                   >-----------------<
-;;                   >longer than `debounce-upper-bound-sec'<
-;;            -------------------------r4.render(FORCED)
 
 (defcustom lean4-info-buffer-debounce-delay-sec 0.1
   "Duration of time we wait before writing to *Lean4 Info*."

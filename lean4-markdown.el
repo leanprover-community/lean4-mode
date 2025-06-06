@@ -18,7 +18,8 @@
 
 ;;; Commentary:
 
-;; This file connects `lean4-mode' and `markdown-mode' packages.
+;; This file mutates `markdown-code-lang-modes' so that
+;; `markdown-mode' supports Lean4 code blocks.
 
 ;;; Code:
 

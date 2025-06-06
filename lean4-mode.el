@@ -31,13 +31,9 @@
 
 ;;; Commentary:
 
-;; Provides a major mode for the Lean4 programming language.
-
-;; Provides highlighting, diagnostics, goal visualization,
-;; and many other useful features for Lean4 users.
-
-;; See the README.md for more advanced features and the
-;; associated keybindings.
+;; Lean4-Mode is a package providing an equally named major mode for
+;; Lean version 4, a programming language and theorem prover.  Consult
+;; the readme or equivalent manual for further information.
 
 ;;; Code:
 
