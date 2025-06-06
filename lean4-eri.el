@@ -20,6 +20,10 @@
 
 ;;; Commentary:
 
+;; This file eventually defines the `lean4-eri-tab' command that
+;; context-sensitively indents the current line, as appropriate for
+;; the Lean4 language.
+
 ;; This file is based on eri.el which was part of Agda-Mode:
 ;; https://github.com/agda/agda/blob/b40c6fc2e0ced7b547553654f81e5898082d700c/src/data/emacs-mode/eri.el
 

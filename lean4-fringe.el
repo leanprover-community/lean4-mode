@@ -18,7 +18,11 @@
 
 ;;; Commentary:
 
-;; Show Lean4 processing progress in the editor fringe
+;; In `lean4-mode', indicate the processing progress of `lsp-mode' in
+;; Emacs window fringes.
+
+;; For documentation on Emacs fringes, see (info "(emacs) Fringes") or
+;; equally: https://gnu.org/s/emacs/manual/html_node/emacs/Fringes
 
 ;;; Code:
 
