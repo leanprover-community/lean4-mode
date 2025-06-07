@@ -1,8 +1,8 @@
-;;; lean4-fringe.el --- Lean4-Mode Processing Progress in Fringe  -*- lexical-binding: t; -*-
+;;; lean4-fringe.el --- Lean4 fringe progress  -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2016 Microsoft Corporation. All rights reserved.
+;; Copyright (c) 2016 Microsoft Corporation
 
-;; This file is not part of GNU Emacs.
+;; This file is NOT part of GNU Emacs.
 
 ;; Licensed under the Apache License, Version 2.0 (the "License"); you
 ;; may not use this file except in compliance with the License.  You
@@ -18,13 +18,25 @@
 
 ;;; Commentary:
 
-;; Show Lean processing progress in the editor fringe
+;; In `lean4-mode', indicate the processing progress of `lsp-mode' in
+;; Emacs window fringes.
+
+;; For documentation on Emacs fringes, see (info "(emacs) Fringes") or
+;; equally: https://gnu.org/s/emacs/manual/html_node/emacs/Fringes
 
 ;;; Code:
 
-(require 'lean4-settings)
 (require 'lsp-mode)
 (require 'lsp-protocol)
+
+(defgroup lean4-fringe nil
+  "Lean4 lsp-mode processing progress in fringes."
+  :group 'lean4)
+
+(defcustom lean4-fringe-show-file-progress t
+  "Highlight file progress in the current buffer."
+  :group 'lean4-fringe
+  :type 'boolean)
 
 (eval-and-compile
   (lsp-interface
@@ -38,8 +50,8 @@
 
 (defface lean4-fringe-face
   nil
-  "Face to highlight Lean file progress."
-  :group 'lean4)
+  "Face to highlight Lean4 file progress."
+  :group 'lean4-fringe)
 
 (if (fboundp 'define-fringe-bitmap)
   (define-fringe-bitmap 'lean4-fringe-fringe-bitmap
@@ -51,8 +63,8 @@
     (((class color) (background dark))
      :background "navajo white")
     (t :inverse-video t))
-  "Face to highlight the fringe of Lean file processing progress."
-  :group 'lean4)
+  "Face to highlight the fringe of Lean4 file processing progress."
+  :group 'lean4-fringe)
 
 (defface lean4-fringe-fringe-fatal-error-face
   '((((class color) (background light))
@@ -60,8 +72,8 @@
     (((class color) (background dark))
      :background "red")
     (t :inverse-video t))
-  "Face to highlight the fringe of Lean file fatal errors."
-  :group 'lean4)
+  "Face to highlight the fringe of Lean4 file fatal errors."
+  :group 'lean4-fringe)
 
 (lsp-defun lean4-fringe-fringe-face ((&lean:LeanFileProgressProcessingInfo :kind))
   (cond
@@ -75,7 +87,7 @@
   (dolist (ov (flatten-tree (overlay-lists)))
     (when (eq (overlay-get ov 'face) 'lean4-fringe-face)
       (delete-overlay ov)))
-  (when lean4-show-file-progress
+  (when lean4-fringe-show-file-progress
     (seq-doseq (item lean4-fringe-data)
       (let* ((reg (lean4-fringe-region item))
              (ov (make-overlay (car reg) (cdr reg))))
