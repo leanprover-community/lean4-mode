@@ -73,6 +73,9 @@ Lean4-Mode should now already be enabled when you open a file with
 Lean4-Mode on Emacs startup, e.g. in order to customize variables:
 #+begin_src elisp
 (require 'lean4-mode)
+
+;; Optionally, customize variables, e.g. hooks:
+;; (add-hook 'lean4-...-hook #'...)
 #+end_src
 
 ** Instructions for Source-Based Use-Package
@@ -84,6 +87,15 @@ your Lean4-Mode package recipe.
 If you use the ~use-package~ macro and intent to defer loading of
 packages in order to improve your Emacs startup time, then make sure
 to specify ~lean4-mode~ as a =:command=.
+
+When customizing Lean4-Mode variables, make sure the customization
+takes place after loading the Lean4-Mode package so that the variables
+are correctly initialized first. For example, many Lean4-Mode hook
+variables like ~lean4-mode-hook~ have non-nil initialization
+values. And since ~use-package~ applies the =:hook= specifications
+before package loading, you should avoid it. Instead, put
+=(add-hook 'lean4-...-hook #'...)= under the =:config= section. (See
+/Common Pitfalls/ section below.)
 
 Following subsections show concrete examples.
 
@@ -190,9 +202,52 @@ option accordingly.
 
 * Common Pitfalls
 
+** Lean(3)-Mode
+
 Lean4-Mode only supports version 4 of Lean.  For editing Lean version
 3, use [[https://github.com/leanprover/lean3-mode][Lean3-Mode]], which is also known as Lean-Mode due to historical
 reasons.  In principle, it is fine to have both Lean3-Mode and
 Lean4-Mode installed at the same time.  But note that Lean3-Mode uses
 the prefix =lean-= for its symbols.  E.g. you should not use
 =lean-=-prefixed commands in a buffer with Lean4-Mode as major mode.
+
+** Partial value of ~lean4-mode-hook~ or other hook variables
+
+If you customize a hook variable like ~lean4-mode-hook~ e.g. with
+~add-hook~ or Use-Package's =:hook= keyword, you may end up with a
+partial / incomplete value of the hook variable. For example,
+~lean4-mode-hook~ may not contain the ~lsp~ command and as a
+consequence ~lsp-mode~ won't start automatically together with
+Lean4-Mode.
+
+There are several reasons that lead to this situation in conjunction:
+(1.) Lean4-Mode has non-nil initialization values for many of its hook
+variables. (2.) Emacs evaluates your ~add-hook~ form before it loads
+the definition of the hook from Lean4-Mode package. (3.) ~add-hook~
+effectively initializes the passed hook-variable to nil when the
+symbol has no value cell. And (4.), Use-Package applies passed =:hook=
+specifications before package loading.
+
+If you do not use Use-Package, the solution is to load Lean4-Mode
+before calling ~add-hook~, e.g. with ~require~:
+#+begin_src elisp
+(require 'lean4-mode)
+(add-hook 'lean4-...-hook #'...)
+#+end_src
+
+Or with ~with-eval-after-load~:
+#+begin_src elisp
+(with-eval-after-load 'lean4-mode
+  (add-hook 'lean4-mode-hook #'...))
+(with-eval-after-load 'lean4-lsp
+  (add-hook 'lean4-lsp-mode-hook #'...))
+#+end_src
+
+If you do Use-Package, you can solve the problem by calling ~add-hook~
+within the =:config= section:
+#+begin_src elisp
+(use-package lean4-mode
+  ;; ...
+  :config
+  (add-hook 'lean4-...-hook #'...))
+#+end_src
