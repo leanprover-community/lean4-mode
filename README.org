@@ -102,23 +102,23 @@ packages from remote source repositories.
 
 (use-package lean4-mode
   :commands lean4-mode
-  :vc (:url "https://github.com/leanprover-community/lean4-mode.git"
-       :rev :last-release
-       ;; Or, if you prefer the bleeding edge version of Lean4-Mode:
-       ;; :rev :newest
-       ))
+  :vc ( :url "https://github.com/leanprover-community/lean4-mode.git"
+        :rev :last-release
+        ;; Or, if you prefer the bleeding edge version of Lean4-Mode:
+        ;; :rev :newest
+        ))
 #+end_src
 
-*** Doom-Emacs
+*** Doom ~package!~
 
 If you use Doom-Emacs, you can place the following code in your Doom
 initialization file:
 
 #+begin_src elisp
 (package! lean4-mode
-  :recipe (:host github
-           :repo "leanprover-community/lean4-mode"
-           :files ("*.el" "data")))
+          :recipe ( :host github
+                    :repo "leanprover-community/lean4-mode"
+                    :files ("*.el" "data")))
 #+end_src
 
 *** Straight

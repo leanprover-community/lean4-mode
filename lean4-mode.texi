@@ -49,7 +49,7 @@ Installation
 Instructions for Source-Based Use-Package
 
 * Native @samp{vc} (Emacs 30 or later)::
-* Doom-Emacs::
+* Doom @code{package!}::
 * Straight::
 
 Usage
@@ -159,7 +159,7 @@ Following subsections show concrete examples.
 
 @menu
 * Native @samp{vc} (Emacs 30 or later)::
-* Doom-Emacs::
+* Doom @code{package!}::
 * Straight::
 @end menu
 
@@ -179,24 +179,24 @@ packages from remote source repositories.
 
 (use-package lean4-mode
   :commands lean4-mode
-  :vc (:url "https://github.com/leanprover-community/lean4-mode.git"
-       :rev :last-release
-       ;; Or, if you prefer the bleeding edge version of Lean4-Mode:
-       ;; :rev :newest
-       ))
+  :vc ( :url "https://github.com/leanprover-community/lean4-mode.git"
+        :rev :last-release
+        ;; Or, if you prefer the bleeding edge version of Lean4-Mode:
+        ;; :rev :newest
+        ))
 @end lisp
 
-@node Doom-Emacs
-@subsection Doom-Emacs
+@node Doom @code{package!}
+@subsection Doom @code{package!}
 
 If you use Doom-Emacs, you can place the following code in your Doom
 initialization file:
 
 @lisp
 (package! lean4-mode
-  :recipe (:host github
-           :repo "leanprover-community/lean4-mode"
-           :files ("*.el" "data")))
+          :recipe ( :host github
+                    :repo "leanprover-community/lean4-mode"
+                    :files ("*.el" "data")))
 @end lisp
 
 @node Straight
