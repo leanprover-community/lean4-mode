@@ -1,10 +1,10 @@
-;;; lean4-eri.el --- Lean4-Mode Indentation  -*- lexical-binding: t; -*-
+;;; lean4-eri.el --- Lean4 indentation  -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2005-2010 Ulf Norell, Nils Anders Danielsson,
 ;; Catarina Coquand, Makoto Takeyama, Andreas Abel, Karl Mehltretter,
 ;; Marcin Benke, Darin Morrison.
 
-;; This file is not part of GNU Emacs.
+;; This file is NOT part of GNU Emacs.
 
 ;; Licensed under the Apache License, Version 2.0 (the "License"); you
 ;; may not use this file except in compliance with the License.  You
@@ -19,6 +19,10 @@
 ;; permissions and limitations under the License.
 
 ;;; Commentary:
+
+;; This file eventually defines the `lean4-eri-tab' command that
+;; context-sensitively indents the current line, as appropriate for
+;; the Lean4 language.
 
 ;; This file is based on eri.el which was part of Agda-Mode:
 ;; https://github.com/agda/agda/blob/b40c6fc2e0ced7b547553654f81e5898082d700c/src/data/emacs-mode/eri.el
@@ -222,6 +226,13 @@ See `lean4-eri-indent' for a description of how the indentation points
 are calculated."
   (interactive)
   (lean4-eri-indent t))
+
+(defun lean4-eri-tab ()
+  "Lean4 function for TAB indent."
+  (interactive)
+  (cond ((looking-back (rx line-start (* white)) nil)
+         (lean4-eri-indent))
+        (t (indent-for-tab-command))))
 
 (provide 'lean4-eri)
 ;;; lean4-eri.el ends here

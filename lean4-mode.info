@@ -3,28 +3,24 @@ lean4-mode.texi.
 
 INFO-DIR-SECTION Emacs misc features
 START-INFO-DIR-ENTRY
-* Lean4-Mode: (lean4-mode). Emacs major mode for Lean language.
+* Lean4-Mode: (lean4-mode). Emacs major mode for Lean4 language.
 END-INFO-DIR-ENTRY
 
 
 File: lean4-mode.info,  Node: Top,  Next: Installation,  Up: (dir)
 
-Lean4-Mode - Emacs major mode for Lean language
-***********************************************
+Emacs Lean4-Mode
+****************
 
 This package extends GNU Emacs (https://www.gnu.org/software/emacs/) by
-providing a major mode for editing code written in version 4 of the
-programming language and theorem prover Lean (https://lean-lang.org).
+a major mode for Lean (https://lean-lang.org) version 4, a programming
+language and theorem prover.
 
-   The Lean4-Mode source code is developed at Github
-(https://github.com/leanprover-community/lean4-mode) and its issues
-tracked there too.  Further discussions and question-answering takes
-place in the #Emacs channel
-(https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs) of
-Lean's Zulip chat.
-
-   For legacy version 3 of Lean, use the archived Lean3-Mode
-(https://github.com/leanprover/lean3-mode) (also known as _Lean-Mode_).
+   Lean4-Mode is developed on Github
+(https://github.com/leanprover-community/lean4-mode).  Bugs and feature
+requests are also tracked there.  Further discussions take place in the
+#Emacs (https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs)
+channel on the Lean Zulip chat platform.
 
 * Menu:
 
@@ -44,7 +40,7 @@ Installation
 Instructions for Source-Based Use-Package
 
 * Native vc (Emacs 30 or later)::
-* Doom-Emacs::
+* Doom package!::
 * Straight::
 
 Usage
@@ -56,6 +52,11 @@ Configuration
 
 * lsp-mode: lsp-mode (1).
 * Flycheck: Flycheck (1).
+
+Common Pitfalls
+
+* Lean(3)-Mode::
+* Partial value of lean4-mode-hook or other hook variables::
 
 
 
@@ -135,6 +136,9 @@ Lean4-Mode repository to the ‘load-path’ list:
 on Emacs startup, e.g.  in order to customize variables:
      (require 'lean4-mode)
 
+     ;; Optionally, customize variables, e.g. hooks:
+     ;; (add-hook 'lean4-...-hook #'...)
+
 
 File: lean4-mode.info,  Node: Instructions for Source-Based Use-Package,  Prev: Detailed and Concrete Instructions,  Up: Installation
 
@@ -149,16 +153,25 @@ your Lean4-Mode package recipe.
 packages in order to improve your Emacs startup time, then make sure to
 specify ‘lean4-mode’ as a ‘:command’.
 
+   When customizing Lean4-Mode variables, make sure the customization
+takes place after loading the Lean4-Mode package so that the variables
+are correctly initialized first.  For example, many Lean4-Mode hook
+variables like ‘lean4-mode-hook’ have non-nil initialization values.
+And since ‘use-package’ applies the ‘:hook’ specifications before
+package loading, you should avoid it.  Instead, put ‘(add-hook
+'lean4-...-hook #'...)’ under the ‘:config’ section.  (See _Common
+Pitfalls_ section below.)
+
    Following subsections show concrete examples.
 
 * Menu:
 
 * Native vc (Emacs 30 or later)::
-* Doom-Emacs::
+* Doom package!::
 * Straight::
 
 
-File: lean4-mode.info,  Node: Native vc (Emacs 30 or later),  Next: Doom-Emacs,  Up: Instructions for Source-Based Use-Package
+File: lean4-mode.info,  Node: Native vc (Emacs 30 or later),  Next: Doom package!,  Up: Instructions for Source-Based Use-Package
 
 1.3.1 Native ‘:vc’ (Emacs 30 or later)
 --------------------------------------
@@ -175,28 +188,28 @@ packages from remote source repositories.
 
      (use-package lean4-mode
        :commands lean4-mode
-       :vc (:url "https://github.com/leanprover-community/lean4-mode.git"
-            :rev :last-release
-            ;; Or, if you prefer the bleeding edge version of Lean4-Mode:
-            ;; :rev :newest
-            ))
+       :vc ( :url "https://github.com/leanprover-community/lean4-mode.git"
+             :rev :last-release
+             ;; Or, if you prefer the bleeding edge version of Lean4-Mode:
+             ;; :rev :newest
+             ))
 
 
-File: lean4-mode.info,  Node: Doom-Emacs,  Next: Straight,  Prev: Native vc (Emacs 30 or later),  Up: Instructions for Source-Based Use-Package
+File: lean4-mode.info,  Node: Doom package!,  Next: Straight,  Prev: Native vc (Emacs 30 or later),  Up: Instructions for Source-Based Use-Package
 
-1.3.2 Doom-Emacs
-----------------
+1.3.2 Doom ‘package!’
+---------------------
 
 If you use Doom-Emacs, you can place the following code in your Doom
 initialization file:
 
      (package! lean4-mode
-       :recipe (:host github
-                :repo "leanprover-community/lean4-mode"
-                :files ("*.el" "data")))
+               :recipe ( :host github
+                         :repo "leanprover-community/lean4-mode"
+                         :files ("*.el" "data")))
 
 
-File: lean4-mode.info,  Node: Straight,  Prev: Doom-Emacs,  Up: Instructions for Source-Based Use-Package
+File: lean4-mode.info,  Node: Straight,  Prev: Doom package!,  Up: Instructions for Source-Based Use-Package
 
 1.3.3 Straight
 --------------
@@ -216,23 +229,23 @@ File: lean4-mode.info,  Node: Usage,  Next: Configuration,  Prev: Installation, 
 2 Usage
 *******
 
-If things are working correctly, you should see the word "Lean 4" in
+If things are working correctly, you should see the word "Lean4" in
 Emacs mode-line when you open a file with ‘.lean’ extension.  Emacs will
 ask you to identify the _project_ this file belongs to.  If you then
 type ‘#check id’, the word ‘#check’ will be underlined, and hovering
 over it will show you the type of ‘id’.
 
-   To view the proof state, run ‘lean4-toggle-info’ (‘C-c C-i’).  This
-will display the ‘*Lean Goals*’ buffer (like the Lean Info-View pane in
+   To view the proof state, run ‘lean4-info-mode’ (‘C-c C-i’).  This
+will display the ‘*Lean4 Info*’ buffer (like the Lean Info-View pane in
 VS-Code) in a separate window.
 
 Key                      Description                                              Command
-----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 ‘C-c C-k’                Echo the keystroke needed to input the symbol at point   ‘quail-show-key’
-‘C-c C-d’                Recompile and reload imports                             ‘lean4-refresh-file-dependencies’
-‘C-c C-x’ or ‘C-c C-l’   Execute Lean in stand-alone mode                         ‘lean4-std-exe’
+‘C-c C-d’                Recompile and reload imports                             ‘lean4-lsp-document-reopen’
+‘C-c C-x’ or ‘C-c C-l’   Execute Lean4 in stand-alone mode                        ‘lean4-std-exe’
 ‘C-c C-p C-l’            Builds package with lake                                 ‘lean4-lake-build’
-‘C-c C-i’                Toggle Info-View which shows goals and errors at point   ‘lean4-toggle-info-buffer’
+‘C-c C-i’                Toggle Info-View which shows goals and errors at point   ‘lean4-info-mode’
 
 * Menu:
 
@@ -305,6 +318,17 @@ File: lean4-mode.info,  Node: Common Pitfalls,  Prev: Configuration,  Up: Top
 4 Common Pitfalls
 *****************
 
+* Menu:
+
+* Lean(3)-Mode::
+* Partial value of lean4-mode-hook or other hook variables::
+
+
+File: lean4-mode.info,  Node: Lean(3)-Mode,  Next: Partial value of lean4-mode-hook or other hook variables,  Up: Common Pitfalls
+
+4.1 Lean(3)-Mode
+================
+
 Lean4-Mode only supports version 4 of Lean.  For editing Lean version 3,
 use Lean3-Mode (https://github.com/leanprover/lean3-mode), which is also
 known as Lean-Mode due to historical reasons.  In principle, it is fine
@@ -313,24 +337,64 @@ note that Lean3-Mode uses the prefix ‘lean-’ for its symbols.  E.g.  you
 should not use ‘lean-’-prefixed commands in a buffer with Lean4-Mode as
 major mode.
 
+
+File: lean4-mode.info,  Node: Partial value of lean4-mode-hook or other hook variables,  Prev: Lean(3)-Mode,  Up: Common Pitfalls
+
+4.2 Partial value of ‘lean4-mode-hook’ or other hook variables
+==============================================================
+
+If you customize a hook variable like ‘lean4-mode-hook’ e.g.  with
+‘add-hook’ or Use-Package's ‘:hook’ keyword, you may end up with a
+partial / incomplete value of the hook variable.  For example,
+‘lean4-mode-hook’ may not contain the ‘lsp’ command and as a consequence
+‘lsp-mode’ won't start automatically together with Lean4-Mode.
+
+   There are several reasons that lead to this situation in conjunction:
+(1.)  Lean4-Mode has non-nil initialization values for many of its hook
+variables.  (2.)  Emacs evaluates your ‘add-hook’ form before it loads
+the definition of the hook from Lean4-Mode package.  (3.)  ‘add-hook’
+effectively initializes the passed hook-variable to nil when the symbol
+has no value cell.  And (4.), Use-Package applies passed ‘:hook’
+specifications before package loading.
+
+   If you do not use Use-Package, the solution is to load Lean4-Mode
+before calling ‘add-hook’, e.g.  with ‘require’:
+     (require 'lean4-mode)
+     (add-hook 'lean4-...-hook #'...)
+
+   Or with ‘with-eval-after-load’:
+     (with-eval-after-load 'lean4-mode
+       (add-hook 'lean4-mode-hook #'...))
+     (with-eval-after-load 'lean4-lsp
+       (add-hook 'lean4-lsp-mode-hook #'...))
+
+   If you do Use-Package, you can solve the problem by calling
+‘add-hook’ within the ‘:config’ section:
+     (use-package lean4-mode
+       ;; ...
+       :config
+       (add-hook 'lean4-...-hook #'...))
+
 
 
 Tag Table:
-Node: Top223
-Node: Installation1492
-Node: Brief and Generic Instructions1735
-Node: Detailed and Concrete Instructions2684
-Node: Instructions for Source-Based Use-Package4341
-Node: Native vc (Emacs 30 or later)5062
-Node: Doom-Emacs5970
-Node: Straight6396
-Node: Usage6896
-Node: lsp-mode8342
-Node: Flycheck8627
-Node: Configuration9237
-Node: lsp-mode (1)9427
-Node: Flycheck (1)9696
-Node: Common Pitfalls10181
+Node: Top224
+Node: Installation1347
+Node: Brief and Generic Instructions1590
+Node: Detailed and Concrete Instructions2539
+Node: Instructions for Source-Based Use-Package4291
+Node: Native vc (Emacs 30 or later)5536
+Node: Doom package!6452
+Node: Straight6922
+Node: Usage7425
+Node: lsp-mode8847
+Node: Flycheck9132
+Node: Configuration9742
+Node: lsp-mode (1)9932
+Node: Flycheck (1)10201
+Node: Common Pitfalls10686
+Node: Lean(3)-Mode10892
+Node: Partial value of lean4-mode-hook or other hook variables11516
 
 End Tag Table
 
