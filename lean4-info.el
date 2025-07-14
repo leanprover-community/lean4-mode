@@ -1,8 +1,8 @@
-;;; lean4-info.el --- Lean4-Mode Info View  -*- lexical-binding: t; -*-
+;;; lean4-info.el --- Lean4 info  -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2016 Gabriel Ebner. All rights reserved.
+;; Copyright (c) 2016 Gabriel Ebner
 
-;; This file is not part of GNU Emacs.
+;; This file is NOT part of GNU Emacs.
 
 ;; Licensed under the Apache License, Version 2.0 (the "License"); you
 ;; may not use this file except in compliance with the License.  You
@@ -18,51 +18,109 @@
 
 ;;; Commentary:
 
-;; This library provides an advanced LSP feature for `lean4-mode'.
+;; This file defines `lean4-info-mode', a minor mode for `lean4-mode'
+;; that keeps a buffer updated with an appealing display of LSP backed
+;; information relevant at point, such as proof goals, type signatures
+;; and error messages.
+
+;;;; Details on Debouncing
+
+;; We want to update the Lean4 info buffer as seldom as possible,
+;; since magit-section is slow at rendering. We wait a small duration
+;; (`debounce-delay-sec') when we get a redisplay request, to see if
+;; there is a redisplay request in the future that invalidates the
+;; current request (debouncing).  Pictorially:
+
+;; (a) One request:
+;;     --r1
+;;     --r1.wait
+;;     ----------r1.render
+
+;; (b) Two requests in quick succession:
+;;
+;;     --r1
+;;     --r1.wait
+;;     --------r2(cancel r1.wait)
+;;     --------r2.wait
+;;     ---------------r2.render
+
+;; (c) Two requests, not in succession:
+;;
+;;     --r1
+;;     --r1.wait
+;;     ---------r1.render
+;;     ------------------r2
+;;     ------------------r2.wait
+;;     -------------------------r2.render
+
+;; This delaying can lead to a pathological case where we continually
+;; stagger, while not rendering anything:
+;;
+;;     --r1
+;;     --r1.wait
+;;     --------r2(cancel r1.wait)
+;;     --------r2.wait
+;;     --------------r3(cancel r2.wait)
+;;     ---------------r3.wait
+;;     ---------------------r4(cancel r3.wait)
+;;     ---------------------...
+
+;; We prevent this pathological case by keeping track of when when we
+;; began debouncing in `lean4-info-buffer-debounce-begin-time'.  If we
+;; have been debouncing for longer than
+;; `lean4-info-buffer-debounce-upper-bound-sec', then we immediately
+;; write instead of debouncing; `max-debounces' times. Upon trying to
+;; stagger the `max-debounces'th request, we immediately render:
+;;
+;;     begin-time:nil----t0----------------nil-------
+;;                -------r1                |
+;;                -------r1.wait           |
+;;                -------|-----r2(cancel r1.wait)
+;;                -------|-----r2.wait     |
+;;                -------|-----------r3(cancel r2.wait)
+;;                -------|-----------r3.wait
+;;                -------|-----------------r4(cancel r3.wait)
+;;                -------|-----------------|
+;;                       >-----------------<
+;;                       >longer than `debounce-upper-bound-sec'<
+;;                -------------------------r4.render(FORCED)
 
 ;;; Code:
 
 (require 'dash)
-(require 'lean4-syntax)
-(require 'lean4-settings)
 (require 'lsp-mode)
 (require 'lsp-protocol)
 (require 'magit-section)
+
+(require 'lean4-syntax)
 
 (defgroup lean4-info nil
   "Lean4-Mode Info."
   :group 'lean4)
 
-;; Lean Info Mode (for "*lean4-info*" buffer)
-;; Automode List
-;;;###autoload
-(define-derived-mode lean4-info-mode prog-mode "Lean-Info"
-  "Major mode for Lean4-Mode Info Buffer."
-  :syntax-table lean4-syntax-table
-  :group 'lean4
-  (set (make-local-variable 'font-lock-defaults) lean4-info-font-lock-defaults)
-  (set (make-local-variable 'indent-tabs-mode) nil)
-  (set 'compilation-mode-font-lock-keywords '())
-  (set (make-local-variable 'lisp-indent-function)
-       'common-lisp-indent-function))
+(defcustom lean4-info-highlight-inaccessibles t
+  "Use font to highlight inaccessible names.
+Set this variable to t to highlight inaccessible names in the info display
+using `font-lock-comment-face' instead of the `✝` suffix used by Lean4."
+  :group 'lean4-info
+  :type 'boolean)
 
-(defun lean4-ensure-info-buffer (buffer)
+;;;###autoload
+(define-derived-mode lean4-info-mockup-mode prog-mode "Lean4-Info"
+  "Major mode used internally to syntax highlight Lean4."
+  :syntax-table lean4-syntax-table
+  :group 'lean4-info
+  (setq-local font-lock-defaults lean4-info-font-lock-defaults))
+
+(defun lean4-info-ensure-buffer (buffer)
   "Create BUFFER if it does not exist.
-Also choose settings used for the *Lean Goal* buffer."
+Also choose settings used for the *Lean4 Info* buffer."
   (unless (get-buffer buffer)
     (with-current-buffer (get-buffer-create buffer)
       (buffer-disable-undo)
       (magit-section-mode)
       (set-syntax-table lean4-syntax-table)
       (setq buffer-read-only t))))
-
-(defun lean4-toggle-info-buffer (buffer)
-  "Create or delete BUFFER.
-The buffer is supposed to be the *Lean Goal* buffer."
-  (-if-let (window (get-buffer-window buffer))
-      (quit-window nil window)
-    (lean4-ensure-info-buffer buffer)
-    (display-buffer buffer)))
 
 (defun lean4-info-buffer-active (buffer)
   "Check whether given info BUFFER should show info for current buffer."
@@ -80,10 +138,10 @@ The buffer is supposed to be the *Lean Goal* buffer."
     (:range :fullRange :message)
     (:code :relatedInformation :severity :source :tags))))
 
-(defconst lean4-info-buffer-name "*Lean Goal*")
+(defconst lean4-info-buffer-name "*Lean4 Info*")
 
-(defvar lean4-goals nil)
-(defvar lean4-term-goal nil)
+(defvar lean4-info-goals nil)
+(defvar lean4-info-term-goal nil)
 
 (lsp-defun lean4-diagnostic-full-start-line ((&lean:Diagnostic :full-range (&Range :start (&Position :line))))
   line)
@@ -103,7 +161,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
 (defun lean4-info--insert-highlight-inaccessible-names (&rest text)
   (let ((begin (point)))
     (apply #'insert text)
-    (when lean4-highlight-inaccessible-names
+    (when lean4-info-highlight-inaccessibles
       (let ((end (point-marker)))
         (goto-char begin)
         (while (re-search-forward "\\(\\sw+\\)✝\\([¹²³⁴-⁹⁰]*\\)" end t)
@@ -114,9 +172,9 @@ The buffer is supposed to be the *Lean Goal* buffer."
            'fixedcase 'literal))
         (goto-char end)))))
 
-(defun lean4--insert-goal-text (text delimiter)
+(defun lean4-info--insert-goal-text (text delimiter)
   (lean4-info--insert-highlight-inaccessible-names
-   (lsp--fontlock-with-mode text 'lean4-info-mode)
+   (lsp--fontlock-with-mode text 'lean4-info-mockup-mode)
    delimiter))
 
 (defun lean4-info--mk-message-section (value caption messages buffer)
@@ -152,89 +210,31 @@ The buffer is supposed to be the *Lean Goal* buffer."
         (progn
           (erase-buffer)
           (magit-insert-section (magit-section 'root)
-            (when-let ((goals lean4-goals)) ;; capture for deferred rendering
+            (when-let ((goals lean4-info-goals)) ;; capture for deferred rendering
               (magit-insert-section (magit-section 'goals)
                 (magit-insert-heading "Goals:")
                 (magit-insert-section-body
                 (if (> (length goals) 0)
                     (seq-doseq (g goals)
                       (magit-insert-section (magit-section)
-                        (lean4--insert-goal-text g "\n\n")))
+                        (lean4-info--insert-goal-text g "\n\n")))
                   (insert "goals accomplished\n\n")))))
-            (when-let ((term-goal lean4-term-goal)) ;; capture for deferred rendering
+            (when-let ((term-goal lean4-info-term-goal)) ;; capture for deferred rendering
               (magit-insert-section (magit-section 'term-goal)
                 (magit-insert-heading "Expected type:")
                 (magit-insert-section-body
-                  (lean4--insert-goal-text term-goal "\n"))))
+                  (lean4-info--insert-goal-text term-goal "\n"))))
             (lean4-info--mk-message-section 'errors-here "Messages here:" errors-here buffer)
             (lean4-info--mk-message-section 'errors-below "Messages below:" errors-below buffer)
             (lean4-info--mk-message-section 'errors-above "Messages above:" errors-above buffer)))))))
 
-;; Debouncing
-;; ~~~~~~~~~~~
-;; We want to update the Lean4 info buffer as seldom as possible,
-;; since magit-section is slow at rendering. We
-;; wait a small duration (`debounce-delay-sec') when we get a
-;; redisplay request, to see if there is a redisplay request in the
-;; future that invalidates the current request (debouncing).
-;; Pictorially,
-;; (a) One request:
-;; --r1
-;; --r1.wait
-;; ----------r1.render
-;; (b) Two requests in quick succession:
-;; --r1
-;; --r1.wait
-;; --------r2(cancel r1.wait)
-;; --------r2.wait
-;; ---------------r2.render
-;; (c) Two requests, not in succession:
-;; --r1
-;; --r1.wait
-;; ---------r1.render
-;; ------------------r2
-;; ------------------r2.wait
-;; -------------------------r2.render
-;; This delaying can lead to a pathological case where we continually
-;; stagger, while not rendering anything:
-;; --r1
-;; --r1.wait
-;; --------r2(cancel r1.wait)
-;; --------r2.wait
-;; --------------r3(cancel r2.wait)
-;; ---------------r3.wait
-;; ---------------------r4(cancel r3.wait)
-;; ---------------------...
-;; We prevent this pathological case by keeping track of when
-;; when we began debouncing in `lean4-info-buffer-debounce-begin-time'.
-;; If we have been debouncing for longer than
-;; `lean4-info-buffer-debounce-upper-bound-sec', then we
-;; immediately write instead of debouncing;
-;; `max-debounces' times. Upon trying to stagger the
-;; `max-debounces'th request, we immediately render:
-;; begin-time:nil----t0----------------nil-------
-;;            -------r1                |
-;;            -------r1.wait           |
-;;            -------|-----r2(cancel r1.wait)
-;;            -------|-----r2.wait     |
-;;            -------|-----------r3(cancel r2.wait)
-;;            -------|-----------r3.wait
-;;            -------|-----------------r4(cancel r3.wait)
-;;            -------|-----------------|
-;;                   >-----------------<
-;;                   >longer than `debounce-upper-bound-sec'<
-;;            -------------------------r4.render(FORCED)
-
-
 (defcustom lean4-info-buffer-debounce-delay-sec 0.1
-  "Duration of time we wait before writing to *Lean Goal*."
+  "Duration of time we wait before writing to *Lean4 Info*."
   :group 'lean4-info
   :type 'number)
 
-
 (defvar lean4-info-buffer-debounce-timer nil
   "Timer that is used to debounce Lean4 info view refresh.")
-
 
 (defvar lean4-info-buffer-debounce-begin-time nil
   "Return the time we have begun debouncing.
@@ -252,7 +252,7 @@ the request."
   :group 'lean4-info
   :type 'number)
 
-;;  Debounce implementation modifed from lsp-lens
+;; This is based on lsp-lens.el from lsp-mode:
 ;; https://github.com/emacs-lsp/lsp-mode/blob/2f0ea2e396ec9a570f2a2aeb097c304ddc61ebee/lsp-lens.el#L140
 (defun lean4-info-buffer-redisplay-debounced ()
   "Debounced version of `lean4-info-buffer-redisplay'.
@@ -260,20 +260,20 @@ the request."
 This version ensures that info buffer is not repeatedly written to.
 This is to prevent lag, because magit is quite slow at building
 sections."
-  ;;  if we have not begun debouncing, setup debouncing begin time.
+  ;; If we have not begun debouncing, setup debouncing begin time.
   (if (not lean4-info-buffer-debounce-begin-time)
       (setq lean4-info-buffer-debounce-begin-time (current-time)))
-  ;; if time since we began debouncing is too long...
+  ;; If time since we began debouncing is too long...
   (if (>= (time-to-seconds
 	   (time-subtract (current-time)
 			  lean4-info-buffer-debounce-begin-time))
 	  lean4-info-buffer-debounce-upper-bound-sec)
-      ;;  then redisplay immediately.
+      ;; then redisplay immediately.
       (progn
-	;;  We have stopped debouncing.
+	;; We have stopped debouncing.
 	(setq lean4-info-buffer-debounce-begin-time nil)
 	(lean4-info-buffer-redisplay))
-    ;; else cancel current timer, create new debounced timer.
+    ;; Else, cancel current timer and create new debounced timer.
     (-some-> lean4-info-buffer-debounce-timer cancel-timer)
     (setq lean4-info-buffer-debounce-timer ; set new timer
 	  (run-with-timer
@@ -286,13 +286,13 @@ sections."
 
 
 (defun lean4-info-buffer-refresh ()
-  "Refresh the *Lean Goal* buffer."
+  "Refresh the *Lean4 Info* buffer."
   (when (lean4-info-buffer-active lean4-info-buffer-name)
     (lsp-request-async
      "$/lean/plainGoal"
      (lsp--text-document-position-params)
      (-lambda ((ignored &as &lean:PlainGoal? :goals))
-       (setq lean4-goals goals)
+       (setq lean4-info-goals goals)
        (lean4-info-buffer-redisplay-debounced))
      :error-handler #'ignore
      :mode 'tick
@@ -301,20 +301,47 @@ sections."
      "$/lean/plainTermGoal"
      (lsp--text-document-position-params)
      (-lambda ((ignored &as &lean:PlainTermGoal? :goal))
-       (setq lean4-term-goal goal)
+       (setq lean4-info-term-goal goal)
        (lean4-info-buffer-redisplay-debounced))
      :error-handler #'ignore
      :mode 'tick
-     :cancel-token :plain-term-goal)
-    ;; may lead to flickering
-    ;(lean4-info-buffer-redisplay)
-    ))
+     :cancel-token :plain-term-goal)))
 
-(defun lean4-toggle-info ()
-  "Show infos at the current point."
-  (interactive)
-  (lean4-toggle-info-buffer lean4-info-buffer-name)
-  (lean4-info-buffer-refresh))
+(defcustom lean4-info-hookings
+  (list
+   (cons 'flycheck-after-syntax-check-hook
+		 #'lean4-info-buffer-redisplay-debounced)
+   (cons 'post-command-hook
+		 #'lean4-info-buffer-redisplay-debounced)
+   (cons 'lsp-on-idle-hook
+		 #'lean4-info-buffer-refresh))
+  "Pairs of hooks and functions to be toggled by `lean4-info-mode'.
+
+The value should be an alist associating hook variables with functions.
+When `lean4-info-mode' is turned on, the function will be added
+buffer-locally to the hook.  When turned off, it'll be removed
+buffer-locally."
+  :type '(repeat (cons variable function))
+  :group 'lean4-info)
+
+(define-minor-mode lean4-info-mode
+  "Minor mode for `lean4-mode' to keep Lean4 Info buffer updated."
+  :lighter "ⓘ"
+  (if lean4-info-mode
+	  (progn
+		(lean4-info-ensure-buffer lean4-info-buffer-name)
+		(display-buffer lean4-info-buffer-name)
+		(lean4-info-buffer-refresh)
+		(mapc (lambda (hooking)
+				(when (boundp (car hooking))
+                  (add-hook (car hooking) (cdr hooking) nil 'local)))
+			  lean4-info-hookings))
+	(when-let* ((window (get-buffer-window lean4-info-buffer-name)))
+      (quit-window nil window)
+	  (mapc (lambda (hooking)
+			  (when (boundp (car hooking))
+                (remove-hook (car hooking) (cdr hooking) 'local)))
+			lean4-info-hookings))))
 
 (provide 'lean4-info)
 ;;; lean4-info.el ends here
