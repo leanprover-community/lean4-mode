@@ -11,7 +11,7 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3
 
     - run: |
         curl "$src" |  jq 'del(.[] | select(. | match("\\$CURSOR")))' \
@@ -19,7 +19,7 @@ jobs:
       env:
         src: https://raw.githubusercontent.com/leanprover/vscode-lean4/master/lean4-unicode-input/src/abbreviations.json
 
-    - uses: peter-evans/create-pull-request@v4
+    - uses: peter-evans/create-pull-request@38e0b6e68b4c852a5500a94740f0e535e0d7ba54 # v4
       with:
         title: 'Update abbreviations.json'
         commit-message: 'chore: update abbreviations.json'
