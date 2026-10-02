@@ -63,7 +63,6 @@
 (defvar markdown-code-lang-modes)
 (declare-function flycheck-list-errors "ext:flycheck")
 (declare-function flymake-proc-init-create-temp-buffer-copy "flymake-proc")
-(declare-function lean-mode "ext:lean-mode")
 (declare-function quail-show-key "quail")
 
 (defun lean4-compile-string (lake-name exe-name args file-name)
@@ -102,11 +101,6 @@ FILE-NAME."
     (setq compile-command cc)
     (setq default-directory dd)))
 
-(defun lean4-std-exe ()
-  "Execute Lean in the current buffer."
-  (interactive)
-  (lean4-execute))
-
 (defun lean4-refresh-file-dependencies ()
   "Refresh the file dependencies.
 
@@ -132,9 +126,9 @@ file, recompiling, and reloading all imports."
         (t (indent-for-tab-command))))
 
 (defun lean4-set-keys ()
-  "Setup Lean 4 keybindings."
-  (local-set-key lean4-keybinding-std-exe1                  #'lean4-std-exe)
-  (local-set-key lean4-keybinding-std-exe2                  #'lean4-std-exe)
+  "Setup Lean4 keybindings."
+  (local-set-key lean4-keybinding-std-exe1                  #'lean4-execute)
+  (local-set-key lean4-keybinding-std-exe2                  #'lean4-execute)
   (local-set-key lean4-keybinding-show-key                  #'quail-show-key)
   (local-set-key lean4-keybinding-tab-indent                #'lean4-tab-indent)
   ;; (local-set-key lean4-keybinding-hole                      #'lean4-hole)
@@ -147,9 +141,6 @@ file, recompiling, and reloading all imports."
   ;; (local-set-key (kbd "<mouse-3>")                         #'lean4-right-click-show-menu)
   )
 
-(define-abbrev-table 'lean4-abbrev-table
-  '())
-
 (defvar lean4-mode-map (make-sparse-keymap)
   "Keymap used in Lean mode.")
 
@@ -158,19 +149,11 @@ file, recompiling, and reloading all imports."
   `("Lean 4"
     ["Execute lean"         lean4-execute           t]
     ["Toggle info display"  lean4-toggle-info       t]
-    ;; TODO: Bug#91: We offers a Flycheck-based menu-item when
-    ;; Flycheck is in use.  Users who use built-in Flymake should also
-    ;; be offered a working menu-item.  Alternatively, the menu-item
-    ;; could also be dropped for both cases.
-    ["List of errors"       flycheck-list-errors    flycheck-mode]
     ["Restart lean process" lsp-workspace-restart   t]
     ["Customize lean4-mode" (customize-group 'lean) t]))
 
 (defconst lean4-hooks-alist
-  '(
-    ;; Handle events that may start automatic syntax checks
-    (before-save-hook . lean4-whitespace-cleanup)
-    ;; info view
+  '(;; info view
     ;; update errors immediately, but delay querying goal
     (flycheck-after-syntax-check-hook . lean4-info-buffer-redisplay-debounced)
     (post-command-hook . lean4-info-buffer-redisplay-debounced)
@@ -216,7 +199,6 @@ of the parent project."
 
 \\{lean4-mode-map}"
   :syntax-table lean4-syntax-table
-  :abbrev-table lean4-abbrev-table
   :group 'lean4
   (set (make-local-variable 'comment-start) "--")
   (set (make-local-variable 'comment-start-skip) "[-/]-[ \t]*")
@@ -234,41 +216,19 @@ of the parent project."
   (lean4-set-keys)
   (if (fboundp 'electric-indent-local-mode)
       (electric-indent-local-mode -1))
-  ;; (abbrev-mode 1)
   (pcase-dolist (`(,hook . ,fn) lean4-hooks-alist)
     (add-hook hook fn nil 'local))
   (lean4-mode-setup))
 
-(defun lean4--version ()
-  "Return Lean version as a list `(MAJOR MINOR PATCH)'."
-  (with-temp-buffer
-    (call-process (lean4-get-executable "lean") nil (list t nil) nil "-v")
-    (goto-char (point-min))
-    (re-search-forward (rx bol "Lean (version " (group (+ digit) (+ "." (+ digit)))))
-    (version-to-list (match-string 1))))
-
-(defun lean4-show-version ()
-  "Print Lean 4 version."
-  (interactive)
-  (message "Lean %s" (mapconcat #'number-to-string (lean4--version) ".")))
-
-;;;###autoload
-(defun lean4-select-mode ()
-  "Automatically select mode (Lean 3 vs Lean 4)."
-  (if (and lean4-autodetect-lean3
-           (eq 3 (car (lean4--version))))
-      (lean-mode)
-    (lean4-mode)))
-
 ;; Automatically use lean4-mode for .lean files.
 ;;;###autoload
 (add-to-list 'auto-mode-alist
-             '("\\.lean\\'" . lean4-select-mode))
+             '("\\.lean\\'" . lean4-mode))
 
 ;;;###autoload
 (with-eval-after-load 'markdown-mode
   (add-to-list 'markdown-code-lang-modes
-               '("lean" . lean4-select-mode)))
+               '("lean" . lean4-mode)))
 
 ;; Use utf-8 encoding
 ;;;### autoload

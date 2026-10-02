@@ -90,14 +90,6 @@ It is approximately the maximum number of memory allocations in thousands."
   :group 'lean4
   :type '(list string))
 
-(defcustom lean4-delete-trailing-whitespace nil
-  "Automatically delete trailing shitespace.
-Set this variable to true to automatically delete trailing
-whitespace when a buffer is loaded from a file or when it is
-written."
-  :group 'lean4
-  :type 'boolean)
-
 (defcustom lean4-highlight-inaccessible-names t
   "Use font to highlight inaccessible names.
 Set this variable to t to highlight inaccessible names in the info display
@@ -110,20 +102,11 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   :group 'lean4
   :type 'boolean)
 
-
-(defcustom lean4-autodetect-lean3 nil
-  "Autodetect Lean version.
-Use elan to check if current project uses Lean 3 or Lean 4 and initialize the
-right mode when visiting a file.  If elan has a default Lean version, Lean files
-outside a project will default to that mode."
-  :group 'lean4
-  :type 'boolean)
-
 (defcustom lean4-keybinding-std-exe1 (kbd "C-c C-x")
-  "Main Keybinding for `lean4-std-exe'."
+  "Main Keybinding for `lean4-execute'."
   :group 'lean4-keybinding :type 'key-sequence)
 (defcustom lean4-keybinding-std-exe2 (kbd "C-c C-l")
-  "Alternative Keybinding for `lean4-std-exe'."
+  "Alternative Keybinding for `lean4-execute'."
   :group 'lean4-keybinding  :type 'key-sequence)
 (defcustom lean4-keybinding-show-key (kbd "C-c C-k")
   "Lean Keybinding for `quail-show-key'."

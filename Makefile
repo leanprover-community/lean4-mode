@@ -8,3 +8,6 @@ lean4-mode.info lean4-mode.texi: README.org
 		"--eval=(require 'ox-texinfo)" \
 		'--eval=(find-file "$<")' \
 		'--eval=(org-texinfo-export-to-info)'
+
+clean:
+	rm lean4-mode.info lean4-mode.texi

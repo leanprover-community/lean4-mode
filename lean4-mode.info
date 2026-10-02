@@ -32,6 +32,7 @@ Lean's Zulip chat.
 * Usage::
 * Configuration::
 * Common Pitfalls::
+* Changelog::
 
 -- The Detailed Node Listing --
 
@@ -56,6 +57,15 @@ Configuration
 
 * lsp-mode: lsp-mode (1).
 * Flycheck: Flycheck (1).
+
+Changelog
+
+* Upcoming Version::
+* Version 1.1.2 from 2024-12-10: Version 112 from 2024-12-10.
+* Version 1.1.1 from 2024-12-02: Version 111 from 2024-12-02.
+* Version 1.1.0 from 2024-12-01: Version 110 from 2024-12-01.
+* Version 1.0.1 from 2024-11-21: Version 101 from 2024-11-21.
+* Version 1.0 from 2024-11-16: Version 10 from 2024-11-16.
 
 
 
@@ -230,7 +240,7 @@ Key                      Description                                            
 ----------------------------------------------------------------------------------------------------------------------
 ‘C-c C-k’                Echo the keystroke needed to input the symbol at point   ‘quail-show-key’
 ‘C-c C-d’                Recompile and reload imports                             ‘lean4-refresh-file-dependencies’
-‘C-c C-x’ or ‘C-c C-l’   Execute Lean in stand-alone mode                         ‘lean4-std-exe’
+‘C-c C-x’ or ‘C-c C-l’   Execute Lean in stand-alone mode                         ‘lean4-execute’
 ‘C-c C-p C-l’            Builds package with lake                                 ‘lean4-lake-build’
 ‘C-c C-i’                Toggle Info-View which shows goals and errors at point   ‘lean4-toggle-info-buffer’
 
@@ -300,7 +310,7 @@ installed, then customize the ‘lsp-diagnostics-provider’ user option
 accordingly.
 
 
-File: lean4-mode.info,  Node: Common Pitfalls,  Prev: Configuration,  Up: Top
+File: lean4-mode.info,  Node: Common Pitfalls,  Next: Changelog,  Prev: Configuration,  Up: Top
 
 4 Common Pitfalls
 *****************
@@ -313,24 +323,143 @@ note that Lean3-Mode uses the prefix ‘lean-’ for its symbols.  E.g.  you
 should not use ‘lean-’-prefixed commands in a buffer with Lean4-Mode as
 major mode.
 
+
+File: lean4-mode.info,  Node: Changelog,  Prev: Common Pitfalls,  Up: Top
+
+5 Changelog
+***********
+
+* Menu:
+
+* Upcoming Version::
+* Version 1.1.2 from 2024-12-10: Version 112 from 2024-12-10.
+* Version 1.1.1 from 2024-12-02: Version 111 from 2024-12-02.
+* Version 1.1.0 from 2024-12-01: Version 110 from 2024-12-01.
+* Version 1.0.1 from 2024-11-21: Version 101 from 2024-11-21.
+* Version 1.0 from 2024-11-16: Version 10 from 2024-11-16.
+
+
+File: lean4-mode.info,  Node: Upcoming Version,  Next: Version 112 from 2024-12-10,  Up: Changelog
+
+5.1 Upcoming Version
+====================
+
+Documentation:
+   • The changelog is now part of the readme (and thus of the Info
+     manual).
+
+   User interface:
+   • The tool-bar menu of Lean4-Mode does not list the
+     ‘flycheck-list-errors’ anymore.  Please use the “Show all errors”
+     entry in Flycheck's menu instead.  (Fixes #91
+     (https://github.com/leanprover-community/lean4-mode/issues/91).)
+
+   Features:
+   • The variable ‘lean4-delete-trailing-whitespace’ has been removed
+     together with related code.  Instead of reinventing the wheel,
+     Lean4-Mode demands users to use Emacs' built-in facilities for this
+     kind of use case.  For example, you might want to define a function
+     that buffer-locally adds ‘delete-trailing-whitespace’ to
+     ‘before-save-hook’, and add that hereby defined function to
+     ‘lean4-mode-hook’.
+   • The variable ‘lean4-autodetect-lean3’ has been removed along with
+     the command ‘lean4-select-mode’ and related code.  If you still use
+     legacy version 3 of Lean for some files or projects, you could
+     directory- or file-locally associate the ‘.lean’ file extension
+     with Lean3-Mode in ‘auto-mode-alist’.
+   • The command ‘lean4-show-version’ has been removed.  Lean4-Mode now
+     assumes Lean version 4.  In order to determine the minor version,
+     you may type ‘M-! lean --version RET’ or similar.
+   • The functions ‘lean4-input-export-translations’ and
+     ‘lean4-input-export-translations-to-stdout’ have been removed.  We
+     expect that noone has been using it.  If you do use it, let us
+     know, so we can reconsider our decision in case of a substantial
+     amount of users.  Otherwise, please just define these functions in
+     your Emacs initialization file yourself.
+   • The command ‘lean4-std-exe’ has been removed.  It was just the same
+     as ‘lean4-execute’ which continues to exist.
+
+
+File: lean4-mode.info,  Node: Version 112 from 2024-12-10,  Next: Version 111 from 2024-12-02,  Prev: Upcoming Version,  Up: Changelog
+
+5.2 Version 1.1.2 from 2024-12-10
+=================================
+
+   • Fix occasional errors like "The connected server(s) does not
+     support method ‘$/lean/plainGoal’" by not wrapping invocations of
+     ‘lsp-protocol’ macro into ‘eval-when-compile’ but rather into
+     ‘eval-and-compile’.  Thus, the methods should now work, no matter
+     whether Lean4-Mode was loaded by interpreting ‘.el’ Elisp code or
+     by loading compiled ‘.elc’ or ‘.eln’ files.  (Bug#54
+     (https://github.com/leanprover-community/lean4-mode/issues/54),
+     Zulip discussion
+     (https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs/topic/lsp-mode.20errors.20due.20to.20list.20!.3D.20hash-table))
+
+
+File: lean4-mode.info,  Node: Version 111 from 2024-12-02,  Next: Version 110 from 2024-12-01,  Prev: Version 112 from 2024-12-10,  Up: Changelog
+
+5.3 Version 1.1.1 from 2024-12-02
+=================================
+
+   • Assign all customizable user-options to the Lean4-Mode specific
+     ‘lean4’ group.  To customize Lean4-Mode, you now need to type ‘M-x
+     customize-group RET lean4 RET’.
+
+
+File: lean4-mode.info,  Node: Version 110 from 2024-12-01,  Next: Version 101 from 2024-11-21,  Prev: Version 111 from 2024-12-02,  Up: Changelog
+
+5.4 Version 1.1.0 from 2024-12-01
+=================================
+
+   • To ‘lean4’ customization group, add link to local info manual and
+     use Lean4-Mode Github URL as website.
+   • Introduce new dependency on Elpa package ‘compat’.
+   • Remove dependency on Elpa package Flycheck.  It is still supported
+     but not required.
+
+
+File: lean4-mode.info,  Node: Version 101 from 2024-11-21,  Next: Version 10 from 2024-11-16,  Prev: Version 110 from 2024-12-01,  Up: Changelog
+
+5.5 Version 1.0.1 from 2024-11-21
+=================================
+
+   • Specify Yury G.  Kudryashov as maintainer.
+   • Rework README.  (Now in Org format).
+   • Provide README as Texi and Info manual too.
+
+
+File: lean4-mode.info,  Node: Version 10 from 2024-11-16,  Prev: Version 101 from 2024-11-21,  Up: Changelog
+
+5.6 Version 1.0 from 2024-11-16
+===============================
+
+   • Specify "Version" in Emacs-Lisp library header.
+
 
 
 Tag Table:
 Node: Top223
-Node: Installation1492
-Node: Brief and Generic Instructions1735
-Node: Detailed and Concrete Instructions2684
-Node: Instructions for Source-Based Use-Package4341
-Node: Native vc (Emacs 30 or later)5062
-Node: Doom-Emacs5970
-Node: Straight6396
-Node: Usage6896
-Node: lsp-mode8342
-Node: Flycheck8627
-Node: Configuration9237
-Node: lsp-mode (1)9427
-Node: Flycheck (1)9696
-Node: Common Pitfalls10181
+Node: Installation1846
+Node: Brief and Generic Instructions2089
+Node: Detailed and Concrete Instructions3038
+Node: Instructions for Source-Based Use-Package4695
+Node: Native vc (Emacs 30 or later)5416
+Node: Doom-Emacs6324
+Node: Straight6750
+Node: Usage7250
+Node: lsp-mode8696
+Node: Flycheck8981
+Node: Configuration9591
+Node: lsp-mode (1)9781
+Node: Flycheck (1)10050
+Node: Common Pitfalls10535
+Node: Changelog11127
+Node: Upcoming Version11567
+Node: Version 112 from 2024-12-1013633
+Node: Version 111 from 2024-12-0214498
+Node: Version 110 from 2024-12-0114905
+Node: Version 101 from 2024-11-2115403
+Node: Version 10 from 2024-11-1615766
 
 End Tag Table
 

@@ -40,6 +40,7 @@ as @emph{Lean-Mode}).
 * Usage::
 * Configuration::
 * Common Pitfalls::
+* Changelog::
 
 @detailmenu
 --- The Detailed Node Listing ---
@@ -65,6 +66,15 @@ Configuration
 
 * lsp-mode: lsp-mode (1). 
 * Flycheck: Flycheck (1). 
+
+Changelog
+
+* Upcoming Version::
+* Version 1.1.2 from 2024-12-10: Version 112 from 2024-12-10. 
+* Version 1.1.1 from 2024-12-02: Version 111 from 2024-12-02. 
+* Version 1.1.0 from 2024-12-01: Version 110 from 2024-12-01. 
+* Version 1.0.1 from 2024-11-21: Version 101 from 2024-11-21. 
+* Version 1.0 from 2024-11-16: Version 10 from 2024-11-16. 
 
 @end detailmenu
 @end menu
@@ -242,7 +252,7 @@ in VS-Code) in a separate window.
 @tab @code{lean4-refresh-file-dependencies}
 @item @samp{C-c C-x} or @samp{C-c C-l}
 @tab Execute Lean in stand-alone mode
-@tab @code{lean4-std-exe}
+@tab @code{lean4-execute}
 @item @samp{C-c C-p C-l}
 @tab Builds package with lake
 @tab @code{lean4-lake-build}
@@ -316,5 +326,124 @@ reasons.  In principle, it is fine to have both Lean3-Mode and
 Lean4-Mode installed at the same time.  But note that Lean3-Mode uses
 the prefix @samp{lean-} for its symbols.  E.g. you should not use
 @samp{lean-}-prefixed commands in a buffer with Lean4-Mode as major mode.
+
+@node Changelog
+@chapter Changelog
+
+@menu
+* Upcoming Version::
+* Version 1.1.2 from 2024-12-10: Version 112 from 2024-12-10. 
+* Version 1.1.1 from 2024-12-02: Version 111 from 2024-12-02. 
+* Version 1.1.0 from 2024-12-01: Version 110 from 2024-12-01. 
+* Version 1.0.1 from 2024-11-21: Version 101 from 2024-11-21. 
+* Version 1.0 from 2024-11-16: Version 10 from 2024-11-16. 
+@end menu
+
+@node Upcoming Version
+@section Upcoming Version
+
+Documentation:
+@itemize
+@item
+The changelog is now part of the readme (and thus of the Info
+manual).
+@end itemize
+
+User interface:
+@itemize
+@item
+The tool-bar menu of Lean4-Mode does not list the
+@code{flycheck-list-errors} anymore. Please use the “Show all errors”
+entry in Flycheck's menu instead. (Fixes @uref{https://github.com/leanprover-community/lean4-mode/issues/91, #91}.)
+@end itemize
+
+Features:
+@itemize
+@item
+The variable @code{lean4-delete-trailing-whitespace} has been removed
+together with related code. Instead of reinventing the wheel,
+Lean4-Mode demands users to use Emacs' built-in facilities for this
+kind of use case. For example, you might want to define a function
+that buffer-locally adds @code{delete-trailing-whitespace} to
+@code{before-save-hook}, and add that hereby defined function to
+@code{lean4-mode-hook}.
+@item
+The variable @code{lean4-autodetect-lean3} has been removed along with
+the command @code{lean4-select-mode} and related code. If you still use
+legacy version 3 of Lean for some files or projects, you could
+directory- or file-locally associate the @samp{.lean} file extension with
+Lean3-Mode in @code{auto-mode-alist}.
+@item
+The command @code{lean4-show-version} has been removed. Lean4-Mode now
+assumes Lean version 4. In order to determine the minor version, you
+may type @samp{M-! lean --version RET} or similar.
+@item
+The functions @code{lean4-input-export-translations} and
+@code{lean4-input-export-translations-to-stdout} have been removed. We
+expect that noone has been using it. If you do use it, let us know,
+so we can reconsider our decision in case of a substantial amount of
+users. Otherwise, please just define these functions in your Emacs
+initialization file yourself.
+@item
+The command @code{lean4-std-exe} has been removed. It was just the same
+as @code{lean4-execute} which continues to exist.
+@end itemize
+
+@node Version 112 from 2024-12-10
+@section Version 1.1.2 from 2024-12-10
+
+@itemize
+@item
+Fix occasional errors like "The connected server(s) does not support
+method @samp{$/lean/plainGoal}" by not wrapping invocations of
+@code{lsp-protocol} macro into @code{eval-when-compile} but rather into
+@code{eval-and-compile}.  Thus, the methods should now work, no matter
+whether Lean4-Mode was loaded by interpreting @samp{.el} Elisp code or by
+loading compiled @samp{.elc} or @samp{.eln} files.  (@uref{https://github.com/leanprover-community/lean4-mode/issues/54, Bug#54}, @uref{https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs/topic/lsp-mode.20errors.20due.20to.20list.20!.3D.20hash-table, Zulip discussion})
+@end itemize
+
+@node Version 111 from 2024-12-02
+@section Version 1.1.1 from 2024-12-02
+
+@itemize
+@item
+Assign all customizable user-options to the Lean4-Mode specific
+@samp{lean4} group.  To customize Lean4-Mode, you now need to type @samp{M-x
+  customize-group RET lean4 RET}.
+@end itemize
+
+@node Version 110 from 2024-12-01
+@section Version 1.1.0 from 2024-12-01
+
+@itemize
+@item
+To @samp{lean4} customization group, add link to local info manual and
+use Lean4-Mode Github URL as website.
+@item
+Introduce new dependency on Elpa package @samp{compat}.
+@item
+Remove dependency on Elpa package Flycheck.  It is still supported
+but not required.
+@end itemize
+
+@node Version 101 from 2024-11-21
+@section Version 1.0.1 from 2024-11-21
+
+@itemize
+@item
+Specify Yury G@. Kudryashov as maintainer.
+@item
+Rework README@.  (Now in Org format).
+@item
+Provide README as Texi and Info manual too.
+@end itemize
+
+@node Version 10 from 2024-11-16
+@section Version 1.0 from 2024-11-16
+
+@itemize
+@item
+Specify "Version" in Emacs-Lisp library header.
+@end itemize
 
 @bye
