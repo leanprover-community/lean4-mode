@@ -271,7 +271,7 @@ of the parent project."
                '("lean" . lean4-select-mode)))
 
 ;; Use utf-8 encoding
-;;;### autoload
+;;;###autoload
 (modify-coding-system-alist 'file "\\.lean\\'" 'utf-8)
 
 ;; LSP init
