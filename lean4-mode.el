@@ -201,7 +201,7 @@ directory hierarchy for a directory containing a file
 This allows us to edit files in child packages using the settings
 of the parent project."
   (let (root)
-    (when-let ((file-name (buffer-file-name)))
+    (when-let* ((file-name (buffer-file-name)))
       (while-let ((dir (locate-dominating-file file-name "lean-toolchain")))
         ;; We found a toolchain file, but maybe it belongs to a package.
         ;; Continue looking until there are no more toolchain files.
