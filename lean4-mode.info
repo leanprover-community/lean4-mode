@@ -3,28 +3,24 @@ lean4-mode.texi.
 
 INFO-DIR-SECTION Emacs misc features
 START-INFO-DIR-ENTRY
-* Lean4-Mode: (lean4-mode). Emacs major mode for Lean language.
+* Lean4-Mode: (lean4-mode). Emacs major mode for Lean4 language.
 END-INFO-DIR-ENTRY
 
 
 File: lean4-mode.info,  Node: Top,  Next: Installation,  Up: (dir)
 
-Lean4-Mode - Emacs major mode for Lean language
-***********************************************
+Emacs Lean4-Mode
+****************
 
 This package extends GNU Emacs (https://www.gnu.org/software/emacs/) by
-providing a major mode for editing code written in version 4 of the
-programming language and theorem prover Lean (https://lean-lang.org).
+a major mode for Lean (https://lean-lang.org) version 4, a programming
+language and theorem prover.
 
-   The Lean4-Mode source code is developed at Github
-(https://github.com/leanprover-community/lean4-mode) and its issues
-tracked there too.  Further discussions and question-answering takes
-place in the #Emacs channel
-(https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs) of
-Lean's Zulip chat.
-
-   For legacy version 3 of Lean, use the archived Lean3-Mode
-(https://github.com/leanprover/lean3-mode) (also known as _Lean-Mode_).
+   Lean4-Mode is developed on Github
+(https://github.com/leanprover-community/lean4-mode).  Bugs and feature
+requests are also tracked there.  Further discussions take place in the
+#Emacs (https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs)
+channel on the Lean Zulip chat platform.
 
 * Menu:
 
@@ -32,19 +28,21 @@ Lean's Zulip chat.
 * Usage::
 * Configuration::
 * Common Pitfalls::
+* Changelog::
+* Contributing::
 
 -- The Detailed Node Listing --
 
 Installation
 
-* Brief and Generic Instructions::
-* Detailed and Concrete Instructions::
+* Brief, Generic Instructions: Brief Generic Instructions.
+* Detailed, Native Instructions: Detailed Native Instructions.
 * Instructions for Source-Based Use-Package::
 
 Instructions for Source-Based Use-Package
 
 * Native vc (Emacs 30 or later)::
-* Doom-Emacs::
+* Doom package!::
 * Straight::
 
 Usage
@@ -57,6 +55,20 @@ Configuration
 * lsp-mode: lsp-mode (1).
 * Flycheck: Flycheck (1).
 
+Common Pitfalls
+
+* Coexistence with Lean3-Mode::
+* Partial value of lean4-mode-hook or other hook variables::
+
+Changelog
+
+* Upcoming Version::
+* Version 1.1.2 from 2024-12-10: Version 112 from 2024-12-10.
+* Version 1.1.1 from 2024-12-02: Version 111 from 2024-12-02.
+* Version 1.1.0 from 2024-12-01: Version 110 from 2024-12-01.
+* Version 1.0.1 from 2024-11-21: Version 101 from 2024-11-21.
+* Version 1.0 from 2024-11-16: Version 10 from 2024-11-16.
+
 
 
 File: lean4-mode.info,  Node: Installation,  Next: Usage,  Prev: Top,  Up: Top
@@ -66,15 +78,15 @@ File: lean4-mode.info,  Node: Installation,  Next: Usage,  Prev: Top,  Up: Top
 
 * Menu:
 
-* Brief and Generic Instructions::
-* Detailed and Concrete Instructions::
+* Brief, Generic Instructions: Brief Generic Instructions.
+* Detailed, Native Instructions: Detailed Native Instructions.
 * Instructions for Source-Based Use-Package::
 
 
-File: lean4-mode.info,  Node: Brief and Generic Instructions,  Next: Detailed and Concrete Instructions,  Up: Installation
+File: lean4-mode.info,  Node: Brief Generic Instructions,  Next: Detailed Native Instructions,  Up: Installation
 
-1.1 Brief and Generic Instructions
-==================================
+1.1 Brief, Generic Instructions
+===============================
 
 First, install the dependencies of Lean4-Mode:
    • Lean (https://lean-lang.org/lean4/doc/setup.html) (version 4)
@@ -84,19 +96,29 @@ First, install the dependencies of Lean4-Mode:
      Magit-Section
      (https://github.com/magit/magit/blob/main/lisp/magit-section.el)
      (available on Melpa)
+   Additionally, we'll assume you have Git installed.
 
    Second, install Lean4-Mode itself:
-   • Clone the Git repository of Lean4-Mode
+   • Clone the Git repository
      (https://github.com/leanprover-community/lean4-mode).
    • In your Emacs initialization file
      (https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html),
-     add the path to that local repository to the ‘load-path’ list.
+     add the path to your local repository to ‘load-path’.
+
+   Third, ensure Lean4-Mode is loaded by one of the following ways:
+   • Load it eagerly.
+   • Load it lazily by associating ‘lean4-mode’ with the ‘.lean’ file
+     extension and setting it up as autoloaded command.
+   • Load it lazily by generating an autoload file (with the Make target
+     called ‘autoload’) and loading that in your init file.  Make sure
+     to regenerate the autoload file, whenever you change the Lean4-Mode
+     repository (e.g.  ‘git pull’).
 
 
-File: lean4-mode.info,  Node: Detailed and Concrete Instructions,  Next: Instructions for Source-Based Use-Package,  Prev: Brief and Generic Instructions,  Up: Installation
+File: lean4-mode.info,  Node: Detailed Native Instructions,  Next: Instructions for Source-Based Use-Package,  Prev: Brief Generic Instructions,  Up: Installation
 
-1.2 Detailed and Concrete Instructions
-======================================
+1.2 Detailed, Native Instructions
+=================================
 
 Install Lean version 4.
 
@@ -130,41 +152,73 @@ approach, add the following to your Emacs initialization file (e.g.
 Lean4-Mode repository to the ‘load-path’ list:
      (add-to-list 'load-path "~/path/to/lean4-mode")
 
-   Lean4-Mode should now already be enabled when you open a file with
-‘.lean’ extension.  But you can optionally also already load Lean4-Mode
-on Emacs startup, e.g.  in order to customize variables:
+   Now you can choose one of the following ways to determine how
+Lean4-Mode is loaded:
+
+   If you want Emacs to load Lean4-Mode eagerly whenever it is started,
+put in your init file:
      (require 'lean4-mode)
 
+   If you want Emacs to load Lean4-Mode lazily, i.e.  when a Lean4
+source file is opened the first time, put in your init file:
+     (autoload 'lean4-mode "lean4-mode" nil t)
+     (add-to-list 'auto-mode-alist '("\\.lean\\'" . lean4-mode))
+
+   If you want Emacs to load Lean4-Mode lazily, you can also generate an
+autoload file and load it in your init file.  That is, whenever your Git
+repository changes (e.g.  ‘git pull’), run ‘make autoload’ inside.  And
+put this in your init file:
+     (require 'lean4-mode-autoloads)
+
 
-File: lean4-mode.info,  Node: Instructions for Source-Based Use-Package,  Prev: Detailed and Concrete Instructions,  Up: Installation
+File: lean4-mode.info,  Node: Instructions for Source-Based Use-Package,  Prev: Detailed Native Instructions,  Up: Installation
 
 1.3 Instructions for Source-Based Use-Package
 =============================================
 
-If you use a source-based package-manager (e.g.  ‘package-vc.el’,
+This section instructs how to set up Lean4-Mode through the
+‘use-package’ macro that is built into Emacs since version 29.
+
+   If you use a source-based package-manager (e.g.  ‘package-vc.el’,
 Straight or Elpaca), then make sure to list the ‘"data"’ directory in
 your Lean4-Mode package recipe.
 
-   If you use the ‘use-package’ macro and intent to defer loading of
-packages in order to improve your Emacs startup time, then make sure to
-specify ‘lean4-mode’ as a ‘:command’.
+   When customizing Lean4-Mode variables, make sure the customization
+takes place after loading the Lean4-Mode package so that the variables
+are correctly initialized first.  For example, many Lean4-Mode hook
+variables like ‘lean4-mode-hook’ have non-nil initialization values.
+And since ‘use-package’ applies the ‘:hook’ specifications before
+package loading, you should avoid it.  Instead, put ‘(add-hook
+'lean4-...-hook #'...)’ under the ‘:config’ section.  (See _Common
+Pitfalls_ section below.)
+
+   Use-Package involves
+(https://www.gnu.org/software/emacs/manual/html_node/use-package/Deferring-loading.html)
+some complexity when it comes to deciding whether to load a package
+eagerly (_demand_) or lazily (_defer_).  For example, it depends on your
+configuration (e.g.  ‘use-package-always-defer’,
+‘use-package-always-demand’).  Assuming you want Lean4-Mode to be
+invoked as major mode when opening a Lean source file, the simplest
+solution would be eager loading, e.g.  via ‘:demand t’.  Alternatively,
+you can defer loading e.g.  via ‘:defer t’ together with ‘:mode
+"\\.lean\\'"’ (which associates Lean4-Mode with the ‘.lean’ file
+extension) and ‘:commands lean4-mode’ (which will set up autoloading).
 
    Following subsections show concrete examples.
 
 * Menu:
 
 * Native vc (Emacs 30 or later)::
-* Doom-Emacs::
+* Doom package!::
 * Straight::
 
 
-File: lean4-mode.info,  Node: Native vc (Emacs 30 or later),  Next: Doom-Emacs,  Up: Instructions for Source-Based Use-Package
+File: lean4-mode.info,  Node: Native vc (Emacs 30 or later),  Next: Doom package!,  Up: Instructions for Source-Based Use-Package
 
 1.3.1 Native ‘:vc’ (Emacs 30 or later)
 --------------------------------------
 
-GNU Emacs comes with ‘use-package.el’ built-in since version 29.  And
-since version 30, it also comes with a built-in ‘:vc’ keyword for the
+Since version 30, Emacs comes with a built-in ‘:vc’ keyword for the
 ‘use-package’ macro that utilizes ‘package-vc.el’ to install Emacs
 packages from remote source repositories.
 
@@ -175,28 +229,29 @@ packages from remote source repositories.
 
      (use-package lean4-mode
        :commands lean4-mode
-       :vc (:url "https://github.com/leanprover-community/lean4-mode.git"
-            :rev :last-release
-            ;; Or, if you prefer the bleeding edge version of Lean4-Mode:
-            ;; :rev :newest
-            ))
+       :mode "\\.lean\\'"
+       :vc ( :url "https://github.com/leanprover-community/lean4-mode.git"
+             :rev :last-release
+             ;; Or, if you prefer the bleeding edge version of Lean4-Mode:
+             ;; :rev :newest
+             ))
 
 
-File: lean4-mode.info,  Node: Doom-Emacs,  Next: Straight,  Prev: Native vc (Emacs 30 or later),  Up: Instructions for Source-Based Use-Package
+File: lean4-mode.info,  Node: Doom package!,  Next: Straight,  Prev: Native vc (Emacs 30 or later),  Up: Instructions for Source-Based Use-Package
 
-1.3.2 Doom-Emacs
-----------------
+1.3.2 Doom ‘package!’
+---------------------
 
 If you use Doom-Emacs, you can place the following code in your Doom
 initialization file:
 
      (package! lean4-mode
-       :recipe (:host github
-                :repo "leanprover-community/lean4-mode"
-                :files ("*.el" "data")))
+               :recipe ( :host github
+                         :repo "leanprover-community/lean4-mode"
+                         :files ("*.el" "data")))
 
 
-File: lean4-mode.info,  Node: Straight,  Prev: Doom-Emacs,  Up: Instructions for Source-Based Use-Package
+File: lean4-mode.info,  Node: Straight,  Prev: Doom package!,  Up: Instructions for Source-Based Use-Package
 
 1.3.3 Straight
 --------------
@@ -206,6 +261,7 @@ the following code in your Emacs initialization file:
 
      (use-package lean4-mode
        :commands lean4-mode
+       :mode "\\.lean\\'"
        :straight (lean4-mode :type git :host github
                              :repo "leanprover-community/lean4-mode"
                              :files ("*.el" "data")))
@@ -216,23 +272,23 @@ File: lean4-mode.info,  Node: Usage,  Next: Configuration,  Prev: Installation, 
 2 Usage
 *******
 
-If things are working correctly, you should see the word "Lean 4" in
+If things are working correctly, you should see the word "Lean4" in
 Emacs mode-line when you open a file with ‘.lean’ extension.  Emacs will
 ask you to identify the _project_ this file belongs to.  If you then
 type ‘#check id’, the word ‘#check’ will be underlined, and hovering
 over it will show you the type of ‘id’.
 
-   To view the proof state, run ‘lean4-toggle-info’ (‘C-c C-i’).  This
-will display the ‘*Lean Goals*’ buffer (like the Lean Info-View pane in
+   To view the proof state, run ‘lean4-info-mode’ (‘C-c C-i’).  This
+will display the ‘*Lean4 Info*’ buffer (like the Lean Info-View pane in
 VS-Code) in a separate window.
 
 Key                      Description                                              Command
-----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 ‘C-c C-k’                Echo the keystroke needed to input the symbol at point   ‘quail-show-key’
-‘C-c C-d’                Recompile and reload imports                             ‘lean4-refresh-file-dependencies’
-‘C-c C-x’ or ‘C-c C-l’   Execute Lean in stand-alone mode                         ‘lean4-std-exe’
+‘C-c C-d’                Recompile and reload imports                             ‘lean4-lsp-document-reopen’
+‘C-c C-x’ or ‘C-c C-l’   Execute Lean4 in stand-alone mode                        ‘lean4-execute’
 ‘C-c C-p C-l’            Builds package with lake                                 ‘lean4-lake-build’
-‘C-c C-i’                Toggle Info-View which shows goals and errors at point   ‘lean4-toggle-info-buffer’
+‘C-c C-i’                Toggle Info-View which shows goals and errors at point   ‘lean4-info-mode’
 
 * Menu:
 
@@ -300,37 +356,247 @@ installed, then customize the ‘lsp-diagnostics-provider’ user option
 accordingly.
 
 
-File: lean4-mode.info,  Node: Common Pitfalls,  Prev: Configuration,  Up: Top
+File: lean4-mode.info,  Node: Common Pitfalls,  Next: Changelog,  Prev: Configuration,  Up: Top
 
 4 Common Pitfalls
 *****************
 
-Lean4-Mode only supports version 4 of Lean.  For editing Lean version 3,
-use Lean3-Mode (https://github.com/leanprover/lean3-mode), which is also
-known as Lean-Mode due to historical reasons.  In principle, it is fine
-to have both Lean3-Mode and Lean4-Mode installed at the same time.  But
-note that Lean3-Mode uses the prefix ‘lean-’ for its symbols.  E.g.  you
-should not use ‘lean-’-prefixed commands in a buffer with Lean4-Mode as
-major mode.
+* Menu:
+
+* Coexistence with Lean3-Mode::
+* Partial value of lean4-mode-hook or other hook variables::
+
+
+File: lean4-mode.info,  Node: Coexistence with Lean3-Mode,  Next: Partial value of lean4-mode-hook or other hook variables,  Up: Common Pitfalls
+
+4.1 Coexistence with Lean3-Mode
+===============================
+
+Lean4-Mode only supports version 4 of Lean.  For editing code written in
+deprecated version 3, use Lean3-Mode
+(https://github.com/leanprover/lean3-mode).  It is possible for both
+packages to be installed in parallel and used independently.  But as a
+user, it's your responsibility to set this up correctly.  You need to
+take care of following issues in particular:
+
+   • Lean3-Mode uses ‘lean-’ as prefix (e.g.  for commands) whereas
+     Lean4-Mode uses ‘lean4-’ as prefix.  When Lean4-Mode is active, you
+     must not use commands with prefix ‘lean-’.
+
+   • Both packages associate the ‘.lean’ file extension with their
+     respective commands.  Even more confusingly, they use different
+     functions and regular expressions to do so.
+
+     Lean3-Mode:
+          ;;;###autoload
+          (push '("\\.lean$" . lean-mode) auto-mode-alist)
+
+     Lean4-Mode:
+          ;;;###autoload
+          (add-to-list 'auto-mode-alist '("\\.lean\\'" . lean4-select-mode))
+
+     Make sure that both packages are loaded, autoloaded and configured
+     in such a way ‘auto-mode-alist’ ends up with your desired value.
+
+   • In particular, if you want Emacs to automatically detect whether
+     Lean3- or Lean4-Mode should be used for a particular file or
+     project, you'll need to define your own Elisp function and
+     associate it with the Lean file extension.  If desired, you can
+     even do this directory locally (via the special "variable" ‘eval’
+     in ‘.dir-locals.el’).
+
+
+File: lean4-mode.info,  Node: Partial value of lean4-mode-hook or other hook variables,  Prev: Coexistence with Lean3-Mode,  Up: Common Pitfalls
+
+4.2 Partial value of ‘lean4-mode-hook’ or other hook variables
+==============================================================
+
+If you customize a hook variable like ‘lean4-mode-hook’ e.g.  with
+‘add-hook’ or Use-Package's ‘:hook’ keyword, you may end up with a
+partial / incomplete value of the hook variable.  For example,
+‘lean4-mode-hook’ may not contain the ‘lsp’ command and as a consequence
+‘lsp-mode’ won't start automatically together with Lean4-Mode.
+
+   There are several reasons that lead to this situation in conjunction:
+(1.)  Lean4-Mode has non-nil initialization values for many of its hook
+variables.  (2.)  Emacs evaluates your ‘add-hook’ form before it loads
+the definition of the hook from Lean4-Mode package.  (3.)  ‘add-hook’
+effectively initializes the passed hook-variable to nil when the symbol
+has no value cell.  And (4.), Use-Package applies passed ‘:hook’
+specifications before package loading.
+
+   If you do not use Use-Package, the solution is to load Lean4-Mode
+before calling ‘add-hook’, e.g.  with ‘require’:
+     (require 'lean4-mode)
+     (add-hook 'lean4-...-hook #'...)
+
+   Or with ‘with-eval-after-load’:
+     (with-eval-after-load 'lean4-mode
+       (add-hook 'lean4-mode-hook #'...))
+     (with-eval-after-load 'lean4-lsp
+       (add-hook 'lean4-lsp-mode-hook #'...))
+
+   If you do Use-Package, you can solve the problem by calling
+‘add-hook’ within the ‘:config’ section:
+     (use-package lean4-mode
+       ;; ...
+       :config
+       (add-hook 'lean4-...-hook #'...))
+
+
+File: lean4-mode.info,  Node: Changelog,  Next: Contributing,  Prev: Common Pitfalls,  Up: Top
+
+5 Changelog
+***********
+
+* Menu:
+
+* Upcoming Version::
+* Version 1.1.2 from 2024-12-10: Version 112 from 2024-12-10.
+* Version 1.1.1 from 2024-12-02: Version 111 from 2024-12-02.
+* Version 1.1.0 from 2024-12-01: Version 110 from 2024-12-01.
+* Version 1.0.1 from 2024-11-21: Version 101 from 2024-11-21.
+* Version 1.0 from 2024-11-16: Version 10 from 2024-11-16.
+
+
+File: lean4-mode.info,  Node: Upcoming Version,  Next: Version 112 from 2024-12-10,  Up: Changelog
+
+5.1 Upcoming Version
+====================
+
+Documentation:
+   • The changelog is now part of the readme (and thus of the Info
+     manual).
+
+   User interface:
+   • The tool-bar menu of Lean4-Mode does not list the
+     ‘flycheck-list-errors’ anymore.  Please use the “Show all errors”
+     entry in Flycheck's menu instead.  (Fixes #91
+     (https://github.com/leanprover-community/lean4-mode/issues/91).)
+
+   Features:
+   • The variable ‘lean4-delete-trailing-whitespace’ has been removed
+     together with related code.  Instead of reinventing the wheel,
+     Lean4-Mode demands users to use Emacs' built-in facilities for this
+     kind of use case.  For example, you might want to define a function
+     that buffer-locally adds ‘delete-trailing-whitespace’ to
+     ‘before-save-hook’, and add that hereby defined function to
+     ‘lean4-mode-hook’.
+   • The variable ‘lean4-autodetect-lean3’ has been removed along with
+     the command ‘lean4-select-mode’ and related code.  If you still use
+     legacy version 3 of Lean for some files or projects, you could
+     directory- or file-locally associate the ‘.lean’ file extension
+     with Lean3-Mode in ‘auto-mode-alist’.
+   • The command ‘lean4-show-version’ has been removed.  Lean4-Mode now
+     assumes Lean version 4.  In order to determine the minor version,
+     you may type ‘M-! lean --version RET’ or similar.
+   • The functions ‘lean4-input-export-translations’ and
+     ‘lean4-input-export-translations-to-stdout’ have been removed.  We
+     expect that noone has been using it.  If you do use it, let us
+     know, so we can reconsider our decision in case of a substantial
+     amount of users.  Otherwise, please just define these functions in
+     your Emacs initialization file yourself.
+   • The command ‘lean4-std-exe’ has been removed.  It was just the same
+     as ‘lean4-execute’ which continues to exist.
+
+
+File: lean4-mode.info,  Node: Version 112 from 2024-12-10,  Next: Version 111 from 2024-12-02,  Prev: Upcoming Version,  Up: Changelog
+
+5.2 Version 1.1.2 from 2024-12-10
+=================================
+
+   • Fix occasional errors like "The connected server(s) does not
+     support method ‘$/lean/plainGoal’" by not wrapping invocations of
+     ‘lsp-protocol’ macro into ‘eval-when-compile’ but rather into
+     ‘eval-and-compile’.  Thus, the methods should now work, no matter
+     whether Lean4-Mode was loaded by interpreting ‘.el’ Elisp code or
+     by loading compiled ‘.elc’ or ‘.eln’ files.  (Bug#54
+     (https://github.com/leanprover-community/lean4-mode/issues/54),
+     Zulip discussion
+     (https://leanprover.zulipchat.com/#narrow/channel/468104-Emacs/topic/lsp-mode.20errors.20due.20to.20list.20!.3D.20hash-table))
+
+
+File: lean4-mode.info,  Node: Version 111 from 2024-12-02,  Next: Version 110 from 2024-12-01,  Prev: Version 112 from 2024-12-10,  Up: Changelog
+
+5.3 Version 1.1.1 from 2024-12-02
+=================================
+
+   • Assign all customizable user-options to the Lean4-Mode specific
+     ‘lean4’ group.  To customize Lean4-Mode, you now need to type ‘M-x
+     customize-group RET lean4 RET’.
+
+
+File: lean4-mode.info,  Node: Version 110 from 2024-12-01,  Next: Version 101 from 2024-11-21,  Prev: Version 111 from 2024-12-02,  Up: Changelog
+
+5.4 Version 1.1.0 from 2024-12-01
+=================================
+
+   • To ‘lean4’ customization group, add link to local info manual and
+     use Lean4-Mode Github URL as website.
+   • Introduce new dependency on Elpa package ‘compat’.
+   • Remove dependency on Elpa package Flycheck.  It is still supported
+     but not required.
+
+
+File: lean4-mode.info,  Node: Version 101 from 2024-11-21,  Next: Version 10 from 2024-11-16,  Prev: Version 110 from 2024-12-01,  Up: Changelog
+
+5.5 Version 1.0.1 from 2024-11-21
+=================================
+
+   • Specify Yury G.  Kudryashov as maintainer.
+   • Rework README.  (Now in Org format).
+   • Provide README as Texi and Info manual too.
+
+
+File: lean4-mode.info,  Node: Version 10 from 2024-11-16,  Prev: Version 101 from 2024-11-21,  Up: Changelog
+
+5.6 Version 1.0 from 2024-11-16
+===============================
+
+   • Specify "Version" in Emacs-Lisp library header.
+
+
+File: lean4-mode.info,  Node: Contributing,  Prev: Changelog,  Up: Top
+
+6 Contributing
+**************
+
+When you contribute to Lean4-Mode, add a personal copyright like ‘;;
+Copyright (c) 2024 Firstname Lastname’ to the header of respective
+files.
+
+   You can use Emacs' built-in ‘bug-reference-mode’ and
+‘bug-reference-prog-mode’ in this repository to make mentions of issues
+like ‘#123’ clickable.
 
 
 
 Tag Table:
-Node: Top223
-Node: Installation1492
-Node: Brief and Generic Instructions1735
-Node: Detailed and Concrete Instructions2684
-Node: Instructions for Source-Based Use-Package4341
-Node: Native vc (Emacs 30 or later)5062
-Node: Doom-Emacs5970
-Node: Straight6396
-Node: Usage6896
-Node: lsp-mode8342
-Node: Flycheck8627
-Node: Configuration9237
-Node: lsp-mode (1)9427
-Node: Flycheck (1)9696
-Node: Common Pitfalls10181
+Node: Top224
+Node: Installation1781
+Node: Brief Generic Instructions2072
+Node: Detailed Native Instructions3528
+Node: Instructions for Source-Based Use-Package5678
+Node: Native vc (Emacs 30 or later)7594
+Node: Doom package!8460
+Node: Straight8930
+Node: Usage9459
+Node: lsp-mode10881
+Node: Flycheck11166
+Node: Configuration11776
+Node: lsp-mode (1)11966
+Node: Flycheck (1)12235
+Node: Common Pitfalls12720
+Node: Coexistence with Lean3-Mode12959
+Node: Partial value of lean4-mode-hook or other hook variables14681
+Node: Changelog16402
+Node: Upcoming Version16863
+Node: Version 112 from 2024-12-1018929
+Node: Version 111 from 2024-12-0219794
+Node: Version 110 from 2024-12-0120201
+Node: Version 101 from 2024-11-2120699
+Node: Version 10 from 2024-11-1621062
+Node: Contributing21295
 
 End Tag Table
 
