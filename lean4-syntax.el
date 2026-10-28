@@ -38,7 +38,22 @@
     "try" "catch" "finally" "where" "rec" "mut" "forall" "fun"
     "exists" "if" "then" "else" "from" "init_quot" "return"
     "mutual" "def" "run_cmd" "declare_syntax_cat" "syntax" "macro_rules" "macro" "scoped" "elab"
-    "initialize" "builtin_initialize" "register_builtin_option" "induction" "cases" "generalizing" "unif_hint" "deriving")
+    "initialize" "builtin_initialize" "register_builtin_option" "induction" "cases" "generalizing" "unif_hint" "deriving"
+    "classical" "assumption" "apply_assumption" "intro" "intros" "rintro" "rfl" "rfl'" "apply_rfl" "symm"
+    "symm_saturate" "calc" "subst" "subst_eqs" "subst_vars" "congr" "eq_refl" "ac_rfl" "ac_nf" "ac_nf0"
+    "exact" "apply" "refine" "refine'" "solve_by_elim" "apply_rules" "as_aux_lemma" "exfalso" "contradiction"
+    "false_or_by_contra" "suffices" "change" "generalize" "specialize" "show_term" "norm_cast" "push_cast"
+    "exact_mod_cast" "apply_mod_cast" "rw_mod_cast" "assumption_mod_cast" "ext" "ext1" "apply_ext_theorem"
+    "funext" "simp" "simp!" "simp?" "simp?!" "simp_arith" "simp_arith!" "dsimp" "dsimp!" "dsimp?" "dsimp?!"
+    "simp_all" "simp_all!" "simp_all?" "simp_all?!" "simp_all_arith" "simp_all_arith!" "simpa" "simpa!"
+    "simpa?!" "simpa?" "simp_wf" "rw" "rewrite" "erw" "rwa" "unfold" "replace" "delta" "constructor"
+    "injection" "injections" "left" "right" "rcases" "fun_cases" "fun_induction" "nofun" "exact?" "apply?"
+    "rw?" "split" "by_cases" "decide" "native_decide" "omega" "bv_omega" "bv_decide" "bv_normalize"
+    "bv_check" "bv_decide?" "skip" "guard_hyb" "guard_target" "guard_expr" "done" "sleep" "stop"
+    "decreasing_with" "get_elem_tactic" "get_elem_tactic_trivial" "trivial" "solve" "and_intros"
+    "infer_instance" "expose_names" "unhygienic" "run_tac" "first" "<;>" "repeat" "all_goals" "any_goals"
+    "case" "case'" "next" "focus" "fail_if_success" "lhs" "rhs" "arg" "args" "enter" "pattern"
+    "whnf" "reduce" "zeta" "simp_match")
   "Lean keywords ending with `word' (not symbol).")
 (defconst lean4-keywords1-regexp
   (eval `(rx word-start (or ,@lean4-keywords1) word-end)))
@@ -57,7 +72,7 @@
              (one-or-more digit) (optional (and "." (zero-or-more digit)))
              word-end)))
 
-(defconst lean4-warnings '("sorry") "Lean warnings.")
+(defconst lean4-warnings '("sorry" "admit") "Lean warnings.")
 (defconst lean4-warnings-regexp
   (eval `(rx word-start (or ,@lean4-warnings) word-end)))
 (defconst lean4-debugging '("unreachable!" "panic!" "assert!" "dbg_trace") "Lean debugging.")
