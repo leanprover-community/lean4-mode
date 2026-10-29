@@ -121,7 +121,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
 
 (defun lean4-info--mk-message-section (value caption messages buffer)
   "Add a section with id VALUE, caption CAPTION and contents ERRORS."
-  (when-let (msgs messages) ;; captured for deferred rendering
+  (when-let* ((msgs messages)) ;; captured for deferred rendering
     (magit-insert-section (magit-section value)
       (magit-insert-heading caption)
       (magit-insert-section-body
@@ -152,7 +152,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
         (progn
           (erase-buffer)
           (magit-insert-section (magit-section 'root)
-            (when-let ((goals lean4-goals)) ;; capture for deferred rendering
+            (when-let* ((goals lean4-goals)) ;; capture for deferred rendering
               (magit-insert-section (magit-section 'goals)
                 (magit-insert-heading "Goals:")
                 (magit-insert-section-body
@@ -161,7 +161,7 @@ The buffer is supposed to be the *Lean Goal* buffer."
                       (magit-insert-section (magit-section)
                         (lean4--insert-goal-text g "\n\n")))
                   (insert "goals accomplished\n\n")))))
-            (when-let ((term-goal lean4-term-goal)) ;; capture for deferred rendering
+            (when-let* ((term-goal lean4-term-goal)) ;; capture for deferred rendering
               (magit-insert-section (magit-section 'term-goal)
                 (magit-insert-heading "Expected type:")
                 (magit-insert-section-body
