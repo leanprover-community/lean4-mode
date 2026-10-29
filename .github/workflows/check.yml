@@ -22,11 +22,8 @@ jobs:
       # One version failing should not hide the result for the others.
       fail-fast: false
       matrix:
-        # The latest minor release of every major version we can build
-        # against.  Note this starts at 28 rather than at the 27.1
-        # declared in Package-Requires: current lsp-mode and
-        # magit-section both require Emacs 28.1, so the dependencies
-        # cannot even be installed on 27.x.
+        # The latest minor release of every major version the package
+        # supports, per the Emacs floor in Package-Requires.
         emacs_version: ['28.2', '29.4', '30.2', '31.1']
         experimental: [false]
         include:
