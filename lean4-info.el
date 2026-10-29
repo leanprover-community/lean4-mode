@@ -59,7 +59,7 @@ Also choose settings used for the *Lean Goal* buffer."
 (defun lean4-toggle-info-buffer (buffer)
   "Create or delete BUFFER.
 The buffer is supposed to be the *Lean Goal* buffer."
-  (-if-let (window (get-buffer-window buffer))
+  (if-let* ((window (get-buffer-window buffer)))
       (quit-window nil window)
     (lean4-ensure-info-buffer buffer)
     (display-buffer buffer)))
