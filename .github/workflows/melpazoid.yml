@@ -4,7 +4,26 @@
 # to .github/workflows/melpazoid.yml and modifying RECIPE and EXIST_OK below.
 
 name: melpazoid
-on: [push, pull_request]
+
+on:
+  # Restricted to the default branch on purpose.  Pushing a topic branch
+  # and opening a PR for it used to start two identical runs, since the
+  # `push` and `pull_request` events both fired.  Topic branches are now
+  # covered by the `pull_request` trigger alone.
+  push:
+    branches: [master]
+  pull_request:
+
+# A superseded run tells us nothing; drop it when new commits arrive.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# This workflow only ever reads the checked-out tree.  GitHub already
+# forces a read-only token and withholds secrets for pull requests from
+# forks; declaring it here extends the same guarantee to branch pushes.
+permissions:
+  contents: read
 
 jobs:
   build:
