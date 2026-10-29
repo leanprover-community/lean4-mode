@@ -14,6 +14,7 @@ DEPS_DIR = .deps
 DEPS = compat dash magit-section lsp-mode
 
 BATCH = $(EMACS) -Q --batch \
+	--eval '(require (quote package))' \
 	--eval '(setq package-user-dir (expand-file-name "$(DEPS_DIR)"))' \
 	--eval '(package-initialize)' \
 	--directory .
@@ -28,6 +29,7 @@ check: compile checkdoc
 # from "check" so that the checks themselves need no network.
 deps:
 	$(EMACS) -Q --batch \
+		--eval '(require (quote package))' \
 		--eval '(setq package-user-dir (expand-file-name "$(DEPS_DIR)"))' \
 		--eval '(add-to-list (quote package-archives) (cons "melpa" "https://melpa.org/packages/") t)' \
 		--eval '(package-initialize)' \
