@@ -146,9 +146,9 @@
 
 (defconst lean4-font-lock-defaults
   `((;; attributes
-     (,(rx word-start "attribute" word-end (zero-or-more whitespace) (group (one-or-more "[" (zero-or-more (not (any "]"))) "]" (zero-or-more whitespace))))
+     (,(rx word-start "attribute" word-end (zero-or-more whitespace) (group (one-or-more "[" (zero-or-more (not (in "]"))) "]" (zero-or-more whitespace))))
       (1 'font-lock-preprocessor-face))
-     (,(rx (group "@[" (zero-or-more (not (any "]"))) "]"))
+     (,(rx (group "@[" (zero-or-more (not (in "]"))) "]"))
       (1 'font-lock-preprocessor-face))
      (,(rx (group "#" (or "eval" "print" "reduce" "help" "check" "lang" "check_failure" "synth")))
       (1 'font-lock-keyword-face))
@@ -160,15 +160,15 @@
            word-start
            (or "inductive" "definition" "def")
            word-end
-           (group (zero-or-more (not (any " \t\n\r{([,"))) (zero-or-more (zero-or-more whitespace) "," (zero-or-more whitespace) (not (any " \t\n\r{([,")))))
+           (group (zero-or-more (not (in " \t\n\r{([,"))) (zero-or-more (zero-or-more whitespace) "," (zero-or-more whitespace) (not (in " \t\n\r{([,")))))
       (1 'font-lock-function-name-face))
      ;; declarations
      (,(rx word-start
            (group (or "inductive" (group "class" (zero-or-more whitespace) "inductive") "instance" "structure" "class" "theorem" "axiom" "lemma" "definition" "def" "constant"))
            word-end (zero-or-more whitespace)
-           (group (zero-or-more "{" (zero-or-more (not (any "}"))) "}" (zero-or-more whitespace)))
+           (group (zero-or-more "{" (zero-or-more (not (in "}"))) "}" (zero-or-more whitespace)))
            (zero-or-more whitespace)
-           (group (zero-or-more (not (any " \t\n\r{([")))))
+           (group (zero-or-more (not (in " \t\n\r{([")))))
       (4 'font-lock-function-name-face))
      ;; Constants which have a keyword as subterm
      (,(rx (or "∘if")) . 'font-lock-constant-face)
@@ -192,7 +192,7 @@
      ;; warnings
      (,lean4-warnings-regexp . 'font-lock-warning-face)
      ;; escaped identifiers
-     (,(rx (and (group "«") (group (one-or-more (not (any "»")))) (group "»")))
+     (,(rx (and (group "«") (group (one-or-more (not (in "»")))) (group "»")))
       (1 font-lock-comment-face t)
       (2 nil t)
       (3 font-lock-comment-face t)))))

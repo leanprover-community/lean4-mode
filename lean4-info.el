@@ -91,6 +91,9 @@ The buffer is supposed to be the *Lean Goal* buffer."
   line)
 
 (defun lean4-info--error-button-action (data)
+  "Visit the source location recorded in DATA.
+DATA is a list (BUFFER LINE COLUMN), as attached to the buttons
+inserted by `lean4-info--mk-message-section'."
   (let ((buffer (nth 0 data))
         (line (nth 1 data))
         (column (nth 2 data)))
@@ -101,6 +104,10 @@ The buffer is supposed to be the *Lean Goal* buffer."
       (forward-char column))))
 
 (defun lean4-info--insert-highlight-inaccessible-names (&rest text)
+  "Insert TEXT, dimming any inaccessible names it contains.
+Lean marks inaccessible hypotheses with a dagger; those names are
+fontified as comments when `lean4-highlight-inaccessible-names' is
+non-nil."
   (let ((begin (point)))
     (apply #'insert text)
     (when lean4-highlight-inaccessible-names
@@ -115,12 +122,15 @@ The buffer is supposed to be the *Lean Goal* buffer."
         (goto-char end)))))
 
 (defun lean4--insert-goal-text (text delimiter)
+  "Insert goal TEXT fontified as Lean 4 code, followed by DELIMITER."
   (lean4-info--insert-highlight-inaccessible-names
    (lsp--fontlock-with-mode text 'lean4-info-mode)
    delimiter))
 
 (defun lean4-info--mk-message-section (value caption messages buffer)
-  "Add a section with id VALUE, caption CAPTION and contents ERRORS."
+  "Add a section with id VALUE, caption CAPTION and contents MESSAGES.
+BUFFER is the source buffer the messages belong to; it is attached
+to each inserted button so that the location can be visited."
   (when-let* ((msgs messages)) ;; captured for deferred rendering
     (magit-insert-section (magit-section value)
       (magit-insert-heading caption)
@@ -137,6 +147,9 @@ The buffer is supposed to be the *Lean Goal* buffer."
             (lean4-info--insert-highlight-inaccessible-names "\n" message "\n")))))))
 
 (defun lean4-info-buffer-redisplay ()
+  "Rebuild the Lean 4 info buffer from the current buffer's state.
+Do nothing unless the info buffer is showing information for the
+current buffer."
   (when (lean4-info-buffer-active lean4-info-buffer-name)
     (-let* ((deactivate-mark) ; keep transient mark
             (inhibit-read-only t)
@@ -317,4 +330,13 @@ sections."
   (lean4-info-buffer-refresh))
 
 (provide 'lean4-info)
+
+;; `lsp-interface' generates accessor docstrings wider than the default
+;; 80 columns.  That is lsp-mode's macro output rather than our own
+;; prose, so relax the limit for this file instead of for the build.
+
+;; Local Variables:
+;; byte-compile-docstring-max-column: 120
+;; End:
+
 ;;; lean4-info.el ends here

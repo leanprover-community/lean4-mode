@@ -1,0 +1,44 @@
+name: check
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Nothing here needs more than the checked-out tree.
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Emacs ${{ matrix.emacs_version }}
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      # One version failing should not hide the result for the others.
+      fail-fast: false
+      matrix:
+        # The latest minor release of every major version the package
+        # supports, per the Emacs floor in Package-Requires.
+        emacs_version: ['29.4', '30.2', '31.1']
+        experimental: [false]
+        include:
+          # Advance warning of changes landing in Emacs itself, which is
+          # how the obsoletion of `when-let' reached us.  Not a gate.
+          - emacs_version: snapshot
+            experimental: true
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: purcell/setup-emacs@34c6ded44899fd1bf74d2889558befd1750e61a7 # master, 2026-08-24
+        with:
+          version: ${{ matrix.emacs_version }}
+      - run: emacs --version
+      - name: Install dependencies
+        run: make deps
+      - name: Byte-compile and run checkdoc
+        run: make check

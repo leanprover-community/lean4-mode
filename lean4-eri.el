@@ -56,8 +56,8 @@ XS1 are <= X, whereas all elements in XS2 are > X."
 
 (defun lean4-eri-calculate-indentation-points-on-line (max)
   "Calculate indentation points on current line.
-Only points left of column number MAX are included. If MAX is
-nil, then all points are included. Points are returned in
+Only points left of column number MAX are included.  If MAX is
+nil, then all points are included.  Points are returned in
 ascending order.
 
 Example (positions marked with ^ are returned):
@@ -91,7 +91,7 @@ Example (positions marked with ^ are returned):
   "Calculate new indentation points.
 Returns a singleton list containing the column number two steps
 in from the indentation of the first non-empty line (white space
-excluded) above the current line. If there is no such line,
+excluded) above the current line.  If there is no such line,
 then the empty list is returned."
   (let ((start (line-beginning-position)))
     (save-excursion
@@ -108,7 +108,7 @@ then the empty list is returned."
 
 (defun lean4-eri-calculate-indentation-points (reverse)
   "Calculate points used to indent the current line.
-The points are given in reverse order if REVERSE is non-nil. See
+The points are given in reverse order if REVERSE is non-nil.  See
 `lean4-eri-indent' for a description of how the indentation points are
 calculated; note that the current indentation is not included in
 the returned list."
@@ -165,7 +165,7 @@ foo = f a b
 ^ ^ ^ ^    ^  ^ ^ ^   ^ * ^ ^ ^ ^
 
 Then the ^'s and the * mark the indentation points that this
-function cycles through. The indentation points are selected as
+function cycles through.  The indentation points are selected as
 follows:
 
   * All lines before the current one, up to and including the
