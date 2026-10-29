@@ -95,7 +95,7 @@
         (save-match-data
           (when (not (memq lean4-fringe-delay-timer timer-list))
             (setq lean4-fringe-delay-timer
-                  (run-at-time "300 milliseconds" nil
+                  (run-at-time lean4-fringe-delay-sec nil
                                (lambda (buf)
                                  (with-current-buffer buf
                                    (lean4-fringe-update-progress-overlays)))

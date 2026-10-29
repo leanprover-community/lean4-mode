@@ -146,42 +146,49 @@ to each inserted button so that the location can be visited."
                                   'help-echo "mouse-2: visit this file, line and column"))
             (lean4-info--insert-highlight-inaccessible-names "\n" message "\n")))))))
 
+(defun lean4-info-buffer-render ()
+  "Rebuild the *Lean Goal* buffer from the current buffer's state.
+Render unconditionally, creating the info buffer if it does not exist
+yet.  Callers which should only render while the info buffer is on
+display want `lean4-info-buffer-redisplay' instead."
+  (lean4-ensure-info-buffer lean4-info-buffer-name)
+  (-let* ((deactivate-mark) ; keep transient mark
+          (inhibit-read-only t)
+          (buffer (current-buffer))
+          (line (lsp--cur-line))
+          (errors (lsp--get-buffer-diagnostics))
+          (errors (-sort (-on #'< #'lean4-diagnostic-full-end-line) errors))
+          ((errors-above errors)
+           (--split-with (< (lean4-diagnostic-full-end-line it) line) errors))
+          ((errors-here errors-below)
+           (--split-with (<= (lean4-diagnostic-full-start-line it) line) errors)))
+    (with-current-buffer lean4-info-buffer-name
+      (erase-buffer)
+      (magit-insert-section (magit-section 'root)
+        (when-let* ((goals lean4-goals)) ;; capture for deferred rendering
+          (magit-insert-section (magit-section 'goals)
+            (magit-insert-heading "Goals:")
+            (magit-insert-section-body
+              (if (> (length goals) 0)
+                  (seq-doseq (g goals)
+                    (magit-insert-section (magit-section)
+                      (lean4--insert-goal-text g "\n\n")))
+                (insert "goals accomplished\n\n")))))
+        (when-let* ((term-goal lean4-term-goal)) ;; capture for deferred rendering
+          (magit-insert-section (magit-section 'term-goal)
+            (magit-insert-heading "Expected type:")
+            (magit-insert-section-body
+              (lean4--insert-goal-text term-goal "\n"))))
+        (lean4-info--mk-message-section 'errors-here "Messages here:" errors-here buffer)
+        (lean4-info--mk-message-section 'errors-below "Messages below:" errors-below buffer)
+        (lean4-info--mk-message-section 'errors-above "Messages above:" errors-above buffer)))))
+
 (defun lean4-info-buffer-redisplay ()
   "Rebuild the Lean 4 info buffer from the current buffer's state.
 Do nothing unless the info buffer is showing information for the
 current buffer."
   (when (lean4-info-buffer-active lean4-info-buffer-name)
-    (-let* ((deactivate-mark) ; keep transient mark
-            (inhibit-read-only t)
-            (buffer (current-buffer))
-            (line (lsp--cur-line))
-            (errors (lsp--get-buffer-diagnostics))
-            (errors (-sort (-on #'< #'lean4-diagnostic-full-end-line) errors))
-            ((errors-above errors)
-             (--split-with (< (lean4-diagnostic-full-end-line it) line) errors))
-            ((errors-here errors-below)
-             (--split-with (<= (lean4-diagnostic-full-start-line it) line) errors)))
-      (with-current-buffer lean4-info-buffer-name
-        (progn
-          (erase-buffer)
-          (magit-insert-section (magit-section 'root)
-            (when-let* ((goals lean4-goals)) ;; capture for deferred rendering
-              (magit-insert-section (magit-section 'goals)
-                (magit-insert-heading "Goals:")
-                (magit-insert-section-body
-                (if (> (length goals) 0)
-                    (seq-doseq (g goals)
-                      (magit-insert-section (magit-section)
-                        (lean4--insert-goal-text g "\n\n")))
-                  (insert "goals accomplished\n\n")))))
-            (when-let* ((term-goal lean4-term-goal)) ;; capture for deferred rendering
-              (magit-insert-section (magit-section 'term-goal)
-                (magit-insert-heading "Expected type:")
-                (magit-insert-section-body
-                  (lean4--insert-goal-text term-goal "\n"))))
-            (lean4-info--mk-message-section 'errors-here "Messages here:" errors-here buffer)
-            (lean4-info--mk-message-section 'errors-below "Messages below:" errors-below buffer)
-            (lean4-info--mk-message-section 'errors-above "Messages above:" errors-above buffer)))))))
+    (lean4-info-buffer-render)))
 
 ;; Debouncing
 ;; ~~~~~~~~~~~

@@ -110,6 +110,13 @@ using `font-lock-comment-face' instead of the `✝` suffix used by Lean."
   :group 'lean4
   :type 'boolean)
 
+(defcustom lean4-fringe-delay-sec 0.3
+  "Seconds to wait before redrawing Lean file progress overlays.
+Progress notifications arrive in bursts while Lean elaborates a file.
+Redrawing is coalesced, so that at most one redraw happens per burst."
+  :group 'lean4
+  :type 'number)
+
 
 (defcustom lean4-autodetect-lean3 nil
   "Autodetect Lean version.
