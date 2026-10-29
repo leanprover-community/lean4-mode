@@ -59,7 +59,7 @@ Also choose settings used for the *Lean Goal* buffer."
 (defun lean4-toggle-info-buffer (buffer)
   "Create or delete BUFFER.
 The buffer is supposed to be the *Lean Goal* buffer."
-  (-if-let (window (get-buffer-window buffer))
+  (if-let* ((window (get-buffer-window buffer)))
       (quit-window nil window)
     (lean4-ensure-info-buffer buffer)
     (display-buffer buffer)))
@@ -121,11 +121,11 @@ The buffer is supposed to be the *Lean Goal* buffer."
 
 (defun lean4-info--mk-message-section (value caption messages buffer)
   "Add a section with id VALUE, caption CAPTION and contents ERRORS."
-  (when-let* ((msgs messages)) ;; captured for deferred rendering
+  (when messages
     (magit-insert-section (magit-section value)
       (magit-insert-heading caption)
       (magit-insert-section-body
-        (dolist (e msgs)
+        (dolist (e messages)
           (-let (((&Diagnostic :message :range (&Range :start (&Position :line :character))) e))
             (let ((ln (1+ (lsp-translate-line line)))
                   (col (lsp-translate-column character)))
