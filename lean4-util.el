@@ -22,7 +22,6 @@
 
 ;;; Code:
 
-(require 'compat)
 (require 'lean4-settings)
 
 (defun lean4-setup-rootdir ()

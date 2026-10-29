@@ -11,7 +11,7 @@ ELCS = $(SRCS:.el=.elc)
 # Dependencies go into a throw-away directory, so that running the
 # checks never disturbs the package set of whoever runs them.
 DEPS_DIR = .deps
-DEPS = compat dash magit-section lsp-mode
+DEPS = dash magit-section lsp-mode
 
 BATCH = $(EMACS) -Q --batch \
 	--eval '(require (quote package))' \
