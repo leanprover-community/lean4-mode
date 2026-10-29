@@ -9,8 +9,11 @@ SRCS = lean4-settings.el lean4-util.el lean4-syntax.el lean4-eri.el \
 ELCS = $(SRCS:.el=.elc)
 
 # The ERT suite.  Hermetic: it starts no language server, opens no
-# network connection and needs no Lean toolchain.
-TESTS = $(sort $(wildcard test/lean4-*-test.el))
+# network connection and needs no Lean toolchain.  Tests named
+# lean4-live-*-test.el are the exception and are held back for the
+# "test-live" target below.
+LIVE_TESTS = $(sort $(wildcard test/lean4-live-*-test.el))
+TESTS = $(filter-out $(LIVE_TESTS),$(sort $(wildcard test/lean4-*-test.el)))
 
 # Dependencies go into a throw-away directory, so that running the
 # checks never disturbs the package set of whoever runs them.
@@ -24,7 +27,7 @@ BATCH = $(EMACS) -Q --batch \
 	--directory .
 
 .DEFAULT_GOAL := check
-.PHONY: check compile checkdoc test deps clean
+.PHONY: check compile checkdoc test test-live deps clean
 
 # Everything CI gates on.  "test" runs after "compile" so that the suite
 # exercises the byte-compiled package, which is what users load.
@@ -51,6 +54,17 @@ compile:
 test:
 	$(BATCH) --directory test \
 		$(patsubst %,--load %,$(TESTS)) \
+		--funcall ert-run-tests-batch-and-exit
+
+# Tests which drive a real "lean --server".  Deliberately outside
+# "check": they need a Lean toolchain, which is several gigabytes, so
+# making every CI run fetch one is not worth it.  Run them by hand after
+# a Lean upgrade, or whenever a fixture in the hermetic suite looks
+# stale -- catching that drift is the whole point of them.  They skip
+# themselves when no "lean" is on PATH.
+test-live:
+	$(BATCH) --directory test \
+		$(patsubst %,--load %,$(LIVE_TESTS)) \
 		--funcall ert-run-tests-batch-and-exit
 
 # Documentation-style checks.  Any finding fails the build; see
