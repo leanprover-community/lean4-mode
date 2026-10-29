@@ -8,6 +8,10 @@ SRCS = lean4-settings.el lean4-util.el lean4-syntax.el lean4-eri.el \
 
 ELCS = $(SRCS:.el=.elc)
 
+# The ERT suite.  Hermetic: it starts no language server, opens no
+# network connection and needs no Lean toolchain.
+TESTS = $(sort $(wildcard test/lean4-*-test.el))
+
 # Dependencies go into a throw-away directory, so that running the
 # checks never disturbs the package set of whoever runs them.
 DEPS_DIR = .deps
@@ -20,10 +24,11 @@ BATCH = $(EMACS) -Q --batch \
 	--directory .
 
 .DEFAULT_GOAL := check
-.PHONY: check compile checkdoc deps clean
+.PHONY: check compile checkdoc test deps clean
 
-# Everything CI gates on.
-check: compile checkdoc
+# Everything CI gates on.  "test" runs after "compile" so that the suite
+# exercises the byte-compiled package, which is what users load.
+check: compile test checkdoc
 
 # Install what is needed to byte-compile this package.  Kept separate
 # from "check" so that the checks themselves need no network.
@@ -42,6 +47,11 @@ compile:
 	@rm -f $(ELCS)
 	$(BATCH) --eval '(setq byte-compile-error-on-warn t)' \
 		-f batch-byte-compile $(SRCS)
+
+test:
+	$(BATCH) --directory test \
+		$(patsubst %,--load %,$(TESTS)) \
+		--funcall ert-run-tests-batch-and-exit
 
 # Documentation-style checks.  Any finding fails the build; see
 # admin/checkdoc-batch.el for why that needs a wrapper.
