@@ -24,7 +24,7 @@ jobs:
       matrix:
         # The latest minor release of every major version the package
         # supports, per the Emacs floor in Package-Requires.
-        emacs_version: ['28.2', '29.4', '30.2', '31.1']
+        emacs_version: ['29.4', '30.2', '31.1']
         experimental: [false]
         include:
           # Advance warning of changes landing in Emacs itself, which is
