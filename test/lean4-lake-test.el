@@ -46,5 +46,27 @@
   (lean4-test-with-buffer "def a : Nat := 0\n"
     (should-error (lean4-lake-find-dir-safe) :type 'error)))
 
+(ert-deftest lean4-test-lake-build-runs-in-the-package-root ()
+  "\"lake build\" is run from the package root, not the file's directory."
+  (lean4-test-with-directory root '("pkg/lakefile.toml" "pkg/Sub/Mod.lean")
+    (lean4-test-with-file-buffer (expand-file-name "pkg/Sub/Mod.lean" root)
+      (let (command directory)
+        (cl-letf (((symbol-function 'compile)
+                   (lambda (cmd &rest _)
+                     (setq command cmd directory default-directory)))
+                  ((symbol-function 'lean4-get-executable)
+                   (lambda (name) (concat "/fake/" name))))
+          (lean4-lake-build))
+        (should (equal "/fake/lake build" command))
+        (should (equal (file-truename (expand-file-name "pkg/" root))
+                       (file-truename directory)))))))
+
+(ert-deftest lean4-test-lake-build-without-a-package ()
+  "Building outside a Lake package is reported rather than attempted."
+  (lean4-test-with-buffer "def a : Nat := 0\n"
+    (cl-letf (((symbol-function 'compile)
+               (lambda (&rest _) (error "compile should not be called"))))
+      (should-error (lean4-lake-build) :type 'error))))
+
 (provide 'lean4-lake-test)
 ;;; lean4-lake-test.el ends here

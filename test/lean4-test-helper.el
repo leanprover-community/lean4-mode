@@ -6,11 +6,15 @@
 
 ;; Helpers shared by the test files in this directory.
 ;;
-;; The suite is hermetic: nothing in it starts a language server, opens
-;; a network connection, or needs a Lean toolchain.  Tests which need
-;; data from a server build it with `lean4-test-payload' instead, and
-;; tests which need lsp-mode buffer state stub it with
-;; `lean4-test-with-lsp'.
+;; The suite "make check" runs is hermetic: nothing in it starts a
+;; language server, opens a network connection, or needs a Lean
+;; toolchain.  Tests which need data from a server build it with
+;; `lean4-test-payload' instead, and tests which need lsp-mode buffer
+;; state stub it with `lean4-test-with-lsp'.
+;;
+;; The exception is lean4-live-*-test.el, which drives a real
+;; "lean --server" and is held back for "make test-live".  It uses
+;; these helpers too, so nothing here may assume there is no server.
 
 ;;; Code:
 
@@ -48,14 +52,14 @@ The buffer does not actually visit PATH, which keeps `auto-mode-alist'
 and the mode hooks out of the way, but `buffer-file-name' and anything
 derived from it behave as though it did."
   (declare (indent 1) (debug (form body)))
-  `(let ((buffer (generate-new-buffer " *lean4-test-file*")))
+  `(let ((lean4-test--buffer (generate-new-buffer " *lean4-test-file*")))
      (unwind-protect
-         (with-current-buffer buffer
+         (with-current-buffer lean4-test--buffer
            (setq buffer-file-name ,path)
            ,@body)
-       (with-current-buffer buffer
+       (with-current-buffer lean4-test--buffer
          (set-buffer-modified-p nil))
-       (kill-buffer buffer))))
+       (kill-buffer lean4-test--buffer))))
 
 (defmacro lean4-test-with-buffer (content &rest body)
   "Evaluate BODY in a temporary `lean4-mode' buffer containing CONTENT.
@@ -135,6 +139,39 @@ afterwards."
            ,@body)
        (when (get-buffer lean4-info-buffer-name)
          (kill-buffer lean4-info-buffer-name)))))
+
+(defmacro lean4-test-with-active-info-buffer (source &rest body)
+  "Evaluate BODY with buffer SOURCE current and the info view on display.
+This is the state `lean4-info-buffer-active' insists on: the info
+buffer visible in some window, and SOURCE the buffer of the selected
+window.  Code gated on it is otherwise a silent no-op in a test."
+  (declare (indent 1) (debug (form body)))
+  `(lean4-test-with-info-buffer
+     (save-window-excursion
+       (delete-other-windows)
+       (switch-to-buffer ,source)
+       (display-buffer lean4-info-buffer-name)
+       (should (lean4-info-buffer-active lean4-info-buffer-name))
+       ,@body)))
+
+(defmacro lean4-test-with-source-buffer (path content &rest body)
+  "Evaluate BODY in a `lean4-mode' buffer holding CONTENT and named PATH.
+Point starts at the beginning.  Unlike `lean4-test-with-buffer' the
+buffer reports a file name, which is what the lsp-mode entry points
+need in order to build a URI."
+  (declare (indent 2) (debug (form form body)))
+  `(let ((lean4-test--buffer (generate-new-buffer " *lean4-test-source*")))
+     (unwind-protect
+         (with-current-buffer lean4-test--buffer
+           (let ((lean4-mode-hook nil))
+             (lean4-mode))
+           (setq buffer-file-name ,path)
+           (insert ,content)
+           (goto-char (point-min))
+           ,@body)
+       (with-current-buffer lean4-test--buffer
+         (set-buffer-modified-p nil))
+       (kill-buffer lean4-test--buffer))))
 
 (defun lean4-test-info-text ()
   "Return the text of the *Lean Goal* buffer, without text properties."
