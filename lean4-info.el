@@ -317,4 +317,13 @@ sections."
   (lean4-info-buffer-refresh))
 
 (provide 'lean4-info)
+
+;; `lsp-interface' generates accessor docstrings wider than the default
+;; 80 columns.  That is lsp-mode's macro output rather than our own
+;; prose, so relax the limit for this file instead of for the build.
+
+;; Local Variables:
+;; byte-compile-docstring-max-column: 120
+;; End:
+
 ;;; lean4-info.el ends here
