@@ -27,7 +27,7 @@ BATCH = $(EMACS) -Q --batch \
 	--directory .
 
 .DEFAULT_GOAL := check
-.PHONY: check compile checkdoc test test-live deps clean
+.PHONY: check compile checkdoc test test-live manual deps clean
 
 # Everything CI gates on.  "test" runs after "compile" so that the suite
 # exercises the byte-compiled package, which is what users load.
@@ -76,13 +76,36 @@ clean:
 	rm -f $(ELCS)
 	rm -rf $(DEPS_DIR)
 
-# GNU- and NonGNU-Elpa accept Org files as package documentation but
-# Melpa does not.  As long as Lean4-Mode is not distributed on GNU- or
-# NonGNU-Elpa, it should ship with .texi and .info manuals.  This
-# depends on: GNU Emacs, Make and GNU Texinfo.
+# The manual is generated from README.org, and all three generated
+# files are tracked.
+#
+# The .texi has to be: GNU- and NonGNU-Elpa accept Org files as package
+# documentation but Melpa does not, so running Org is the one step its
+# build system cannot do for us.
+#
+# The .info and the Info "dir" index are tracked so that "C-h i" works
+# for people who install from source.  Nothing on that path builds a
+# manual -- package-vc only does so when a package specification names
+# a :doc file -- and `package-activate-1' only puts a package on
+# `Info-directory-list' when it ships a "dir".  Once Lean4-Mode is
+# listed on Melpa or NonGNU-Elpa, both of which build and index the
+# manual themselves, these two can be dropped again.
+#
+# Regenerate all three after editing README.org; CI checks that they
+# are up to date.  Depends on: GNU Emacs, Make and GNU Texinfo.
+manual: lean4-mode.texi lean4-mode.info dir
 
-lean4-mode.info lean4-mode.texi: README.org
+lean4-mode.texi: README.org
 	$(EMACS) --batch \
 		"--eval=(require 'ox-texinfo)" \
 		'--eval=(find-file "$<")' \
-		'--eval=(org-texinfo-export-to-info)'
+		'--eval=(org-texinfo-export-to-texinfo)'
+
+lean4-mode.info: lean4-mode.texi
+	makeinfo --no-split $< -o $@
+
+# Built from scratch rather than updated in place, so that the result
+# does not depend on whatever the file happened to contain before.
+dir: lean4-mode.info
+	rm -f $@
+	install-info --dir=$@ $<

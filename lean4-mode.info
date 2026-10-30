@@ -1,4 +1,4 @@
-This is lean4-mode.info, produced by makeinfo version 7.1 from
+This is lean4-mode.info, produced by makeinfo version 7.2 from
 lean4-mode.texi.
 
 INFO-DIR-SECTION Emacs misc features
@@ -56,7 +56,7 @@ Configuration
 
 * lsp-mode: lsp-mode (1).
 * Flycheck: Flycheck (1).
-
+* File Progress::
 
 
 File: lean4-mode.info,  Node: Installation,  Next: Usage,  Prev: Top,  Up: Top
@@ -275,6 +275,7 @@ File: lean4-mode.info,  Node: Configuration,  Next: Common Pitfalls,  Prev: Usag
 
 * lsp-mode: lsp-mode (1).
 * Flycheck: Flycheck (1).
+* File Progress::
 
 
 File: lean4-mode.info,  Node: lsp-mode (1),  Next: Flycheck (1),  Up: Configuration
@@ -287,7 +288,7 @@ header-line, set the user option ‘lsp-headerline-breadcrumb-enable’ to
 ‘t’.
 
 
-File: lean4-mode.info,  Node: Flycheck (1),  Prev: lsp-mode (1),  Up: Configuration
+File: lean4-mode.info,  Node: Flycheck (1),  Next: File Progress,  Prev: lsp-mode (1),  Up: Configuration
 
 3.2 Flycheck
 ============
@@ -298,6 +299,22 @@ it.  If you want to customize this behavior, e.g.  if you'd like to use
 Emacs' built-in Flymake package instead of Flycheck while keeping later
 installed, then customize the ‘lsp-diagnostics-provider’ user option
 accordingly.
+
+
+File: lean4-mode.info,  Node: File Progress,  Prev: Flycheck (1),  Up: Configuration
+
+3.3 File Progress
+=================
+
+While Lean elaborates a file, Lean4-Mode marks the regions being
+processed in the fringe.  Set the user option ‘lean4-show-file-progress’
+to ‘nil’ to turn that off.
+
+   Lean reports progress in bursts, so redrawing is coalesced.  The user
+option ‘lean4-fringe-delay-sec’ is how long Lean4-Mode waits, in
+seconds, before it redraws once a notification has arrived.  Raise it if
+the overlays are distracting on a large file; lower it for more
+immediate feedback.
 
 
 File: lean4-mode.info,  Node: Common Pitfalls,  Prev: Configuration,  Up: Top
@@ -313,28 +330,29 @@ note that Lean3-Mode uses the prefix ‘lean-’ for its symbols.  E.g.  you
 should not use ‘lean-’-prefixed commands in a buffer with Lean4-Mode as
 major mode.
 
-
 
 Tag Table:
 Node: Top223
-Node: Installation1492
-Node: Brief and Generic Instructions1735
-Node: Detailed and Concrete Instructions2684
-Node: Instructions for Source-Based Use-Package4341
-Node: Native vc (Emacs 30 or later)5062
-Node: Doom-Emacs5970
-Node: Straight6396
-Node: Usage6896
-Node: lsp-mode8342
-Node: Flycheck8627
-Node: Configuration9237
-Node: lsp-mode (1)9427
-Node: Flycheck (1)9696
-Node: Common Pitfalls10181
+Node: Installation1509
+Node: Brief and Generic Instructions1752
+Node: Detailed and Concrete Instructions2701
+Node: Instructions for Source-Based Use-Package4358
+Node: Native vc (Emacs 30 or later)5079
+Node: Doom-Emacs5987
+Node: Straight6413
+Node: Usage6913
+Node: lsp-mode8359
+Node: Flycheck8644
+Node: Configuration9254
+Node: lsp-mode (1)9462
+Node: Flycheck (1)9731
+Node: File Progress10238
+Node: Common Pitfalls10837
 
 End Tag Table
 
 
 Local Variables:
 coding: utf-8
+Info-documentlanguage: en
 End:
