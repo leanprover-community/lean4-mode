@@ -1,3 +1,4 @@
 .cask
 *.elc
 .deps/
+lean4-mode.info

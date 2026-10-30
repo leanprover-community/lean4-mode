@@ -74,15 +74,27 @@ checkdoc:
 
 clean:
 	rm -f $(ELCS)
+	rm -f lean4-mode.info
 	rm -rf $(DEPS_DIR)
 
 # GNU- and NonGNU-Elpa accept Org files as package documentation but
-# Melpa does not.  As long as Lean4-Mode is not distributed on GNU- or
-# NonGNU-Elpa, it should ship with .texi and .info manuals.  This
-# depends on: GNU Emacs, Make and GNU Texinfo.
-
-lean4-mode.info lean4-mode.texi: README.org
+# Melpa does not, which is why the generated .texi is tracked: running
+# Org is the one step Melpa cannot do for us.  Regenerate it after
+# editing README.org.  Depends on: GNU Emacs and Make.
+lean4-mode.texi: README.org
 	$(EMACS) --batch \
 		"--eval=(require 'ox-texinfo)" \
 		'--eval=(find-file "$<")' \
-		'--eval=(org-texinfo-export-to-info)'
+		'--eval=(org-texinfo-export-to-texinfo)'
+
+# The .info is deliberately not tracked.  Melpa compiles the .texi
+# itself, generates the Info "dir" index and drops the .texi from the
+# tarball; see package-build--generate-info-files.  Tracking a .info
+# would be worse than redundant, because package-build only runs
+# makeinfo "unless (file-exists-p info)" -- a stale tracked copy would
+# be shipped as-is instead of being rebuilt.
+#
+# So this rule is only for reading the manual locally.  Depends on: GNU
+# Texinfo.
+lean4-mode.info: lean4-mode.texi
+	makeinfo --no-split $< -o $@
