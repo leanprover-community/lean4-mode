@@ -23,6 +23,16 @@
 
 (require 'seq)
 
+;; Native compilation runs in child processes, and those abort -- and so
+;; dump core -- when this batch process exits while they are still
+;; going.  Loading straight.el is enough to set several off.  Nothing
+;; here depends on native code, so switch it off rather than litter the
+;; machine with crash reports.  Straight's own native-compile build step
+;; is excluded separately, in `lean4-install-check-straight'.
+(when (boundp 'native-comp-jit-compilation)
+  (setq native-comp-jit-compilation nil))
+(setq native-comp-async-report-warnings-errors nil)
+
 (defvar lean4-install-check-method nil)
 (defvar lean4-install-check-checkout nil)
 (defvar lean4-install-check-home nil)
@@ -125,6 +135,11 @@ of which this repository controls, and none of which bears on whether
 the manual is installed."
   (setq straight-base-dir lean4-install-check-home
         straight-check-for-modifications nil
+        ;; Set before the bootstrap, so that it also covers straight
+        ;; building itself: `defcustom' leaves an already-set value
+        ;; alone.  Without this, compiling straight's own files spawns
+        ;; the children described at the top of this file.
+        straight-disable-native-compile t
         straight-built-in-pseudo-packages
         '(emacs nadvice python image-mode dash lsp-mode magit-section))
   (make-directory (expand-file-name "straight/repos/" lean4-install-check-home) t)
@@ -146,7 +161,8 @@ the manual is installed."
   ;; go looking for a recipe, which would clone the recipe repositories.
   ;; :files mirrors the Melpa recipe.
   (straight-use-package
-   '(lean4-mode :type nil :inherit nil :files (:defaults "data" "data/*.json")))
+   '(lean4-mode :type nil :inherit nil
+                :files (:defaults "data" "data/*.json")))
   (let ((build (expand-file-name "straight/build/lean4-mode/"
                                  lean4-install-check-home)))
     (unless (file-directory-p build)
