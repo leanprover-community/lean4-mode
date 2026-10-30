@@ -192,6 +192,18 @@ use Emacs' built-in Flymake package instead of Flycheck while keeping
 later installed, then customize the ~lsp-diagnostics-provider~ user
 option accordingly.
 
+** File Progress
+
+While Lean elaborates a file, Lean4-Mode marks the regions being
+processed in the fringe.  Set the user option
+~lean4-show-file-progress~ to ~nil~ to turn that off.
+
+Lean reports progress in bursts, so redrawing is coalesced.  The user
+option ~lean4-fringe-delay-sec~ is how long Lean4-Mode waits, in
+seconds, before it redraws once a notification has arrived.  Raise it
+if the overlays are distracting on a large file; lower it for more
+immediate feedback.
+
 * Common Pitfalls
 
 Lean4-Mode only supports version 4 of Lean.  For editing Lean version
