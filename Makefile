@@ -27,7 +27,7 @@ BATCH = $(EMACS) -Q --batch \
 	--directory .
 
 .DEFAULT_GOAL := check
-.PHONY: check compile checkdoc test test-live manual deps clean
+.PHONY: check compile checkdoc test test-live manual install-check deps clean
 
 # Everything CI gates on.  "test" runs after "compile" so that the suite
 # exercises the byte-compiled package, which is what users load.
@@ -66,6 +66,14 @@ test-live:
 	$(BATCH) --directory test \
 		$(patsubst %,--load %,$(LIVE_TESTS)) \
 		--funcall ert-run-tests-batch-and-exit
+
+# Install the working tree the way a user would and check that "C-h i"
+# finds the manual.  Outside "check" because it needs network access;
+# CI runs it as its own job.  Plain "$(EMACS) -Q" rather than $(BATCH),
+# so that the install sees nothing of this directory's package set.
+install-check:
+	$(EMACS) -Q --batch --load admin/install-check.el -- package-vc .
+	$(EMACS) -Q --batch --load admin/install-check.el -- straight .
 
 # Documentation-style checks.  Any finding fails the build; see
 # admin/checkdoc-batch.el for why that needs a wrapper.

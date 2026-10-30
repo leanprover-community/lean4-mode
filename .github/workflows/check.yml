@@ -43,6 +43,47 @@ jobs:
       - name: Byte-compile and run checkdoc
         run: make check
 
+  # Lean4-Mode is on no package archive yet, so everybody installs it
+  # from source -- and nothing on that path builds a manual, which is
+  # why lean4-mode.info and the Info "dir" index are tracked alongside
+  # the .texi.  This job installs the working tree the way a user would
+  # and checks that "C-h i" really does find the manual, so that those
+  # two files cannot quietly stop being enough.
+  #
+  # GNU Texinfo is deliberately not installed here: the point is that
+  # the tracked files are sufficient on their own.
+  #
+  # Needs the network.  The package-vc run installs the real
+  # dependencies from Melpa, which also exercises this package's
+  # Package-Requires header, and straight.el is bootstrapped from its
+  # own repository.
+  install:
+    name: ${{ matrix.method }} install, Emacs ${{ matrix.emacs_version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Spelled out rather than crossed, because `use-package' only
+        # grew the :vc keyword in Emacs 30, so the package-vc method
+        # cannot be tried on the 29.x floor.
+        include:
+          - method: straight
+            emacs_version: '29.4'
+          - method: straight
+            emacs_version: '31.1'
+          - method: package-vc
+            emacs_version: '30.2'
+          - method: package-vc
+            emacs_version: '31.1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: purcell/setup-emacs@34c6ded44899fd1bf74d2889558befd1750e61a7 # master, 2026-08-24
+        with:
+          version: ${{ matrix.emacs_version }}
+      - run: emacs --version
+      - name: Install from the working tree and look for the manual
+        run: emacs -Q --batch --load admin/install-check.el -- ${{ matrix.method }} .
+
   # The manual is generated from README.org but tracked, so editing the
   # README and forgetting to regenerate ships a stale manual.  That is
   # what this job catches.
