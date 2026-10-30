@@ -35,11 +35,14 @@
 
 (defun lean4-install-check--copy-tree (destination)
   "Copy the checkout to DESTINATION, without build leftovers.
-A user installs a clone, not a working tree that has been built in, so
-the dependency directory and any stale .elc files are left behind."
+The copy keeps its .git: `package-vc-install-from-checkout' refuses a
+directory that no VC backend is responsible for.  What it drops is the
+dependency directory and any stale .elc files, which a fresh clone
+would not have either."
   (copy-directory lean4-install-check-checkout destination nil t t)
-  (dolist (junk '(".deps" ".git"))
-    (ignore-errors (delete-directory (expand-file-name junk destination) t)))
+  (let ((deps (expand-file-name ".deps" destination)))
+    (when (file-directory-p deps)
+      (delete-directory deps t)))
   (dolist (elc (directory-files destination t "\\.elc\\'"))
     (delete-file elc)))
 
