@@ -19,6 +19,12 @@
 ;; current directory.  Each run works inside a throwaway
 ;; `user-emacs-directory' and needs network access.
 ;;
+;; CI is the reference, not a local run.  This script installs packages
+;; and leans on how Emacs was built, so a distribution that expects its
+;; Emacs packages to come from the distribution -- NixOS, say -- can
+;; diverge from the plain builds CI uses, in both directions.  Every
+;; failure this check has caught so far passed locally first.
+;;
 ;; The run happens in two phases, in two processes.  The first installs;
 ;; the second starts afresh against the same `user-emacs-directory' and
 ;; looks for the manual.  Nobody reads the manual in the session that
