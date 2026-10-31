@@ -67,10 +67,9 @@
 
 (defun lean4-install-check--copy-tree (destination)
   "Copy the checkout to DESTINATION, without build leftovers.
-The copy keeps its .git: `package-vc-install-from-checkout' refuses a
-directory that no VC backend is responsible for.  What it drops is the
-dependency directory and any stale .elc files, which a fresh clone
-would not have either."
+Used for straight.el, which builds whatever sits in its repos
+directory.  Dropped along the way are the dependency directory and any
+stale .elc files, which a fresh clone would not have either."
   (copy-directory lean4-install-check-checkout destination nil t t)
   (let ((deps (expand-file-name ".deps" destination)))
     (when (file-directory-p deps)
@@ -113,7 +112,18 @@ is installed."
 (defun lean4-install-check-install-package-vc ()
   "Install through `package-vc' the way `use-package' :vc does.
 Dependencies are installed for real here, because resolving them reads
-this package's own Package-Requires header, which is worth exercising."
+this package's own Package-Requires header, which is worth exercising.
+
+The checkout is passed as the :url, so that package-vc clones it as it
+would any remote.  Deliberately not :load-path, which would send
+`use-package' down `package-vc-install-from-checkout' instead: that
+symlinks the directory rather than cloning it, and a symlinked package
+is not what the overwhelming majority of users install.  Nor is it
+equivalent: installed that way on Emacs 31.1, lean4-mode never reached
+`Info-directory-list', though its autoloads did load and the real
+directories beside it registered fine.
+
+Cloning sees committed state only, which is what CI has anyway."
   (require 'package)
   (require 'package-vc)
   (require 'use-package)
@@ -122,21 +132,12 @@ this package's own Package-Requires header, which is worth exercising."
                '("melpa" . "https://melpa.org/packages/") t)
   (package-initialize)
   (package-refresh-contents)
-  ;; Install from a copy, not from the checkout itself:
-  ;; `package-vc-install-from-checkout' symlinks what it is given and
-  ;; then writes a -pkg.el, an autoloads file and .elc files into it,
-  ;; which would leave the working tree dirty.
-  (let ((clone (expand-file-name "clone" lean4-install-check-home)))
-    (lean4-install-check--copy-tree clone)
-    ;; `use-package-handler/:vc' takes the local path from the
-    ;; :load-path keyword and hands it to
-    ;; `package-vc-install-from-checkout', so this is the declaration a
-    ;; user would write against a local clone.
-    (eval `(use-package lean4-mode
-             :load-path ,clone
-             :vc (:url "https://github.com/leanprover-community/lean4-mode")
-             :defer t)
-          t))
+  ;; :rev :newest -- take the checked-out commit rather than hunting for
+  ;; the latest revision that bumped the Version header.
+  (eval `(use-package lean4-mode
+           :vc (:url ,lean4-install-check-checkout :rev :newest)
+           :defer t)
+        t)
   (unless (package-installed-p 'lean4-mode)
     (lean4-install-check--fail "use-package :vc did not install the package"))
   (message "  installed %s"
