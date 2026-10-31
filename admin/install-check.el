@@ -21,17 +21,17 @@
 ;;
 ;; The run happens in two phases, in two processes.  The first installs;
 ;; the second starts afresh against the same `user-emacs-directory' and
-;; looks for the manual.  That split matters: inside the session that
-;; did the installing, packages are activated as they arrive, and a
-;; dependency that is not ready yet makes `package-activate-1' give up.
-;; On Emacs 31.1 that left lsp-mode and magit-section inactive, and
-;; lean4-mode with them, so nothing put it on `Info-directory-list'.  A
-;; user restarts Emacs rather than reading the manual in the session
-;; that installed it, and the second phase is that restart.
+;; looks for the manual.  Nobody reads the manual in the session that
+;; installed the package -- they restart Emacs -- and the second phase
+;; is that restart.  It also sidesteps activation inside the installing
+;; session, which is not dependable: packages are activated as they
+;; arrive there, and on Emacs 31.1 lsp-mode and magit-section both
+;; reported "Unable to activate package".
 
 ;;; Code:
 
 (require 'seq)
+(require 'subr-x)
 
 ;; Native compilation runs in child processes, and those abort -- and so
 ;; dump core -- when the parent exits while they are still going.
@@ -162,18 +162,23 @@ working tree under test is what gets built."
 
 (defun lean4-install-check--assert-info ()
   "Fail unless the Lean4-Mode manual is reachable through Info.
-Checks the three things that have to line up: the installed directory
-is on `Info-directory-list', the Info directory node lists the manual,
-and the manual itself opens."
+Asserts the two things a user would notice: the Info directory node
+lists the manual, and the manual itself opens.
+
+Deliberately not asserted: that some entry of `Info-directory-list'
+has \"lean4-mode\" in its name.  That looks like the same question but
+is not.  `package-vc-install-from-checkout' installs a symlink, so the
+directory which ends up registered may be the link's target under
+whatever name the clone has -- and whether it is resolved differs
+between Emacs versions.  The list is only reported here, to make a
+failure easier to read."
   (require 'info)
-  (let ((entry (seq-find (lambda (directory)
-                           (and (stringp directory)
-                                (string-match-p "lean4-mode" directory)))
-                         Info-directory-list)))
-    (unless entry
-      (lean4-install-check--fail
-       "no lean4-mode directory on Info-directory-list; a \"dir\" file is what puts it there"))
-    (message "  Info-directory-list has %s" entry))
+  (info-initialize)
+  (message "  Info-directory-list: %S"
+           (seq-remove (lambda (directory)
+                         (and (stringp directory)
+                              (string-match-p "\\`/usr\\|/share/info" directory)))
+                       Info-directory-list))
   (with-temp-buffer
     (Info-mode)
     (condition-case err
@@ -210,12 +215,19 @@ and the manual itself opens."
 (defun lean4-install-check--verify-in-fresh-emacs ()
   "Re-run this script in a fresh Emacs to do the checking."
   (message "  restarting Emacs to look for the manual")
-  (let ((status (call-process
-                 (expand-file-name invocation-name invocation-directory)
-                 nil t nil
-                 "-Q" "--batch" "--load" lean4-install-check-script
-                 "--" "verify" lean4-install-check-method
-                 lean4-install-check-home)))
+  (let* ((buffer (generate-new-buffer " *lean4-install-check*"))
+         (status (call-process
+                  (expand-file-name invocation-name invocation-directory)
+                  nil buffer nil
+                  "-Q" "--batch" "--load" lean4-install-check-script
+                  "--" "verify" lean4-install-check-method
+                  lean4-install-check-home)))
+    ;; Forward whatever it said; `call-process' would otherwise leave the
+    ;; second phase's diagnostics in a buffer nobody ever reads.
+    (with-current-buffer buffer
+      (unless (zerop (buffer-size))
+        (message "%s" (string-trim (buffer-string)))))
+    (kill-buffer buffer)
     (unless (equal status 0)
       (lean4-install-check--fail
        "a fresh Emacs could not find the manual (exit %s)" status))))
