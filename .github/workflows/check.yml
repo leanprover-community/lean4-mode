@@ -42,3 +42,96 @@ jobs:
         run: make deps
       - name: Byte-compile and run checkdoc
         run: make check
+
+  # Lean4-Mode is on no package archive yet, so everybody installs it
+  # from source -- and nothing on that path builds a manual, which is
+  # why lean4-mode.info and the Info "dir" index are tracked alongside
+  # the .texi.  This job installs the working tree the way a user would
+  # and checks that "C-h i" really does find the manual, so that those
+  # two files cannot quietly stop being enough.
+  #
+  # GNU Texinfo is deliberately not installed here: the point is that
+  # the tracked files are sufficient on their own.
+  #
+  # Needs the network.  The package-vc run installs the real
+  # dependencies from Melpa, which also exercises this package's
+  # Package-Requires header, and straight.el is bootstrapped from its
+  # own repository.
+  install:
+    name: ${{ matrix.method }} install, Emacs ${{ matrix.emacs_version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Spelled out rather than crossed, because `use-package' only
+        # grew the :vc keyword in Emacs 30, so the package-vc method
+        # cannot be tried on the 29.x floor.
+        include:
+          - method: straight
+            emacs_version: '29.4'
+          - method: straight
+            emacs_version: '31.1'
+          - method: package-vc
+            emacs_version: '30.2'
+          - method: package-vc
+            emacs_version: '31.1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: purcell/setup-emacs@34c6ded44899fd1bf74d2889558befd1750e61a7 # master, 2026-08-24
+        with:
+          version: ${{ matrix.emacs_version }}
+      - run: emacs --version
+      - name: Install from the working tree and look for the manual
+        run: emacs -Q --batch --load admin/install-check.el -- ${{ matrix.method }} .
+
+  # The manual is generated from README.org but tracked, so editing the
+  # README and forgetting to regenerate ships a stale manual.  That is
+  # what this job catches.
+  #
+  # It is pinned to one Emacs version rather than run across the matrix
+  # above, because Org's output changes between releases -- Emacs 30
+  # began escaping commas as @comma{}, for instance -- so the tracked
+  # files can only ever match one of them.  Pinned to the newest
+  # version the package supports, so that it has to move deliberately
+  # when the matrix grows.
+  #
+  # The .info and dir additionally depend on the runner's GNU Texinfo,
+  # so an upgrade there can require a regeneration too.  Either way the
+  # job says so and uploads the files it generated.
+  manual:
+    name: Manual is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: purcell/setup-emacs@34c6ded44899fd1bf74d2889558befd1750e61a7 # master, 2026-08-24
+        with:
+          # Keep in step with the newest version in the matrix above,
+          # and with the message below.
+          version: '31.1'
+      - run: emacs --version
+      - name: Install GNU Texinfo
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y texinfo
+      - run: makeinfo --version | head -n 1
+      # No "make deps": these rules need nothing from the package set.
+      - name: Regenerate the manual from README.org
+        run: make --always-make manual
+      - name: Compare against the tracked copies
+        run: |
+          if git diff --quiet -- lean4-mode.texi lean4-mode.info dir; then
+            echo "The generated manual matches README.org."
+          else
+            echo "::error::The manual is out of date. Run 'make -B manual' under Emacs 31.1, or download this job's manual artifact and commit it."
+            git --no-pager diff --stat -- lean4-mode.texi lean4-mode.info dir
+            # The .info is not worth dumping; these two are readable.
+            git --no-pager diff -- lean4-mode.texi dir
+            exit 1
+          fi
+      - name: Upload the regenerated manual
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: manual
+          path: |
+            lean4-mode.texi
+            lean4-mode.info
+            dir
