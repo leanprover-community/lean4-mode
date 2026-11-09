@@ -90,7 +90,8 @@ First, install the dependencies of Lean4-Mode:
      (https://github.com/leanprover-community/lean4-mode).
    • In your Emacs initialization file
      (https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html),
-     add the path to that local repository to the ‘load-path’ list.
+     add the path to that local repository to the ‘load-path’ list, and
+     load Lean4-Mode with ‘(require 'lean4-mode)’.
 
 
 File: lean4-mode.info,  Node: Detailed and Concrete Instructions,  Next: Instructions for Source-Based Use-Package,  Prev: Brief and Generic Instructions,  Up: Installation
@@ -127,13 +128,12 @@ approach, add the following to your Emacs initialization file (e.g.
      git clone https://github.com/leanprover-community/lean4-mode.git ~/path/to/lean4-mode
 
    In your Emacs initialization file, add the path to your local
-Lean4-Mode repository to the ‘load-path’ list:
+Lean4-Mode repository to the ‘load-path’ list and load Lean4-Mode:
      (add-to-list 'load-path "~/path/to/lean4-mode")
-
-   Lean4-Mode should now already be enabled when you open a file with
-‘.lean’ extension.  But you can optionally also already load Lean4-Mode
-on Emacs startup, e.g.  in order to customize variables:
      (require 'lean4-mode)
+
+   Lean4-Mode is then enabled when you open a file with ‘.lean’
+extension.
 
 
 File: lean4-mode.info,  Node: Instructions for Source-Based Use-Package,  Prev: Detailed and Concrete Instructions,  Up: Installation
@@ -335,19 +335,19 @@ Tag Table:
 Node: Top223
 Node: Installation1509
 Node: Brief and Generic Instructions1752
-Node: Detailed and Concrete Instructions2701
-Node: Instructions for Source-Based Use-Package4358
-Node: Native vc (Emacs 30 or later)5079
-Node: Doom-Emacs5987
-Node: Straight6413
-Node: Usage6913
-Node: lsp-mode8359
-Node: Flycheck8644
-Node: Configuration9254
-Node: lsp-mode (1)9462
-Node: Flycheck (1)9731
-Node: File Progress10238
-Node: Common Pitfalls10837
+Node: Detailed and Concrete Instructions2760
+Node: Instructions for Source-Based Use-Package4313
+Node: Native vc (Emacs 30 or later)5034
+Node: Doom-Emacs5942
+Node: Straight6368
+Node: Usage6868
+Node: lsp-mode8314
+Node: Flycheck8599
+Node: Configuration9209
+Node: lsp-mode (1)9417
+Node: Flycheck (1)9686
+Node: File Progress10193
+Node: Common Pitfalls10792
 
 End Tag Table
 

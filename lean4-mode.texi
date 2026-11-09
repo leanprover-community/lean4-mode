@@ -99,7 +99,8 @@ Second@comma{} install Lean4-Mode itself:
 Clone the @uref{https://github.com/leanprover-community/lean4-mode, Git repository of Lean4-Mode}.
 @item
 In your @uref{https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html, Emacs initialization file}@comma{} add the path to that local
-repository to the @code{load-path} list.
+repository to the @code{load-path} list@comma{} and load Lean4-Mode with
+@code{(require 'lean4-mode)}.
 @end itemize
 
 @node Detailed and Concrete Instructions
@@ -137,17 +138,14 @@ git clone https://github.com/leanprover-community/lean4-mode.git ~/path/to/lean4
 @end example
 
 In your Emacs initialization file@comma{} add the path to your local
-Lean4-Mode repository to the @code{load-path} list:
+Lean4-Mode repository to the @code{load-path} list and load Lean4-Mode:
 @lisp
 (add-to-list 'load-path "~/path/to/lean4-mode")
-@end lisp
-
-Lean4-Mode should now already be enabled when you open a file with
-@samp{.lean} extension.  But you can optionally also already load
-Lean4-Mode on Emacs startup@comma{} e.g. in order to customize variables:
-@lisp
 (require 'lean4-mode)
 @end lisp
+
+Lean4-Mode is then enabled when you open a file with @samp{.lean}
+extension.
 
 @node Instructions for Source-Based Use-Package
 @section Instructions for Source-Based Use-Package
